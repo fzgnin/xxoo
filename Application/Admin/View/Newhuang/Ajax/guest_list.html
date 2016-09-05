@@ -1,0 +1,56 @@
+<div class="data-table table-striped">
+	<table class="">
+    <thead>
+        <tr>
+		<th class="row-selected row-selected"><input class="check-all" type="checkbox"/></th>
+		<th class="" onClick="table_order('g.id')" style="color: rgb(0, 176, 189);">ID</th>
+		<th class="">店名</th>
+		<th class="">地区</th>
+		<th class="">负责人</th>
+		<th class="">联系方式</th>
+		<th class="">所属</th>
+		<th class="">管辖业务员</th>
+		<th class="" onClick="table_order('bnum')" style="color: rgb(0, 176, 189);">合作品牌数</th>
+		<th class="">状态</th>
+		<th class="">操作</th>
+		</tr>
+    </thead>
+    <tbody>
+		<notempty name="list">
+		<volist name="list" id="vo">
+		<tr>
+            <td><input class="ids" type="checkbox" name="id[]" value="{$vo.id}" /></td>
+			<td>{$vo.id} </td>
+			<td>{$vo.guestname}</td>
+			<td>{$vo.province}</td>
+			<td>{$vo.manager}</td>
+			<td>{$vo.phone}</td>
+			<td>
+			<volist name="vo.blist" id="vs">
+			<a href="javascript:;" class="btn_list_1" style="background-color:rgb(35, 59, 19);">{$vs.bname}</a>
+			</volist>
+			</td>
+			<td>{$vo.fname}</td>
+			<td>{$vo.bnum}</td>
+			<td>正常</td>
+			<td>
+				<a href="javascript:;" onclick="edit_guest({$vo.id})" class="btn_list_1" style="background-color:#00B0BD;">修改</a>	
+				<neq name="vo.stus" value="0" ><a href="javascript:;" class="btn_list_1"  onclick="no_guest({$vo.id},0)">设为未合作</a></neq>  
+				<eq name="vo.stus" value="1" ><a href="javascript:;" class="btn_list_1"  onclick="no_guest({$vo.id},2)">设为休眠</a></eq> 
+				<eq name="vo.stus" value="0" ><a href="javascript:;" class="btn_list_1"  onclick="no_guest({$vo.id},2)">设为休眠</a></eq>  
+				<eq name="vo.stus" value="2" ><a href="javascript:;" class="btn_list_1"  onclick="no_guest({$vo.id},1)" style="background-color:#4933DD">激活客户</a></eq>        
+                </td>
+		</tr>
+		</volist>
+		<else/>
+		<td colspan="9" class="text-center"> aOh! 暂时还没有内容! </td>
+		</notempty>
+	</tbody>
+    </table>
+	<input type="hidden" id="SORT_BY_ID" value="{$sort_by}">
+	</div>
+    <div class="page">
+        {$page}
+    </div>
+	
+	

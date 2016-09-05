@@ -1,0 +1,24 @@
+<extend name="Public/base" />
+
+<block name="body">
+	<!-- 标题栏 -->
+	<div class="main-title">
+		<h2><span style="color:red">{$filter.time}</span>日，未签到人员列表</h2>
+	</div>
+
+    <!-- 数据列表 -->
+	<div id="guest_list">
+    <include file="Default:Ajax:Attendance:nosign_list" />
+	</div>
+</block>
+
+<block name="script">
+	<script src="__STATIC__/thinkbox/jquery.thinkbox.js"></script>
+
+	<script type="text/javascript">
+	var url = "{:U('Attendance/ajax_query')}";
+	var APP = "__APP__";
+	</script>
+	<script type="text/javascript" src="__JS__/huang.js"/></script>
+	
+</block>

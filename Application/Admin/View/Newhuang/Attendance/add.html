@@ -1,0 +1,319 @@
+<extend name="Public/basechild"/>
+<block name="body">
+<style type="text/css">
+.demo-huang{
+max-height:500px
+}
+</style>
+<link rel="stylesheet" href="__CSS__/style.default.css" type="text/css" />
+<script type="text/javascript" src="__JS__/general.js"></script>
+    <div class="bodywrapper">
+  <!--头部-->
+
+    <!--子菜单结束-->
+    <div class="centercontent">
+    
+        <div class="pageheader">
+           
+            
+            <ul class="hornav">
+                <li class="current"><a href="#basicform">新增用户</a></li>
+                <li class=""><a href="#secondform">其他</a></li>
+            </ul>
+        </div><!--pageheader-->
+        
+        <div id="contentwrapper" class="contentwrapper">
+        	<form  id="mpostForm" name="mpostForm" class="stdform" action="{:U('Admin/Attendance/insert')}" method="post">
+        	<div id="basicform" class="subcontent"><!--contenttitle-->
+
+                  	    <p>
+                        	<label>姓名</label>
+                            <span class="field"><input type="text" name="name"  class="smallinput" /></span>
+                            <small class="desc">请填写入职人员姓名</small>
+                        </p>
+						
+						
+						<p>
+                        	<label>登陆账号</label>
+                            <span class="field"><input type="text"  name="username"  class="smallinput" /></span>
+                            <small class="desc">请填写在职人员手机号码</small>
+                        </p>
+                        
+                        
+                        
+                         <p>
+                        	<label>所属部门</label>
+                            <span class="formwrapper">
+                            	<select data-placeholder="请选择所属部门....." id="select_did" class="chzn-select"  name="bid" style="width:350px;height:37px" tabindex="2" onchange="make_auth(this)">
+								  <option value="0"  >请选择</option>
+								  <volist name="did_info" id="vo">
+								  <option value="{$vo.id}"  >{$vo.title_show}</option> 
+								  </volist>
+                                </select>
+                            </span>
+                        </p>
+	
+                        
+                        <p>
+                        	<label>职位</label>
+                            <span class="field">
+							<select data-placeholder="请选择所属职位....." id="select_pid" class="chzn-select"  name="pid" style="width:350px;height:37px" tabindex="2">
+								  <option value="0"  >请选择</option> 
+								  <volist name="pid_info" id="vo">
+								  <option value="{$vo.id}"  >{$vo.name}</option> 
+								  </volist>
+                                </select>
+							</span>
+                            
+                        </p>
+						
+						<p>
+							<label>前台app显示部门</label>
+							<span class="field">
+							<a href="javascript:;" onclick="show_userbid();" class="btn_list_1">设置部门</a><span id="gbumen_id"></span>
+						</p>
+                        
+
+                       
+                        
+                        
+                        <!--隐藏字段-->
+                         
+                        <p class="stdformbutton">
+                        	<input style="width:100px; margin: 0; font-weight: bold; color: #eee; background: #FB9337; border: 1px solid #F0882C; padding: 7px 10px; 
+  -moz-box-shadow: none; -webkit-box-shadow: none; box-shadow: none; cursor: pointer; -moz-border-radius: 2px; -webkit-border-radius: 2px;
+  border-radius: 2px;" type="button" class="submit radius2" value="提交" onClick="myFunction()">
+                        </p>
+                    
+
+            </div><!--subcontent-->
+
+            <div id="secondform" class="subcontent" style="display:none">
+            </div>
+        </form>
+        </div><!--contentwrapper-->
+        
+	</div><!-- centercontent -->
+    
+    
+</div>
+</block>
+
+<block name="script">
+    
+	<script type="text/javascript">
+	
+	function myFunction()
+	{ 
+	
+	 if(mpostForm.name.value==""){
+	 	alert("请输入姓名！");
+		mpostForm.name.focus();
+		return false;
+	   }
+	   
+	   if(mpostForm.username.value==""){
+	   	alert("请输入登陆账号！");
+		mpostForm.username.focus();
+		return false;
+	   }
+	   
+	   if(mpostForm.bid.value==0){
+	   	alert("请输选择部门！");
+		mpostForm.bid.focus();
+		return false;
+	   }
+	   
+	   if (confirm("你确认要提交吗？"))
+		document.mpostForm.submit()
+	}
+	
+	
+	jQuery('.btn_anniu').click(function(){
+	
+	var html_span = jQuery('.formwrapper').eq(1).prop("outerHTML");
+	
+	jQuery('#add_xuanxiang').append(html_span);
+	
+	
+	})
+	
+	
+	
+	function show_userbid(obj)
+	{
+		//获取军团列表
+		
+		$.ajax({
+		type:'post',
+		data:{'gid':obj},
+		url:"{:U('Guest/select_uidbid')}",
+		success:function(data)
+		{
+			if(data)
+			{
+				var str = '<form method="post" action="" name="tbform" id="tbform">';
+				
+				for(var i=0;i<data.length;i++)
+				{
+					str += '<dl class="checkmod" style="border:none;border-bottom: 1px solid #ebebeb;margin-bottom:0px">';
+
+					str += '<dd class="bd" style="padding-left:30px">';
+						
+					str += '<div class="rule_check"><div>';
+					
+					str += '<label class="checkbox">';
+					
+					if(data[i]['gbid'])
+					{
+						if(data[i]['show'])
+						{
+							str += '<input class="auth_rules rules_row" type="checkbox" checked="true" name="bid[]" value="'+data[i]['id']+'" data-name="'+data[i]['bname']+'"/>'+data[i]['title_show'];
+						}else
+						{
+							str += '<input class="auth_rules rules_row" type="checkbox" disabled="" checked="true" name="bid[]" value="'+data[i]['id']+'" data-name="'+data[i]['bname']+'"/>'+data[i]['title_show'];
+						}
+					
+						str += '<input type="hidden" name="ubid[]" value="'+data[i]['gbid']+'"/>';
+					}else
+					{
+						if(data[i]['show'])
+						{
+							str += '<input class="auth_rules rules_row" type="checkbox" name="bid[]" value="'+data[i]['id']+'" data-name="'+data[i]['bname']+'"/>'+data[i]['title_show'];
+						}else
+						{
+							str += '<input class="auth_rules rules_row" type="checkbox" disabled="" name="bid[]" value="'+data[i]['id']+'" data-name="'+data[i]['bname']+'"/>'+data[i]['title_show'];
+						}
+					}
+							
+					str += '</label></div></div>';
+
+					str += '</dd></dl>';
+
+				}
+				
+				str += '<input type="hidden" name="uid" value="'+obj+'"></form>';
+				
+				layer.open({
+					type:1,
+					title: '军团管理权限',
+					shadeClose: false,
+					shade: 0.8,
+					shift:5,
+					area: ['380px', 'auto'],
+					skin: 'demo-huang',
+					btn: ['确认'],
+					success: function(layero, index){
+						//获取页面现存部门id
+						$('#gbumen_id').find('input[name="gbid[]"]').each(function(){
+						
+						    var that = this;
+							$('#tbform').find('input[name="bid[]"]').each(function(){
+							//形成数据插入页面
+								if($(that).val() == $(this).val())
+								{
+									$(this).attr("checked","checked");
+								}
+							});
+						}); 
+					},
+					yes: function(index, layero){
+						//提交到后台
+						
+						var str = '';
+						$('#tbform').find('input[name="bid[]"]').each(function(){
+							//形成数据插入页面
+						
+						var bid_f = $(this).val();
+						
+						if($(this).prop('checked'))
+						{
+							//检查选中项是否已存在
+							var open_f = true;
+							
+							$('#gbumen_id').find('input[name="gbid[]"]').each(function(){
+								if(bid_f == $(this).val())
+								{
+									open_f = false;
+								}
+							});
+							
+							if(open_f)
+							{
+								str += '<a href="javascript:;" id="gbid_'+bid_f+'" class="btn_list_1" style="background-color:rgb(35, 59, 19);">'+$(this).attr('data-name')+'</a>';
+								
+								str += '<input type="hidden" name="gbid[]" value="'+bid_f+'" />';
+								
+							}
+						}else
+						{
+							//删除未选中
+							$('#gbumen_id').find('input[name="gbid[]"]').each(function(){
+								if(bid_f == $(this).val())
+								{
+									$(this).remove();
+									$('#gbid_'+bid_f).remove();
+									
+								}
+							});
+						}
+							 
+						
+						}); 
+						
+						$('#gbumen_id').append(str);
+						
+						layer.close(index); //如果设定了yes回调，需进行手工关闭
+						
+						
+						
+					},
+					content: str //iframe的url
+				});
+			}
+		},
+		error:function()
+		{
+			alert('传输错误');
+		}
+		});
+
+
+	}
+	
+	function make_auth(obj)
+	{
+		
+		//根据bid取出bid下的子id
+		$.ajax({
+		type:'post',
+		data:{'bid':obj.value},
+		url:"{:U('Attendance/make_auth')}",
+		success:function(data)
+		{
+			var str = '';
+			
+			for(var i=0;i<data.info.length;i++)
+			{
+				str += '<a href="javascript:;" id="gbid_'+data.info[i]['id']+'" class="btn_list_1" style="background-color:rgb(35, 59, 19);margin:5px">'+data.info[i]['bname']+'</a>';
+								
+				str += '<input type="hidden" name="gbid[]" value="'+data.info[i]['id']+'" />';
+			}
+			
+			$('#gbumen_id').html(str);
+		},
+		error:function()
+		{
+			alert('数据传输错误！');
+		},
+		
+		});
+	
+	}
+	
+	function check_all(obj)
+	{
+		$(obj).closest('dl').find('dd').find('input').prop('checked', obj.checked);
+	}
+	</script>
+</block>

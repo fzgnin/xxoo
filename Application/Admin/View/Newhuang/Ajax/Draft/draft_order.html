@@ -1,0 +1,209 @@
+<div class="bill-container ng-scope">
+<form name="xsckd" id="xsckd" action="{:U('Draft/insert')}" method="post">
+    <div class="ng-scope" ><div class="bill-header ng-scope">
+    <div class="bill-subject">
+        <div class="bill-subject-left">
+            <div class="subject pull-left">
+                <h1>
+                    <input <eq name="order_info.order_type" value="1">style="background: rgb(33, 179, 61) none repeat scroll 0% 0%;color: rgb(255, 255, 255);box-shadow:none" value="销售出库单" <else/>value="销售退货单"  style="background: rgb(179, 64, 33) none repeat scroll 0% 0%;color: rgb(255, 255, 255);box-shadow:none"</eq>  type="text">
+                </h1>
+            </div>
+            <div class="company-info pull-left">
+                <big class="ng-binding"><eq name="order_info.order_type" value="1">上海国际雅兰出库单<else/>上海国际雅兰退货单</eq></big>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="bill-footer-input row">
+            <div class="bill-footer-input-item">
+                <div class="input-group ng-scope">
+				<span class="input-group-addon">录单日期</span>
+				<input value="{$order_info.add_time|date='Y-m-d H:i',###}" placeholder="请选择时间" class="form-control input_widget_datetime ng-pristine ng-untouched ng-valid time" name="add_time" type="text">
+				</div>
+            </div>
+			
+			<div class="bill-footer-input-item">
+                <div class="input-group ng-scope">
+				<span class="input-group-addon">出货单编号</span>
+				<span class="form-control input_widget_number ng-pristine ng-untouched ng-valid">{$order_info.order_sn}</span>
+				<input value="{$order_info.order_sn}" name="order_sn" type="hidden">
+				</div>
+            </div>
+			
+		
+            <div class="bill-footer-input-item">
+                <div class="input-group ng-scope">
+				<span class="input-group-addon"><eq name="order_info.order_type" value="1">收货单位<else/>退货单位</eq></span>
+				<input class="form-control input_widget_number ng-pristine ng-untouched ng-valid" type="text" id="hhhhyu" value="{$order_info.gname}" readonly="readonly" title="{$order_info.gname}" name="gname">
+				<input type="hidden" name="guest_id" id="guest_id" value="{$order_info.gid}">
+				</div>
+            </div>
+            <div class="bill-footer-input-item">
+                <div class="input-group ng-scope">
+				<span class="input-group-addon"><eq name="order_info.order_type" value="1">出库仓库<else/>入库仓库</eq></span>
+				<input class="form-control input_widget_number ng-pristine ng-untouched ng-valid" name="warehouse" type="text" value="上海总部库" readonly="readonly">
+				</div>
+            </div>
+			
+			<div class="bill-footer-input-item">
+                <div class="input-group ng-scope">
+				<span class="input-group-addon">经手人</span>
+				<input class="form-control input_widget_number ng-pristine ng-untouched ng-valid" type="text" id="department_id" value="{$order_info.bname}" readonly="readonly" title="{$order_info.bname}" name="bname">
+				<input type="hidden" name="bumen_id" id="bumen_id" value="{$order_info.bid}">
+				</div>
+            </div>
+        </div>
+</div>
+    <div class="bill-body">
+        <div config="bill_config" class="bill-rows ng-isolate-scope">
+    <table class="table table-bordered bill-rows-table">
+        <thead>
+            <tr>
+                <th width="60" style="text-align:center"><i class="fa fa-plus" style="cursor: pointer;"></i></th>
+                <th class="text-center" width="50">#</th>
+                <th style="" class="ng-scope">
+                    <label class="ng-binding">商品编号</label>
+                    
+                </th><th class="ng-scope">
+                    <label class="ng-binding">商品全名</label>
+                    
+                </th><th class="ng-scope" >
+                    <label class="ng-binding">规格</label>
+                    
+                </th><th class="ng-scope" >
+                    <label class="ng-binding">数量</label>
+                    
+                </th><th class="ng-scope" >
+                    <label class="ng-binding">单价</label>
+                   
+                </th><th class="ng-scope" >
+                    <label class="ng-binding">金额</label>
+                   
+                </th><th style="" class="ng-scope" >
+                    <label class="ng-binding">开单折扣</label>
+                   
+                </th><th class="ng-scope" >
+                    <label class="ng-binding">折后单价</label>
+                   
+                </th><th class="ng-scope"  style="border-right: 1px solid rgb(248, 65, 65);">
+                    <label class="ng-binding">折后金额</label>
+                    
+                </th>
+				
+				
+				<th style="border: 1px solid #F84141;" class="ng-scope">
+                    <label class="ng-binding">过账折扣</label>
+                    
+                </th><th class="ng-scope" style="border: 1px solid #F84141;">
+                    <label class="ng-binding">过账折后单价</label>
+                   
+                </th><th class="ng-scope" style="border: 1px solid #F84141;">
+                    <label class="ng-binding">过账折后金额</label>
+                    
+                </th>
+				
+            </tr>
+        </thead>
+        <tbody id="tbody_id" onkeydown="keyDown(event)">
+		<volist name="order_goods" id="vo">
+            <tr>
+                <td class="text-center">
+                    <i class="fa fa-trash-o" style="cursor: pointer;"></i>
+                </td>
+                <td class="text-center">#<span class="paixu">{$key+1}</span></td>
+                <td class="td_huang">
+					<input class="form-control form-huang" type="text"	 value="{$vo.code}" name="code[]" title="{$vo.code}" onblur="check_info(this)" readonly="readonly">
+                </td>
+				
+				<td class="td_huang" style="width: 200px !important;">
+				<input class="form-control form-huang" type="text" name="goodsname[]" value="{$vo.goodsname}" onblur="check_info(this)"  title="{$vo.goodsname}" readonly="readonly"/><input type="hidden" name="goods_id[]" value="{$vo.goods_id}" />
+				</td>
+				
+				<td><span>{$vo.format}</span><input type="hidden" name="format[]" value="{$vo.format}" /></td>
+				
+				<td class="td_huang">
+                  <input class="form-control form-huang" type="text" name="num[]" value="{$vo.num}" onBlur="calculate_money()" readonly="readonly"/>
+                </td>
+				<td>
+                 <span>{$vo.price}</span><input type="hidden" name="price[]" value="{$vo.price}" />
+                </td>
+				<td>
+                  <span>{$vo.totalprice}</span><input type="hidden" name="price_total[]" value="{$vo.totalprice}" />
+                </td>
+				<td class="td_huang">
+                   <input class="form-control form-huang" type="text" name="zhekou[]" value="{$vo.k_zhekou}" onblur="change_zhekou(this)"/>
+                </td>
+				<td class="td_huang">
+                   <input class="form-control form-huang" type="text" name="z_price[]" value="{$vo.k_price}" onblur="change_zhekou(this)"/>
+                </td>
+				<td style="border-right: 1px solid rgb(248, 65, 65);">
+                 <span>{$vo.k_totalprice}</span><input type="hidden" name="z_price_total[]" value="{$vo.k_totalprice}" />
+                </td>
+				<td class="td_huang" style="border: 1px solid rgb(248, 65, 65);">
+                   <input class="form-control form-huang_new" type="text" name="g_zhekou[]" value="{$vo.g_zhekou}" onblur="change_zhekou(this)"/>
+                </td>
+				<td class="td_huang" style="border: 1px solid rgb(248, 65, 65);">
+                   <input class="form-control form-huang_new" type="text" name="g_z_price[]" value="{$vo.g_price}" onblur="change_zhekou(this)"/>
+                </td>
+				<td style="border: 1px solid rgb(248, 65, 65);">
+                 <span class="form-huang_new">{$vo.g_totalprice}</span><input type="hidden" name="g_z_price_total[]" value="{$vo.g_totalprice}" />
+				 <input type="hidden" name="order_goods_id[]" value="{$vo.id}" />
+                </td>
+            </tr>
+			</volist>
+        </tbody>
+        <tfoot>
+            <tr>
+               <td colspan="2" align="center"><strong class="ng-binding">合计</strong></td>
+               <td class="ng-scope"></td>
+			   <td class="ng-scope"></td>
+			   <td class="ng-scope"></td>
+			   <td class="ng-scope">
+			   <span id="total_num"></span><input type="hidden" name="total_num" id="total_num_input" value="" />
+			   </td>
+			   <td class="ng-scope"></td>
+			   <td class="ng-scope">
+			   <span id="total_s_price">{$order_info.amount}</span><input type="hidden" name="total_s_price" id="total_s_price_input" value="{$order_info.amount}"/>
+			   </td>
+			   <td class="ng-scope td_huang" ><input class="form-control form-huang_new" type="text" onblur="set_all_zhekou(this)" h-name="zhekou"></td>
+			   <td class="ng-scope" ></td>
+			   <td class="ng-scope"  style="border-right: 1px solid rgb(248, 65, 65);">
+			   <span id="total_s_z_price">{$order_info.k_amount}</span><input type="hidden" name="total_s_z_price" id="total_s_z_price_input" value="{$order_info.k_amount}" />
+			   </td>
+			   <td class="ng-scope td_huang" style="border: 1px solid rgb(248, 65, 65);"><input class="form-control form-huang_new" type="text" onblur="set_all_zhekou(this)" h-name="g_zhekou"></td>
+			   <td class="ng-scope" style="border: 1px solid rgb(248, 65, 65);"></td>
+			   <td class="ng-scope" style="border: 1px solid rgb(248, 65, 65);">
+			   <span id="total_s_g_z_price">{$order_info.g_amount}</span><input type="hidden" name="total_s_g_z_price" id="total_s_g_z_price_input" value="{$order_info.g_amount}" />
+			   </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+    </div>
+    <div class="bill-footer">
+
+        <div class="bill-footer-input row">
+            <div class="input-group bill-footer-input-item" style="width: auto">
+                <span class="input-group-addon ng-binding">备注</span>
+                <input class="form-control ng-pristine ng-untouched ng-valid" name="remarks" value="{$order_info.remarks}" type="text">
+            </div>
+        </div>
+
+        <div class="bill-footer-meta">
+            <span class="label label-primary">
+                <span class="ng-binding">制单人</span>
+                <span class="ng-binding">TEam Swift
+ 管理员</span>
+            </span>
+            <div class="pull-right">
+                <input type="hidden" value="{$order_info.order_type}"name="order_type"/>
+				<input type="hidden" value="{$draft_id}" name="draft_id" />
+				<input type="hidden" value="{$brand_id}" name="brand_id" />
+				    <eq name="is_nf" value="1"><input type="button" value="保存" onclick="form_submit()"  class="btn btn-primary btn-lg ng-binding"/></eq>
+            </div>
+        </div>
+
+    </div>
+	</form>
+</div>

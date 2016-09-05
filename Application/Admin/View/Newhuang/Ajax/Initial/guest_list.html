@@ -1,0 +1,59 @@
+<div class="data-table table-striped">
+	<table class="">
+    <thead>
+        <tr>
+		<th class="">ID</th>
+		<th class="">部门</th>
+		<th class="">店家名字</th>
+		<th class="">添加日期</th>
+		<th class="">地区</th>
+		<th class="">详细地址</th>
+		<th class="">负责人</th>
+		<th class="">联系方式</th>
+		<th class="">初始账户资金</th>
+		<th class="">当前账户金额（负数为欠款）</th>
+		<th class="">合作状态</th>
+		<th class="">操作</th>
+		</tr>
+    </thead>
+    <tbody>
+		<notempty name="list">
+		<volist name="list" id="vo">
+		<tr>
+            <td>{$vo.id}</td>
+			<td>
+			<volist name="vo.bumen" id="vs">
+			
+			<a href="javascript:;" class="btn_list_1">{$vs.bname}</a>
+			</volist>
+			</td>
+			<td>{$vo.guestname}</td>
+			<td>{$vo.intime|date='Y-m-d H:i',###}</td>
+			<td>{$vo.province}</td>
+			<td>{$vo.address}</td>
+			<td>{$vo.manager}</td>
+			<td>{$vo.phone}</td>
+			<td>{$vo.b_money}</td>
+			<td>{$vo.money}</td>
+			<td><if condition="$vo.stus eq 1"><span style="color:green">已合作</span><else/><span style="color:red">未合作</span></if></td>
+			<td><a class="btn_list_1" href="javascript:;" onclick="change_bmoney({$vo.id},2)">更改初始金额</a></td>
+		</tr>
+		</volist>
+		<else/>
+		<td colspan="9" class="text-center"> aOh! 暂时还没有内容! </td>
+		</notempty>
+	</tbody>
+    </table>
+	</div>
+    <div class="page">
+		
+        {$page}
+		
+		<select style="height:32px;border-radius:0px;min-width:100px;outline:none;float:left"  name="page_num" id="page_num" onchange="table_order_page(1)">                   
+									  <option value="10" <eq name="filter.page_num" value="10">selected</eq>>10个</option>
+									  <option value="20" <eq name="filter.page_num" value="20">selected</eq>>20个</option>
+									  <option value="50" <eq name="filter.page_num" value="50">selected</eq>>50个</option>
+									  <option value="100" <eq name="filter.page_num" value="100">selected</eq>>100个</option>				  		     
+		</select>
+		<span style="float:right">总业绩：{$a_amount|default="0"}元</span>
+    </div>

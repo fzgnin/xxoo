@@ -1,0 +1,52 @@
+<div class="data-table table-striped">
+	<table class="">
+    <thead>
+        <tr>
+		
+		<th class="">ID</th>
+		<th class="">科目名称</th>
+		<th class="">科目类型</th>
+		<th class="">上级科目</th>
+		<th class="">备注</th>
+		<th class="">操作</th>
+		</tr>
+    </thead>
+    <tbody>
+		<notempty name="list">
+		<volist name="list" id="vo">
+		<tr>
+            
+			<td>{$vo.id} </td>
+			<td>{$vo.name}</td>
+			<td>
+			<if condition="$vo.type eq 1 ">
+			<span style="color:green">收入类</span>
+			<else/>
+			<span style="color:red">支出类</span>
+			</if>
+			</td>
+			<td>{$vo.pname}</td>
+			<td>{$vo.remarks}</td>
+			
+			<td>
+				
+				
+				<a class="btn_list_1" style="background-color:#00B0BD;" href="{:U('Paycategory/edit',array('id'=>$vo['id']))}">编辑</a>
+				<a class="btn_list_1" href="javascript:;" onclick="delete_order({$vo.id})">删除</a>
+				
+					          
+                </td>
+		</tr>
+		</volist>
+		<else/>
+		<td colspan="9" class="text-center"> aOh! 暂时还没有内容! </td>
+		</notempty>
+	</tbody>
+    </table>
+	</div>
+    <div class="page">
+        {$page}
+		<span style="float:right;display:none">总业绩：{$a_amount|default="0"}元</span>
+    </div>
+	
+	

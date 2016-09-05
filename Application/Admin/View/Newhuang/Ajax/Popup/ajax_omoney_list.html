@@ -1,0 +1,58 @@
+<table class="">
+    <thead>
+        <tr>
+		<th class="">ID</th>
+		<th class="">账户</th>
+		<th class="">卡号</th>
+		<th class="">类型</th>
+		<th class="">当前余额</th>
+
+		
+		</tr>
+    </thead>
+    <tbody style="cursor: pointer;">
+		<notempty name="list">
+		<volist name="list" id="vo">
+		<tr class="checksss">
+		    
+			<td>{$vo.id}</td>
+			<td>{$vo.cname}</td>
+			<td>{$vo.cid}</td>
+			<td><if condition="$vo.type eq 1 ">银行卡<else/>现金</if></td>
+			<td>{$vo.money}</td>	
+		</tr>
+		</volist>
+		<else/>
+		<td colspan="9" class="text-center"> aOh! 暂时还没有内容! </td>
+		</notempty>
+	</tbody>
+    </table>
+	
+	<div class="page">
+        {$page}
+    </div><script type="text/javascript">
+	
+	//单击变色
+	$('.checksss').bind("click",function(){
+	 //变色效果
+	 $(this).addClass("tr_select").siblings().removeClass("tr_select");
+	 
+	 //$(this).find("input").trigger('click');
+	 
+    });
+	
+	//双击选中
+	$('.checksss').bind("dblclick",function(){
+	 //获取信息
+	 var guest_id = $(this).children('td').eq(0).html();
+	 var guestname = $(this).children('td').eq(1).html();
+
+	 var back_ob = {id:guest_id,name:guestname};
+	 
+	 parent.call_back(back_ob);
+	 
+	 parent.layer.closeAll();
+    });
+	
+	
+	</script>

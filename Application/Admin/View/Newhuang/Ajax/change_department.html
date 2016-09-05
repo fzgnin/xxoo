@@ -1,0 +1,89 @@
+<html><head>
+    <meta charset="UTF-8">
+    <title>|OneThink管理平台</title>
+    <link href="/thinkphproot/onethink/Public/favicon.ico" type="image/x-icon" rel="shortcut icon">
+    <link rel="stylesheet" type="text/css" href="/thinkphproot/onethink/Public/Admin/css/module.css">
+    
+	
+     <!--[if lt IE 9]>
+    <script type="text/javascript" src="/thinkphproot/onethink/Public/static/jquery-1.10.2.min.js"></script>
+	<script type="text/javascript" src="/thinkphproot/onethink/Public/Admin/layer/layer.js"></script>
+    <![endif]--><!--[if gte IE 9]><!-->
+    <script type="text/javascript" src="/thinkphproot/onethink/Public/static/jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" src="/thinkphproot/onethink/Public/Admin/js/jquery.mousewheel.js"></script>
+	<script type="text/javascript" src="/thinkphproot/onethink/Public/Admin/layer/layer.js"></script>
+    <!--<![endif]-->
+    
+</head>
+<body>
+    <!-- 头部 -->
+    
+    <!-- /头部 -->
+
+    <!-- 边栏 -->
+    
+    <!-- /边栏 -->
+
+    <!-- 内容区 -->
+    <block name="body">
+    <form action="{:U()}" method="post" class="form-horizontal" style="padding: 15px;">
+        
+        <div class="form-item">
+            <label class="item-label">部门归属<span class="check-tips">（设置成员所属部门）</span></label>
+            <div class="controls" style="text-align: center;margin: 10px 0px;">
+                <select name="parent_id" style="height: 40px;line-height: 40px;" id="select_d">
+                    <volist name="department" id="department">
+                        <option value="{$department.id}">{$department.name}</option>
+                    </volist>
+                </select>
+            </div>
+        </div>
+        <input type="hidden" id="uid_v" value="{$uid}">
+        <div class="form-item" style="text-align: center;">
+            <a class="btn submit-btn ajax-post" onclick="javascript:tijiao();" style="padding: 10px 30px;">确 定</a>
+            <a class="btn btn-return" onclick="javascript:close_ifm();return false;" style="padding: 10px 30px;">关 闭</a>
+        </div>
+    </form>
+</block>
+    <!-- /内容区 -->
+	
+	<script type="text/javascript">
+	var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+	function tijiao()
+	{
+	  var s_v = $('#select_d').val();
+	  
+	  var uid = $('#uid_v').val();
+	  
+	  $.ajax({
+	  type:'POST',
+	  url:'{:U('User/change_department')}',
+	  data:'id='+s_v+'&uid='+uid,
+	  success:function(data)
+	  { 
+	   if(data.status)
+	   {
+	    parent.layer.alert(data.info,{icon: 1,shift: 6});
+	    parent.layer.close(index);
+	   }else
+	   {
+	    parent.layer.msg(data.info);
+	   }
+	   
+	  }
+  
+	  })
+	 
+	
+	}
+	
+	function close_ifm()
+	{
+	 parent.layer.close(index);
+	}
+	</script>
+</body></html>
+
+
+
+

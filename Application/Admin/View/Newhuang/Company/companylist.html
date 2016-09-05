@@ -1,0 +1,95 @@
+<extend name="Public/basechild"/>
+
+
+
+
+<block name="body">
+	<!-- 标题栏 -->
+	<div class="main-title">
+		<h2>账户列表</h2>
+	</div>
+	<div class="cf">
+		<div class="fl">
+            <a class="btn" href="{:U('add')}">新 增</a>
+            
+        </div>
+
+        <!-- 高级搜索 -->
+		
+    </div>
+	
+    <!-- 数据列表 -->
+	<div id="guest_list">
+    <include file="Default:Ajax:Company:company_list" />
+	</div>
+</block>
+
+<block name="script">
+<script type="text/javascript">
+	var url = "{:U('Company/ajax_query')}";
+	var APP = "__APP__";
+	var URL_JS = "__URL__";
+	</script>
+	<script src="__STATIC__/thinkbox/jquery.thinkbox.js"></script>
+	<script type="text/javascript" src="__JS__/huang.js"/></script>
+	<script type="text/javascript">
+	
+	//修改客户资料弹出框
+	function edit_guest(obj)
+	{
+	 //iframe层
+	  var url = "__URL__/edit/id/"+obj;
+		layer.open({
+			type: 2,
+			title: '修改商品资料',
+			shadeClose: false,
+			shade: 0.8,
+			shift:5,
+			area: ['900px', '800px'],
+			content: url //iframe的url
+		}); 
+	
+	
+	}
+	
+	//删除商品
+	function d_goods(obj)
+	{
+	    layer.confirm("你确认要删除吗？",function(index1){
+		  
+		  $.ajax({
+					type: "POST",
+					url:"{:U('Admin/Goods/delete_goods')}",
+					data:{'id':obj},// 你的formid
+					async: false,
+					error: function(request) {
+						alert("网络传输错误");
+					},
+					success: function(data) {
+						
+						if(data.status)
+						{
+											
+							layer.alert(data.info,{icon: 1,shift: 6,closeBtn: 0},function(index2)
+							{
+							  table_order_page(0);
+							  layer.closeAll();
+							});
+							
+							
+						}else
+						{
+							layer.close(index1);
+							layer.msg(data.info);
+							table_order_page(0);
+						}
+					}
+				});
+	  
+		  })
+
+	}
+	
+	
+	</script>
+</block>

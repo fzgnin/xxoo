@@ -1,0 +1,61 @@
+<extend name="Public/basechild"/>
+
+<block name="body">
+<style type="text/css">
+.btn_list_1:hover{ background-color:#4BBD00 !important;}
+</style>
+	<!-- 标题栏 -->
+	<div class="main-title">
+		<h2 class="btn_h2_style">app预订单</h2>
+	</div>
+	<input type="hidden" id="benqi" value="{$time|default="1970-01-01"}" />
+    <!-- 数据列表 -->
+	<div id="guest_list">
+    <include file="Default:Ajax:Draft:order_list" />
+	</div>
+	
+	
+</block>
+
+<block name="script">
+<link href="__STATIC__/datetimepicker/css/datetimepicker.css" rel="stylesheet" type="text/css">
+<php>if(C('COLOR_STYLE')=='blue_color') echo '<link href="__STATIC__/datetimepicker/css/datetimepicker_blue.css" rel="stylesheet" type="text/css">';</php>
+<link href="__STATIC__/datetimepicker/css/dropdown.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="__STATIC__/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="__STATIC__/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+
+    <script type="text/javascript">
+	var url = "{:U('Draft/ajax_query')}";
+	var APP = "__APP__";
+	var URL_JS = "__URL__";
+	</script>
+	<script src="__STATIC__/thinkbox/jquery.thinkbox.js"></script>
+	<script type="text/javascript" src="__JS__/huang.js"/></script>
+	
+	<script type="text/javascript">
+	
+	function no_review(obj)
+	{
+		layer.confirm('确定反审核吗？反审核将删除该订单关联订单',function(index)
+			  {
+				$.ajax({
+				type:'POST',
+				data:{'id':obj},
+				url:"{:U('Draft/no_review')}",
+				success:function(data)
+					{
+					  if(data.status)
+					  {
+						  layer.msg(data.info,{icon:1,time: 1000});
+						  table_order_page(0);
+					  }else
+					  {
+					      layer.msg(data.info,{icon:2,time: 3000});
+					  }
+					}					
+				});	  
+			  })
+	
+	}
+	</script>
+</block>

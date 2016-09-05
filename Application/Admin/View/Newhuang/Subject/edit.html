@@ -1,0 +1,142 @@
+<extend name="Public/basechild"/>
+
+<block name="body">
+    <div class="main-title">
+        <h2 class="btn_h2_style">编辑科目</h2>
+    </div>
+    <form action="{:U('insert')}" method="post" class="form-horizontal">
+        <div class="form-item">
+            <label class="item-label">科目名称</label>
+            <div class="controls">
+                <input type="text" class="text input-large" name="name" value="{$info.name}">
+            </div>
+        </div>
+		
+		
+		
+		<div class="form-item">
+            <label class="item-label">辅助核算<span class="check-tips">（不选则无）</span></label>
+            <div class="controls">
+                <select name="assist_id">   
+					<option value="0">请选择</option>              
+					<option value="1" <if condition="$info.assist_id eq 1">selected="selected"</if>>部门</option>
+                </select>
+            </div>
+        </div>
+		
+        
+        <div class="form-item">
+		<input type="hidden" name="id" value="{$info.id}">
+            <button class="btn submit-btn ajax-post" id="submit" type="submit" target-form="form-horizontal">确 定</button>
+            <button class="btn btn-return" onclick="javascript:history.back(-1);return false;">返 回</button>
+        </div>
+    </form>
+</block>
+
+
+
+<block name="body">
+<style type="text/css">
+.demo-huang{
+max-height:500px
+}
+</style>
+<link rel="stylesheet" href="__CSS__/style.default.css" type="text/css" />
+<script type="text/javascript" src="__JS__/general.js"></script>
+    <div class="bodywrapper">
+  <!--头部-->
+
+    <!--子菜单结束-->
+    <div class="centercontent">
+    
+        <div class="pageheader">
+           
+            
+            <ul class="hornav">
+                <li class="current"><a href="#basicform">编辑科目</a></li>
+                <li class=""><a href="#secondform">其他</a></li>
+            </ul>
+        </div><!--pageheader-->
+        
+        <div id="contentwrapper" class="contentwrapper">
+        	<form  id="mpostForm" name="mpostForm" class="stdform" action="{:U('insert')}" method="post">
+        	<div id="basicform" class="subcontent"><!--contenttitle-->
+
+                  	    <p>
+                        	<label>科目名称</label>
+                            <span class="field"><input type="text" name="name"  class="smallinput" value="{$info.name}" /></span>
+                            <small class="desc">请填写科目名称</small>
+                        </p>
+            
+						
+						<p>
+							<label>辅助核算项目</label>
+							<span class="field">
+							<volist name="assist" id="vo">
+							<span class="btn_list_1">
+							
+							
+							<input style="margin-right:5px" name="assist_id[]" type="checkbox" <if condition="$vo.checked eq 1">checked="true"</if> value="{$vo.id}" />
+							
+							{$vo.name} </span> 
+							</volist>
+							</span>
+						</p>
+                        
+
+                       
+                        
+                        
+                        <!--隐藏字段-->
+                         <input type="hidden" name="id" value="{$info.id}">
+                        <p class="stdformbutton">
+                        	<input style="width:100px; margin: 0; font-weight: bold; color: #eee; background: #FB9337; border: 1px solid #F0882C; padding: 7px 10px; 
+  -moz-box-shadow: none; -webkit-box-shadow: none; box-shadow: none; cursor: pointer; -moz-border-radius: 2px; -webkit-border-radius: 2px;
+  border-radius: 2px;" type="button" class="submit radius2" value="提交" onClick="myFunction()">
+                        </p>
+                    
+
+            </div><!--subcontent-->
+
+            <div id="secondform" class="subcontent" style="display:none">
+            </div>
+        </form>
+        </div><!--contentwrapper-->
+        
+	</div><!-- centercontent -->
+    
+    
+</div>
+</block>
+
+<block name="script">
+    
+	<script type="text/javascript">
+	
+	function myFunction()
+	{ 
+	
+	 if(mpostForm.name.value==""){
+	 	alert("请输入科目名称！");
+		mpostForm.name.focus();
+		return false;
+	   } 
+	   if (confirm("你确认要提交吗？"))
+		document.mpostForm.submit()
+	}
+	
+	
+	jQuery('.btn_anniu').click(function(){
+	var html_span = jQuery('.formwrapper').eq(1).prop("outerHTML");
+	jQuery('#add_xuanxiang').append(html_span);
+	})
+
+	
+	function check_all(obj)
+	{
+		$(obj).closest('dl').find('dd').find('input').prop('checked', obj.checked);
+	}
+	</script>
+</block>
+
+

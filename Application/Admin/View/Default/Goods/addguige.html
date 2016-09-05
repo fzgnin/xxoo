@@ -1,0 +1,86 @@
+<extend name="Public/base"/>
+<block name="body">
+<style type="text/css">
+.demo-huang{
+max-height:500px
+}
+</style>
+<link rel="stylesheet" href="__CSS__/style.default.css" type="text/css" />
+<script type="text/javascript" src="__JS__/general.js"></script>
+    <div class="bodywrapper">
+  <!--头部-->
+
+    <!--子菜单结束-->
+    <div class="centercontent">
+    
+        <div class="pageheader">
+           
+            
+            <ul class="hornav">
+                <li class="current"><a href="#basicform">商品单位</a></li>
+                <li class=""><a href="#secondform">其他</a></li>
+            </ul>
+        </div><!--pageheader-->
+        
+        <div id="contentwrapper" class="contentwrapper">
+        	<form  id="mpostForm" name="mpostForm" class="stdform" action="{:U('Goods/insertguige')}" method="post">
+        	<div id="basicform" class="subcontent"><!--contenttitle-->
+
+                  	    <p>
+                        	<label>商品单位</label>
+                            <span class="field"><textarea  name="guige"  class="smallinput" />{$guige.guige}</textarea></span>
+                            <small class="desc">每个规格之间用逗号隔开，注意是英文状态下的逗号</small>
+                        </p>
+            
+						
+						
+
+                       
+                        
+                        
+                        <!--隐藏字段-->
+                         
+                        <p class="stdformbutton">
+                        	<input style="width:100px; margin: 0; font-weight: bold; color: #eee; background: #FB9337; border: 1px solid #F0882C; padding: 7px 10px; 
+  -moz-box-shadow: none; -webkit-box-shadow: none; box-shadow: none; cursor: pointer; -moz-border-radius: 2px; -webkit-border-radius: 2px;
+  border-radius: 2px;" type="button" class="submit radius2" value="提交" onClick="myFunction()">
+                        </p>
+                    
+
+            </div><!--subcontent-->
+
+            <div id="secondform" class="subcontent" style="display:none">
+            </div>
+        </form>
+        </div><!--contentwrapper-->
+        
+	</div><!-- centercontent -->
+    
+    
+</div>
+</block>
+
+<block name="script">
+    
+	<script type="text/javascript">
+	
+	function myFunction()
+	{ 
+	
+	 if(mpostForm.guige.value==""){
+	 	alert("请输入单位！");
+		mpostForm.guige.focus();
+		return false;
+	   } 
+	   if (confirm("你确认要提交吗？"))
+		document.mpostForm.submit()
+	}
+	
+	
+	jQuery('.btn_anniu').click(function(){
+	var html_span = jQuery('.formwrapper').eq(1).prop("outerHTML");
+	jQuery('#add_xuanxiang').append(html_span);
+	})
+	</script>
+</block>
+

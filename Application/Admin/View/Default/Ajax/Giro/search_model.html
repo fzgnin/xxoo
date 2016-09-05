@@ -1,0 +1,141 @@
+<div class="cf">
+
+		<div class="cf" >
+		<div class="fl" id="select_value_id">
+		
+		    <div class="ajax_search_btn_div">
+			<span class="ajax_search_btn_span">起始日期</span>
+			<input value="{$filter.begin_time|date='Y-m-d',###}" placeholder="请选择时间" class="ajax_search_btn_input time" style="padding:5px"   name="begin_time" type="text" onchange="clean_timetype_new(this);table_order_page(1)">
+			</div>
+			
+			<div class="ajax_search_btn_div">
+			<span class="ajax_search_btn_span">截止日期</span>
+			<input value="{$filter.end_time|date='Y-m-d',###}" placeholder="请选择时间" class="ajax_search_btn_input time" style="padding:5px"  name="end_time" type="text" onchange="clean_timetype_new(this);table_order_page(1)">
+			</div>
+			
+			<div class="ajax_search_btn_div">
+			<a class="btn" href="javascript:;" <if condition=" $filter.time_type eq 'year' " >style="background-color:rgb(35, 59, 19)"</if> onclick="change_times('year')">今 年</a>
+			
+			<a class="btn" href="javascript:;" <if condition=" $filter.time_type eq 'mounth' " >style="background-color:rgb(35, 59, 19)"</if> onclick="change_times('mounth')">本 月</a>
+			
+			<a class="btn" href="javascript:;" <if condition=" $filter.time_type eq 'day' " >style="background-color:rgb(35, 59, 19)"</if> onclick="change_times('day')">今 天</a>
+			
+			<a class="btn" href="javascript:;" <if condition=" $filter.time_type eq 'stage' " >style="background-color:rgb(35, 59, 19)"</if> onclick="change_times('stage')">本 期</a>
+			
+			
+			</div>
+			
+			<!--{获取条件数组的值并赋值}-->
+			<a href="javascript:;" class="btn_list_1" style="background-color:rgb(35, 59, 19);padding:6px 10px">
+			<if condition="$filter.date_type eq 1 ">
+			下单时间
+			<elseif condition="$filter.date_type eq 2 "/>
+			过账时间
+			<elseif condition="$filter.date_type eq 3 "/>
+			入单时间
+			</if>
+			</a>
+			
+			<a href="javascript:;" class="btn_list_1" style="padding:6px 16px" onclick="show_select();">高级搜索</a>
+			
+			
+			<if condition="$filter.status eq 1 ">
+			<a href="javascript:;" onclick="delete_select('status')" class="btn_list_1"  style="background-color:rgb(150, 35, 16)">未过账</a>
+			<elseif condition="$filter.status eq 2 "/>
+			<a href="javascript:;" onclick="delete_select('status')" class="btn_list_1"  style="background-color:rgb(150, 35, 16)">已过账</a>
+			<elseif condition="$filter.status eq 3 "/>
+			<a href="javascript:;" onclick="delete_select('status')" class="btn_list_1"  style="background-color:rgb(150, 35, 16)">已作废</a>
+			</if>
+			
+			<if condition="$filter.out_cname "><a href="javascript:;" onclick="delete_select('out_cname')" class="btn_list_1"  style="background-color:rgb(150, 35, 16)">转出账户：{$filter.out_cname}</a></if>
+			<if condition="$filter.in_cname "><a href="javascript:;" onclick="delete_select('in_cname')" class="btn_list_1"  style="background-color:rgb(150, 35, 16)">转入账户：{$filter.in_cname}</a></if>
+			
+			<if condition="$filter.order_sn "><a href="javascript:;" onclick="delete_select('order_sn')" class="btn_list_1"  style="background-color:rgb(150, 35, 16)">订单号：{$filter.order_sn}</a></if>
+			<if condition="$filter.money "><a href="javascript:;" onclick="delete_select('money')" class="btn_list_1"  style="background-color:rgb(150, 35, 16)">总金额：{$filter.money}</a></if>
+			<if condition="$filter.remarks "><a href="javascript:;" onclick="delete_select('remarks')" class="btn_list_1"  style="background-color:rgb(150, 35, 16)">备注：{$filter.remarks}</a></if>
+			
+        </div>
+		
+    </div>
+		
+    </div>
+
+<div id="search_model" style="display:none">
+<div class="fl"  style="padding:10px">
+<form name="select_model_form" id="select_model_form" method="post" action="">
+		
+		    <div class="ajax_search_btn_div" style="padding:5px">
+			<span class="ajax_search_btn_span">时间类型</span>
+			<select class="ajax_search_btn_input" style="height:30px;border-radius:0px;min-width:200px;outline:none;"  name="date_type"> 
+									  
+                                      <option value="1" <if condition="$filter.date_type eq 1 ">selected = "selected"</if> >下单时间</option>
+									  <option value="2" <if condition="$filter.date_type eq 2 ">selected = "selected"</if> >过账时间</option>
+									  <option value="3" <if condition="$filter.date_type eq 3 ">selected = "selected"</if> >入单时间</option>				     
+									</select>
+			
+			</div>
+			
+			
+			<div class="ajax_search_btn_div" style="padding:5px">
+			<span class="ajax_search_btn_span">起</span>
+			<input value="{$filter.begin_time|date='Y-m-d',###}" id="search_begintime_id" placeholder="请选择时间" class="ajax_search_btn_input time" style="padding:5px;width:89px"   name="begin_time" type="text" onchange="$('#select_time_type').val('');">
+			<span class="ajax_search_btn_span">止</span>
+			<input value="{$filter.end_time|date='Y-m-d',###}" id="search_endtime_id" placeholder="请选择时间" class="ajax_search_btn_input time" style="padding:5px;width:89px"  name="end_time" type="text" onchange="$('#select_time_type').val('');">
+			</div>
+			
+			<div class="ajax_search_btn_div" style="padding:5px">
+			<span class="ajax_search_btn_span">订单状态</span>
+			<select class="ajax_search_btn_input" style="height:30px;border-radius:0px;min-width:200px;outline:none;"  name="status"> 
+									  <option value="0" <if condition="$filter.status eq 0 ">selected = "selected"</if> >请选择</option>
+                                      <option value="1" <if condition="$filter.status eq 1 ">selected = "selected"</if> >未过账</option>
+									  <option value="2" <if condition="$filter.status eq 2 ">selected = "selected"</if> >已过账</option>
+									  <option value="3" <if condition="$filter.status eq 3 ">selected = "selected"</if> >已作废</option>				     
+									</select>
+			
+			</div>
+			
+			<div class="ajax_search_btn_div" style="padding:5px">
+			<span class="ajax_search_btn_span">转出账户模糊</span>
+			<input class="ajax_search_btn_input" style="padding:5px;width:100%;" type="text"  value="{$filter.out_cname}"  name="out_cname">
+			</div>
+			
+			
+			<div class="ajax_search_btn_div" style="padding:5px">
+			<span class="ajax_search_btn_span">转入账户模糊</span>
+			<input class="ajax_search_btn_input" style="padding:5px;width:100%;" type="text"  value="{$filter.in_cname}"  name="in_cname">
+			</div>
+			
+			
+			<div class="ajax_search_btn_div" style="padding:5px">
+			<span class="ajax_search_btn_span">订单号模糊</span>
+			<input class="ajax_search_btn_input" style="padding:5px;min-width:175px;" type="text"  value="{$filter.order_sn}"  name="order_sn">
+			</div>
+			
+			<div class="ajax_search_btn_div" style="padding:5px">
+			<span class="ajax_search_btn_span">总金额模糊</span>
+			<input class="ajax_search_btn_input" style="padding:5px;min-width:175px;" type="text"  value="{$filter.money}"  name="money">
+			</div>
+			
+			<div class="ajax_search_btn_div" style="padding:5px">
+			<span class="ajax_search_btn_span">备注模糊</span>
+			<input class="ajax_search_btn_input" style="padding:5px;min-width:175px;" type="text"  value="{$filter.remarks}"  name="remarks">
+			</div>
+			
+			<input type="hidden" name="p" id="select_p" value="{$filter.p}" />
+			<input type="hidden" name="time_type" id="select_time_type" value="{$filter.time_type}" />
+
+	</form>		
+        </div>
+		</div>
+		
+		<script type="text/javascript">
+		$(function(){
+			$('.time').datetimepicker({
+				format: 'yyyy-mm-dd',
+				language:"zh-CN",
+				minView:2,
+				autoclose:true
+			});
+			
+		});
+	   </script>

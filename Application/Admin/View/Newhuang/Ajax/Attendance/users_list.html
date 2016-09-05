@@ -1,0 +1,49 @@
+<div class="data-table table-striped">
+	<table class="">
+    <thead>
+        <tr>
+		<th class="row-selected row-selected"><input class="check-all" type="checkbox"/></th>
+		<th class="">ID</th>
+		<th class="">昵称</th>
+		<th class="">账号</th>
+		<th class="">所属部门</th>
+		<th class="">职位</th>
+		<th class="">最后登录时间</th>
+		<th class="">操作</th>
+		</tr>
+    </thead>
+    <tbody>
+		<notempty name="list">
+		<volist name="list" id="vo">
+		<tr>
+            <td><input class="ids" type="checkbox" name="id[]" value="{$vo.id}" /></td>
+			<td>{$vo.id} </td>
+			<td>{$vo.name}</td>
+			<td>{$vo.username}</td>
+			<td>{$vo.bname}</td>
+			<td>{$vo.zhiwei}</td>
+			<td>{$vo.lastsignin|date="Y-m-d H:i",###}</td>
+			<td>
+				<a href="javascript:;" class="btn_list_1" onclick="edit_userinfo({$vo.id})">编辑</a>
+				
+				<a href="javascript:;" class="btn_list_1" onclick="show_userarchives({$vo.id})">员工档案</a>
+				
+                <if condition="$vo.onjob eq 1 ">
+				<a href="javascript:;" class="btn_list_1" onclick="set_user_onjob({$vo.id},{$vo.onjob})">离职</a>
+				<else />
+				<a href="javascript:;" class="btn_list_1" style="background-color:#4933DD" onclick="set_user_onjob({$vo.id},{$vo.onjob})">激活</a>
+				</if>
+
+				
+                </td>
+		</tr>
+		</volist>
+		<else/>
+		<td colspan="9" class="text-center"> aOh! 暂时还没有内容! </td>
+		</notempty>
+	</tbody>
+    </table>
+	</div>
+    <div class="page" style="padding-left:15px">
+        {$page}
+    </div>

@@ -1,0 +1,44 @@
+<div class="data-table table-striped">
+	<table class="">
+    <thead>
+        <tr>
+		<th class="row-selected row-selected"><input class="check-all" type="checkbox"/></th>
+		<th class="" style="background-color:#33CC99" onClick="table_order('onethink_supplier.id')">ID</th>
+		<th class="">供应商</th>
+		<th class="">地区</th>
+		<th class="">负责人</th>
+		<th class="">联系方式</th>
+		<th class="">账户金额</th>
+		<th class="">操作</th>
+		</tr>
+    </thead>
+    <tbody>
+		<notempty name="list">
+		<volist name="list" id="vo">
+		<tr>
+            <td><input class="ids" type="checkbox" name="id[]" value="{$vo.id}" /></td>
+			<td>{$vo.id} </td>
+			<td>{$vo.suppliername}</td>
+			<td>{$vo.province}</td>
+			<td>{$vo.manager}</td>
+			<td>{$vo.phone}</td>
+			<td>{$vo.money}</td>
+			<td>
+				<a href="javascript:;" onclick="edit({$vo.id})" class="btn_list_1" style="background-color:#00B0BD;">修改</a>	
+				<!--<a href="{:U('suppliermoneyinfo',array('sid'=>$vo['id'],'type'=>'money'))}" class="btn_list_1">账户信息</a> -->
+				<a href="javascript:;" class="btn_list_1"  onclick="delete_order({$vo.id})">删除</a> 
+                </td>
+		</tr>
+		</volist>
+		<else/>
+		<td colspan="9" class="text-center"> aOh! 暂时还没有内容! </td>
+		</notempty>
+	</tbody>
+    </table>
+	<input type="hidden" id="SORT_BY_ID" value="{$sort_by}">
+	</div>
+    <div class="page">
+        {$page}
+    </div>
+	
+	

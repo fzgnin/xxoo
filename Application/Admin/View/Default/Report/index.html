@@ -1,0 +1,84 @@
+<extend name="Public/base" />
+<block name="body">
+	<!-- 标题栏 -->
+	<div class="main-title">
+		<h2 class="btn_h2_style">业绩查询</h2>
+	</div>
+	<div class="cf">
+		<div class="fl" style="display:none">
+            <a class="btn" href="{:U('add')}">新 增</a>
+            
+        </div>
+		<input type="hidden" id="benqi" value="{$time|default="1970-01-01"}" />
+        <!-- 高级搜索 -->
+		<div class="search-form fr cf" style="display:none">
+			<div class="sleft">
+				<input type="text" name="nickname" class="search-input" value="{:I('nickname')}" placeholder="请输入用户昵称或者ID">
+				<a class="sch-btn" href="javascript:;" id="search" url="{:U('index')}"><i class="btn-search"></i></a>
+			</div>
+		</div>
+    </div>
+	
+    <!-- 数据列表 -->
+	<div id="guest_list">
+    <include file="Default:Ajax:Report:report_jlist" />
+	</div>
+</block>
+
+<block name="script">
+
+<link href="__STATIC__/datetimepicker/css/datetimepicker.css" rel="stylesheet" type="text/css">
+<php>if(C('COLOR_STYLE')=='blue_color') echo '<link href="__STATIC__/datetimepicker/css/datetimepicker_blue.css" rel="stylesheet" type="text/css">';</php>
+<link href="__STATIC__/datetimepicker/css/dropdown.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="__STATIC__/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="__STATIC__/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+
+    <script type="text/javascript">
+	var url = "{:U('Report/ajax_query')}";
+	var APP = "__APP__";
+	</script>
+	
+	<script src="__STATIC__/thinkbox/jquery.thinkbox.js"></script>
+	<script type="text/javascript" src="__JS__/huang.js"/></script>
+	
+	<script type="text/javascript">
+	//查看订单详细
+	function show_order(obj)
+	{
+	 //iframe层
+	  var url = "__APP__/Admin/Order/order_info/id/"+obj;
+		layer.open({
+			type: 2,
+			title: '查看订单详细',
+			shadeClose: false,
+			shade: 0.8,
+			shift:5,
+			area: ['1500px', '800px'],
+			content: url //iframe的url
+		}); 
+	
+	
+	}
+	
+	function call_back(obj)
+	{
+	 	//回调函数赋值到页面
+		
+		if(1 == obj.mtype)
+		{
+			$('#hhhhyu').val(obj.name);
+			$('#hhhhyu').attr('title',obj.name);
+			$('#guest_id').val(obj.id);
+		}
+		else if(3 == obj.mtype)
+		{
+			$('#department_id').val(obj.name);
+			$('#department_id').attr('title',obj.name);
+			$('#bumen_id').val(obj.id);
+		}
+		
+		
+		table_order_page(1);
+	}
+	</script>
+</block>

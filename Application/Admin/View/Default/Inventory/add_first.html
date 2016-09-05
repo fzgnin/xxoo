@@ -1,0 +1,188 @@
+<extend name="Public/base"/>
+<block name="body">
+<link rel="stylesheet" href="__CSS__/style.default.css" type="text/css" />
+<link rel="stylesheet" href="__CSS__/order_css.css" type="text/css" />
+<link rel="stylesheet" href="__CSS__/font-awesome.min.css" type="text/css" />
+<div class="bill-container ng-scope">
+<form name="xsckd" id="xsckd" action="{:U('Inventory/insert')}" method="post">
+    <div class="ng-scope" ><div class="bill-header ng-scope">
+    <div class="bill-subject">
+        <div class="bill-subject-left">
+            <div class="subject pull-left">
+                <h1>
+                    <input value="初始化库存单" type="text" style="background: rgb(33, 179, 61) none repeat scroll 0% 0%;color: rgb(255, 255, 255);box-shadow:none">
+                </h1>
+            </div>
+            <div class="company-info pull-left">
+                <big class="ng-binding">上海国际雅兰库存初始单</big>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="bill-footer-input row">
+            <div class="bill-footer-input-item">
+                <div class="input-group ng-scope">
+				<span class="input-group-addon">录单日期</span>
+				<input value="{$time}" placeholder="请选择时间" class="form-control input_widget_datetime ng-pristine ng-untouched ng-valid time" name="add_time" type="text">
+				</div>
+            </div>
+			
+			<div class="bill-footer-input-item">
+                <div class="input-group ng-scope">
+				<span class="input-group-addon">单据编号</span>
+				<span class="form-control input_widget_number ng-pristine ng-untouched ng-valid">{$order_num}</span>
+				<input value="{$order_num}" name="order_sn" type="hidden">
+				</div>
+            </div>
+			
+            <div class="bill-footer-input-item">
+                <div class="input-group ng-scope">
+				<span class="input-group-addon">初始化仓库</span>
+				<input class="form-control input_widget_number ng-pristine ng-untouched ng-valid" name="warehouse" type="text" value="上海总部库">
+				</div>
+            </div>
+			
+			<div class="bill-footer-input-item">
+                <div class="input-group ng-scope">
+				<span class="input-group-addon">录单人</span>
+				<span class="form-control input_widget_number ng-pristine ng-untouched ng-valid">{$username}</span>
+				<input type="hidden" value="{$username}">
+				</div>
+            </div>
+        </div>
+</div>
+    <div class="bill-body">
+        <div config="bill_config" class="bill-rows ng-isolate-scope">
+    <table class="table table-bordered bill-rows-table">
+        <thead>
+            <tr>
+                <th width="60" style="text-align:center"><i class="fa fa-plus" style="cursor: pointer;"></i></th>
+                <th class="text-center" width="50">#</th>
+                <th class="ng-scope" >
+                    <label class="ng-binding">商品编号</label>      
+                </th><th class="ng-scope" >
+                    <label class="ng-binding">商品全名</label>         
+                </th><th class="ng-scope" >
+                    <label class="ng-binding">规格</label>     
+                </th><th class="ng-scope" >
+                    <label class="ng-binding">库存数量</label>    
+                </th><th class="ng-scope" >
+                    <label class="ng-binding">盘点数量</label>      
+                </th><th class="ng-scope" >
+                    <label class="ng-binding">盈亏数量</label>      
+                </th>
+					
+            </tr>
+        </thead>
+        <tbody id="tbody_id" onkeydown="keyDown(event)">
+            <tr>
+                <td class="text-center">
+                    <i class="fa fa-trash-o" style="cursor: pointer;"></i>
+                </td>
+                <td class="text-center">#<span class="paixu">1</span></td>
+                <td class="td_huang">
+					<input class="form-control form-huang" type="text"  onkeydown="enter_up(this,'goods')" value="" name="code[]"  onblur="check_info(this)">
+                </td>
+				<td class="td_huang" style="width: 200px !important;"><input class="form-control form-huang" type="text" name="goodsname[]" value="" onblur="check_info(this)"  onkeydown="enter_up(this,'kgoods')"/><input type="hidden" name="goods_id[]" value="" /></td>
+				<td><span></span><input type="hidden" name="format[]" value="" /></td>
+				<td>
+                 <span></span><input type="hidden" name="num[]" value="" /> 
+                </td>
+				<td class="td_huang">
+                 <input class="form-control form-huang" type="text" name="n_num[]" value="" onBlur="calculate_money()"/>
+                </td>
+				<td>
+                  <span></span><input type="hidden" name="l_num[]" value="" />
+                </td>
+				
+				
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+               <td colspan="2" align="center"><strong class="ng-binding">合计</strong></td>
+               <td class="ng-scope"></td>
+			   <td class="ng-scope"></td>
+			   <td class="ng-scope"></td>
+			   <td class="ng-scope">
+			   <span id="total_num"></span><input type="hidden" name="total_num" id="total_num_input" value="" />
+			   </td>
+			   <td class="ng-scope">
+			   <span id="total_n_num"></span><input type="hidden" name="total_n_num" id="total_n_num_input" value="" />
+			   </td>
+			   <td class="ng-scope">
+			   <span id="total_l_num"></span><input type="hidden" name="total_l_num" id="total_l_num_input" value="" />
+			   </td>
+			   
+            </tr>
+        </tfoot>
+    </table>
+</div>
+    </div>
+    <div class="bill-footer">
+        <div class="bill-footer-input row">
+            <div class="input-group bill-footer-input-item" style="width: auto">
+                <span class="input-group-addon ng-binding">备注</span>
+                <input class="form-control ng-pristine ng-untouched ng-valid" name="remarks" value="" type="text">
+            </div>
+        </div>
+
+        <div class="bill-footer-meta">
+            <span class="label label-primary">
+                <span class="ng-binding">制单人</span>
+                <span class="ng-binding">TEam Swift
+ 管理员</span>
+            </span>
+            <div class="pull-right">
+                <input type="hidden" value="8"name="order_type"/>
+				<input type="button" value="提交" onclick="form_submit()"  class="btn btn-primary btn-lg ng-binding"/>
+            </div>
+        </div>
+
+    </div>
+	</form>
+</div>
+
+    
+</block>
+
+<block name="script">
+<link href="__STATIC__/datetimepicker/css/datetimepicker.css" rel="stylesheet" type="text/css">
+<php>if(C('COLOR_STYLE')=='blue_color') echo '<link href="__STATIC__/datetimepicker/css/datetimepicker_blue.css" rel="stylesheet" type="text/css">';</php>
+<link href="__STATIC__/datetimepicker/css/dropdown.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="__STATIC__/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="__STATIC__/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+<script type="text/javascript">
+
+Think.setValue("type", {$data.type|default='""'});
+Think.setValue("display", {$data.display|default=0});
+
+$('#submit').click(function(){
+	$('#form').submit();
+});
+
+$(function(){
+    $('.time').datetimepicker({
+        format: 'yyyy-mm-dd hh:ii',
+        language:"zh-CN",
+        minView:2,
+        autoclose:true
+    });
+    showTab();
+
+});
+</script>
+<script type="text/javascript">
+var URL_JS = "__URL__";
+var APP = "__APP__";
+</script>
+<script type="text/javascript" src="__JS__/korder_huang.js"/></script>
+
+<script type="text/javascript">
+function call_back()
+{
+
+}
+</script>
+</block>

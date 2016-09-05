@@ -1,0 +1,66 @@
+<extend name="Public/basechild"/>
+
+<block name="body">
+	<!-- 标题栏 -->
+	<div class="main-title">
+		<h2 class="btn_h2_style">仓库商品金额</h2>
+	</div>
+	
+	<div class="cf">
+		
+
+		<div class="fl" id="select_value_id">
+		
+		<div class="ajax_search_btn_div">
+			<span class="ajax_search_btn_span">选择品牌</span>
+			<select class="ajax_search_btn_input" style="height:30px;border-radius:0px;min-width:100px;outline:none;"  name="brand_id" onchange="table_order_page(1);"> 
+									  <option value="" select="selectd">请选择品牌</option> 
+									  <volist name="brand_list" id="v">
+                                      <option value="{$v.id}">{$v.name}</option>
+								      </volist>	     
+									</select>
+			
+			</div>
+
+		<div class="search-form fr cf" >
+			<div class="sleft">
+				<input type="text" name="keywords" class="ajax_search_btn_input search-input" value="" placeholder="请输入商品名字" >
+				<a class="sch-btn" href="javascript:;" id="search" url="{:U('ajax_query')}"><i class="btn-search"></i></a>
+			</div>
+		    </div>
+			<input type="hidden" class="ajax_search_btn_input" name="type" value="warehouse" />
+        </div>
+     
+		
+    </div>
+	
+    <!-- 数据列表 -->
+	<div id="guest_list">
+    <include file="Default:Ajax:Ledgers:warehouse_list" />
+	</div>
+</block>
+
+<block name="script">
+	<script type="text/javascript">
+	var url = "{:U('Ledgers/ajax_query')}";
+	var APP = "__APP__";
+	var URL_JS = "__URL__";
+	</script>
+	<script src="__STATIC__/thinkbox/jquery.thinkbox.js"></script>
+	<script type="text/javascript" src="__JS__/huang.js"/></script>
+	
+	<script type="text/javascript">
+	//搜索功能
+	$("#search").click(function(){
+		table_order_page(1);
+	});
+	//回车搜索
+	$(".search-input").keyup(function(e){
+		if(e.keyCode === 13){
+			$("#search").click();
+			return false;
+		}
+	});
+	</script>
+
+</block>

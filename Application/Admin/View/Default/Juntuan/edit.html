@@ -1,0 +1,278 @@
+<extend name="Public/base"/>
+
+<block name="body">
+<style type="text/css">
+.demo-huang{
+max-height:500px
+}
+</style>
+<link rel="stylesheet" href="__CSS__/style.default.css" type="text/css" />
+<script type="text/javascript" src="__JS__/general.js"></script>
+    <div class="bodywrapper">
+  	<!--头部-->
+
+    <!--子菜单结束-->
+    <div class="centercontent">
+    
+        <div class="pageheader">
+           
+            
+            <ul class="hornav">
+                <li class="current"><a href="#basicform">填写店家信息</a></li>
+                <li class=""><a href="#secondform">暂无</a></li>
+            </ul>
+        </div><!--pageheader-->
+        
+        <div id="contentwrapper" class="contentwrapper">
+        	<form  id="mpostForm" name="mpostForm" class="stdform" action="{:U('Juntuan/edit')}" method="post" onsubmit="return myFunction();">
+        	<div id="basicform" class="subcontent"><!--contenttitle-->
+
+                  	
+                        
+			<p>
+				<label>业绩划分名称</label>
+				<span class="field"><input type="text" name="tname"  class="smallinput"  value="{$info.tname}"/></span>
+				<small class="desc">请填写名称如（一军团、二军团···）</small>
+			</p>
+                                    
+                        
+			<p>
+				<label>上级分类</label>
+				<span class="field">
+				<select name="pid" class="chzn-select" style="width:350px;height: 37px;">
+				<volist name="department" id="department">
+					<option value="{$department.id}" <if condition="$info.pid eq $department.id ">selected="selected"</if>>{$department.title_show}</option>
+				</volist>
+				</select>
+				
+				
+				</span>
+				
+			</p>
+                        
+
+			<p>
+				<label>划分业绩部门</label>
+				<span class="field">
+				<a href="javascript:;" onclick="show_userbid();" class="btn_list_1">设置部门</a>
+
+				<span id="gbumen_id">
+				
+				<foreach name='gblist' item='v'>
+							<a href="javascript:;" id="gbid_{$v.id}" class="btn_list_1" style="background-color:rgb(35, 59, 19);">{$v.bname}</a>
+							<input type="hidden" name="gbid[]" value="{$v.id}" />
+                            </foreach>
+				</span>
+			</p>             
+			
+   
+                        
+                        <!--隐藏字段-->
+                         
+                        <p class="stdformbutton">
+						<input type="hidden" name="id" value="{$info.id}">
+                        	<input style="width:100px; margin: 0; font-weight: bold; color: #eee; background: #FB9337; border: 1px solid #F0882C; padding: 7px 10px; 
+  -moz-box-shadow: none; -webkit-box-shadow: none; box-shadow: none; cursor: pointer; -moz-border-radius: 2px; -webkit-border-radius: 2px;
+  border-radius: 2px;" type="button" class="submit radius2" value="提交" onClick="myFunction()">
+                        </p>
+                    
+
+            </div><!--subcontent-->
+
+            <div id="secondform" class="subcontent" style="display:none">
+              
+
+            </div>
+        </form>
+        </div><!--contentwrapper-->
+        
+	</div><!-- centercontent -->
+    
+    
+</div>
+</block>
+
+<block name="script">
+  
+	
+	<script type="text/javascript">
+	
+	function myFunction()
+	{ 
+	
+	 if(mpostForm.tname.value==""){
+	 
+	 	layer.msg("请输入划分名称！",{icon:2,time: 3000});
+		mpostForm.tname.focus();
+		return false;
+	   }
+ 
+	   layer.confirm(
+			'你确认要提交吗？',
+			{icon: 3, title:'提示'},
+			function(index){
+              document.mpostForm.submit();
+              layer.close(index);
+       		}
+	   );   
+	   return false;
+	}
+	
+	
+	jQuery('.btn_anniu').click(function(){
+	
+	var html_span = jQuery('.formwrapper').eq(1).prop("outerHTML");
+	
+	jQuery('#add_xuanxiang').append(html_span);
+
+	})
+	
+	
+	
+	function show_userbid(obj)
+	{
+		//获取军团列表
+		
+		$.ajax({
+		type:'post',
+		data:{'gid':obj},
+		url:"{:U('Juntuan/select_uidbid')}",
+		success:function(data)
+		{
+			if(data)
+			{
+				var str = '<form method="post" action="" name="tbform" id="tbform">';
+				
+				for(var i=0;i<data.length;i++)
+				{
+					str += '<dl class="checkmod" style="border:none;border-bottom: 1px solid #ebebeb;margin-bottom:0px">';
+
+					str += '<dd class="bd" style="padding-left:30px">';
+						
+					str += '<div class="rule_check"><div>';
+					
+					str += '<label class="checkbox">';
+					
+					if(data[i]['gbid'])
+					{
+						if(data[i]['show'])
+						{
+							str += '<input class="auth_rules rules_row" type="checkbox" checked="true" name="bid[]" value="'+data[i]['id']+'" data-name="'+data[i]['bname']+'"/>'+data[i]['title_show'];
+						}else
+						{
+							str += '<input class="auth_rules rules_row" type="checkbox" disabled="" checked="true" name="bid[]" value="'+data[i]['id']+'" data-name="'+data[i]['bname']+'"/>'+data[i]['title_show'];
+						}
+					
+						str += '<input type="hidden" name="ubid[]" value="'+data[i]['gbid']+'"/>';
+					}else
+					{
+						if(data[i]['show'])
+						{
+							str += '<input class="auth_rules rules_row" type="checkbox" name="bid[]" value="'+data[i]['id']+'" data-name="'+data[i]['bname']+'"/>'+data[i]['title_show'];
+						}else
+						{
+							str += '<input class="auth_rules rules_row" type="checkbox" disabled="" name="bid[]" value="'+data[i]['id']+'" data-name="'+data[i]['bname']+'"/>'+data[i]['title_show'];
+						}
+					}
+							
+					str += '</label></div></div>';
+
+					str += '</dd></dl>';
+
+				}
+				
+				str += '<input type="hidden" name="uid" value="'+obj+'"></form>';
+				
+				layer.open({
+					type:1,
+					title: '军团管理权限',
+					shadeClose: false,
+					shade: 0.8,
+					shift:5,
+					area: ['380px', 'auto'],
+					skin: 'demo-huang',
+					btn: ['确认'],
+					success: function(layero, index){
+						//获取页面现存部门id
+						$('#gbumen_id').find('input[name="gbid[]"]').each(function(){
+						
+						    var that = this;
+							$('#tbform').find('input[name="bid[]"]').each(function(){
+							//形成数据插入页面
+								if($(that).val() == $(this).val())
+								{
+									$(this).attr("checked","checked");
+								}
+							});
+						}); 
+					},
+					yes: function(index, layero){
+						//提交到后台
+						
+						var str = '';
+						$('#tbform').find('input[name="bid[]"]').each(function(){
+							//形成数据插入页面
+						
+						var bid_f = $(this).val();
+						
+						if($(this).prop('checked'))
+						{
+							//检查选中项是否已存在
+							var open_f = true;
+							
+							$('#gbumen_id').find('input[name="gbid[]"]').each(function(){
+								if(bid_f == $(this).val())
+								{
+									open_f = false;
+								}
+							});
+							
+							if(open_f)
+							{
+								str += '<a href="javascript:;" id="gbid_'+bid_f+'" class="btn_list_1" style="background-color:rgb(35, 59, 19);">'+$(this).attr('data-name')+'</a>';
+								
+								str += '<input type="hidden" name="gbid[]" value="'+bid_f+'" />';
+								
+							}
+						}else
+						{
+							//删除未选中
+							$('#gbumen_id').find('input[name="gbid[]"]').each(function(){
+								if(bid_f == $(this).val())
+								{
+									$(this).remove();
+									$('#gbid_'+bid_f).remove();
+									
+								}
+							});
+						}
+							 
+						
+						}); 
+						
+						$('#gbumen_id').append(str);
+						
+						layer.close(index); //如果设定了yes回调，需进行手工关闭
+						
+						
+						
+					},
+					content: str //iframe的url
+				});
+			}
+		},
+		error:function()
+		{
+			alert('传输错误');
+		}
+		});
+
+
+	}
+	
+	function check_all(obj)
+	{
+		$(obj).closest('dl').find('dd').find('input').prop('checked', obj.checked);
+	}
+	</script>
+</block>

@@ -1,0 +1,185 @@
+<extend name="Public/base" />
+
+<block name="body">
+	<!-- 标题栏 -->
+	<div class="main-title">
+		<h2>用户列表</h2>
+	</div>
+	
+    <!-- 数据列表 -->
+	<div id="guest_list">
+    <div class="span2" style="width:50%">
+	<div class="columns-mod">
+		<div class="hd cf">
+			<h5>军团业绩排行</h5>
+			<div class="title-opt">
+			<select name="bid" onchange="get_bumenguest(this)"><option value="0">请选择部门</option>
+						<volist name="bumen_list" id="vo">
+						<option value="{$vo.bid}">{$vo.bname}</option>
+						</volist>
+						</select>
+			</div>
+		</div>
+		<div class="bd">
+			<div class="sys-info">
+				<table>
+					<tbody id="tbody_bumen">
+					
+					<include file="Default:Ajax:bumen_table"/>
+					
+				</tbody></table>
+			</div>
+		</div>
+	</div>
+</div>
+	</div>
+</block>
+
+<block name="script">
+	<script src="__STATIC__/thinkbox/jquery.thinkbox.js"></script>
+
+	<script type="text/javascript">
+	//搜索功能
+	$("#search").click(function(){
+		var url = $(this).attr('url');
+        var query  = $('.search-form').find('input').serialize();
+        query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g,'');
+        query = query.replace(/^&/g,'');
+        if( url.indexOf('?')>0 ){
+            url += '&' + query;
+        }else{
+            url += '?' + query;
+        }
+		window.location.href = url;
+	});
+	//回车搜索
+	$(".search-input").keyup(function(e){
+		if(e.keyCode === 13){
+			$("#search").click();
+			return false;
+		}
+	});
+    //导航高亮
+    highlight_subnav('{:U('User/index')}');
+	
+	
+	
+	function edit_guest(obj)
+	{
+	 //iframe层
+	  var url = "__URL__/changeguest/id/"+obj;
+		layer.open({
+			type: 2,
+			title: '修改客户资料',
+			shadeClose: false,
+			shade: 0.8,
+			shift:5,
+			area: ['900px', '800px'],
+			content: url //iframe的url
+		}); 
+	
+	
+	}
+	
+	function no_guest(obj,oaj)
+	{
+	  var url = "{:U('Guest/changegueststyle')}";
+	  layer.confirm('确定修改吗？',function(index)
+	  {
+	    $.ajax({
+		type:'POST',
+		data:{'id':obj,stus:oaj},
+		url:url,
+		success:function(data)
+			{
+			  table_order_page(0);
+			  layer.msg(data.info,{icon:1,time: 1000});
+			}					
+		});	  
+	  })
+	
+	}
+
+	function table_order(obj)
+	{
+	  
+	  //分页url
+	  var url = "{:U('Guest/ajax_query')}";
+	  
+	  //获取分页的排序条件
+	  
+	  if($('#filter_id').html())
+	  {
+		  var filter_list = $('#filter_id').html();
+		  filter_list =  JSON.parse(filter_list);
+		  
+		  //更改分页的排序方式		  
+		  filter_list['order_by'] = obj;
+		  
+		  if(filter_list['sort_by'] == 'ASC')
+		  {
+		  
+		    filter_list['sort_by'] = 'DESC';
+		  }else
+		  {
+		  
+		    filter_list['sort_by'] = 'ASC';
+		  }
+	  }
+	  
+	  $.ajax({
+	  type:'POST',
+	  url:url,
+	  data:filter_list,
+	  success:function(data)
+	  {
+	   $('#guest_list').html(data.info);
+	  }
+
+	  });	
+	}
+	
+	function table_order_page(obj)
+	{
+	  if($('#filter_id').html())
+	  {
+		  var filter_list = $('#filter_id').html();
+		  filter_list =  JSON.parse(filter_list);
+		  if(obj != 0)
+		  {
+		   filter_list['p'] = obj;
+		  }  
+	  }
+	  var url = "{:U('Guest/ajax_query')}";
+	  $.ajax({
+	  type:'POST',
+	  url:url,
+	  data:filter_list,
+	  success:function(data)
+	  {
+	   $('#guest_list').html(data.info);
+	  }
+	  });
+	
+	}
+	</script>
+	
+	<script type="text/javascript">
+	function get_bumenguest(obj)
+	{
+	  $.ajax({
+	  type:'POST',
+	  url:"{:U('Order/sales_list')}",
+	  data:{'bid':obj.value},
+	  success:function(data)
+	  {
+	    	$('#tbody_bumen').html(data.info);
+	  },
+	  error:function()
+	  {
+	    alert('数据传输错误！');
+	  }
+	  });
+	}
+	</script>
+</block>

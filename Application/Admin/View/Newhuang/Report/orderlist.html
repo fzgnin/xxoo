@@ -1,0 +1,424 @@
+<extend name="Public/basechild"/>
+
+<block name="body">
+<style type="text/css">
+
+.ajax_search_btn_div{
+padding:3px 0px
+}
+</style>
+	<!-- 标题栏 -->
+	<div class="main-title">
+		<h2>报表查询</h2>
+	</div>
+	<div class="cf">
+		<div class="fl" style="display:none">
+            <a class="btn" href="{:U('add')}">新 增</a>
+            
+        </div>
+
+        <!-- 高级搜索 -->
+		<div class="search-form fr cf" style="display:none">
+			<div class="sleft">
+				<input type="text" name="nickname" class="search-input" value="{:I('nickname')}" placeholder="请输入用户昵称或者ID">
+				<a class="sch-btn" href="javascript:;" id="search" url="{:U('index')}"><i class="btn-search"></i></a>
+			</div>
+		</div>
+    </div>
+	<div class="cf" style="margin-top:10px;float: left;
+width: 250px;">
+		<div class="fl" id="select_value_id">
+		
+		    <div class="ajax_search_btn_div">
+			<span class="ajax_search_btn_span">起始日期</span>
+			<input value="{$beginToday|date='Y-m-d',###}" placeholder="请选择时间" class="ajax_search_btn_input time" style="padding:5px;"   name="begin_time" type="text">
+			</div>
+			
+			<div class="ajax_search_btn_div">
+			<span class="ajax_search_btn_span">截止日期</span>
+			<input value="{$nowToday|date='Y-m-d',###}" placeholder="请选择时间" class="ajax_search_btn_input time" style="padding:5px;"  name="end_time" type="text">
+			</div>
+			
+			<div class="ajax_search_btn_div">
+			<span class="ajax_search_btn_span">单据类型</span>
+			<select id="calculation" class="ajax_search_btn_input" style="height:30px;border-radius:0px;min-width:100px;outline:none;"  name="order_type"> 
+									  
+                                      <option value="0" selected = "selected">请选择</option>
+									  <option value="1">出货单</option>
+									  <option value="2">退货单</option>				     
+									</select>
+			
+			</div>
+			
+			
+			<div class="ajax_search_btn_div">
+			<span class="ajax_search_btn_span">客户筛选</span>
+			<input class="ajax_search_btn_input" style="padding:5px" type="text" id="hhhhyu" value="" title="" >
+				
+			
+			</div>	
+			
+			<div class="ajax_search_btn_div">
+			<span class="ajax_search_btn_span">部门筛选</span>
+			<input class="ajax_search_btn_input" style="padding:5px" type="text" id="department_id" value="" title="" onblur="check_info(this)">
+				
+			
+			</div>
+			
+			<div class="ajax_search_btn_div">
+			<span class="ajax_search_btn_span">订单编号</span>
+			<input class="ajax_search_btn_input" style="padding:5px" type="text" id="department_id" value="" title="" >
+				<input class="ajax_search_btn_input" type="hidden" name="bumen_id" id="bumen_id" value="">
+			
+			</div>
+			
+			<div class="ajax_search_btn_div">
+			<span class="ajax_search_btn_span">商品名称</span>
+			<input class="ajax_search_btn_input" style="padding:5px" type="text" id="department_id" value="" title="" >
+				<input class="ajax_search_btn_input" type="hidden" name="bumen_id" id="bumen_id" value="">
+			
+			</div>
+			
+			<div class="ajax_search_btn_div">
+			<span class="ajax_search_btn_span">订单备注</span>
+			<input class="ajax_search_btn_input" style="padding:5px" type="text" id="department_id" value="" title="" >
+				<input class="ajax_search_btn_input" type="hidden" name="bumen_id" id="bumen_id" value="">
+			
+			</div>
+			
+			
+			<div class="ajax_search_btn_div">
+			<span class="ajax_search_btn_span">起始金额</span>
+			<input class="ajax_search_btn_input" style="padding:5px" type="text" id="department_id" value="" title="" >
+			
+			
+			</div>
+			
+			
+			<div class="ajax_search_btn_div">
+			<span class="ajax_search_btn_span">结束金额</span>
+			<input class="ajax_search_btn_input" style="padding:5px" type="text" id="department_id" value="" title="" >
+			
+			
+			</div>
+			
+			
+			<div class="ajax_search_btn_div" style="text-align:center">
+			
+			<a href="javascript:;" onclick="alert(111);" class="btn_list_1">确认</a>
+			
+			</div>
+			
+	    <input class="ajax_search_btn_input" type="hidden" name="type" value="5">
+			
+        </div>
+		
+		
+
+        <!-- 高级搜索 -->
+		
+    </div>
+    <!-- 数据列表 -->
+	<div id="guest_list" style="float:left">
+    <include file="Default:Ajax:order_list" />
+	</div>
+</block>
+
+<block name="script">
+
+<link href="__STATIC__/datetimepicker/css/datetimepicker.css" rel="stylesheet" type="text/css">
+<php>if(C('COLOR_STYLE')=='blue_color') echo '<link href="__STATIC__/datetimepicker/css/datetimepicker_blue.css" rel="stylesheet" type="text/css">';</php>
+<link href="__STATIC__/datetimepicker/css/dropdown.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="__STATIC__/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="__STATIC__/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+<script type="text/javascript">
+$(function(){
+    $('.time').datetimepicker({
+        format: 'yyyy-mm-dd',
+        language:"zh-CN",
+        minView:2,
+        autoclose:true
+    });
+    showTab();
+});
+</script>
+
+	<script src="__STATIC__/thinkbox/jquery.thinkbox.js"></script>
+
+	<script type="text/javascript">
+	//搜索功能
+	$("#search").click(function(){
+		var url = $(this).attr('url');
+        var query  = $('.search-form').find('input').serialize();
+        query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g,'');
+        query = query.replace(/^&/g,'');
+        if( url.indexOf('?')>0 ){
+            url += '&' + query;
+        }else{
+            url += '?' + query;
+        }
+		window.location.href = url;
+	});
+	//回车搜索
+	$(".search-input").keyup(function(e){
+		if(e.keyCode === 13){
+			$("#search").click();
+			return false;
+		}
+	});
+	
+	//更改排序方式
+	function table_order(obj)
+	{
+	  
+	  //分页url
+	  var url = "{:U('Report/ajax_query')}";
+	  
+	  //获取分页的排序条件
+	  var filter_list = getCookie('SEARCH_INFO');
+	  
+	  
+	  if(filter_list)
+	  {
+		  filter_list =  JSON.parse(filter_list);
+		  
+		  //更改分页的排序方式		  
+		  filter_list['order_by'] = obj;
+		  
+		  if(filter_list['sort_by'] == 'ASC')
+		  {
+		    filter_list['sort_by'] = 'DESC';
+		  }else
+		  {
+		    filter_list['sort_by'] = 'ASC';
+		  }
+		  
+		  //获取上方筛选信息
+		  $('#select_value_id .ajax_search_btn_input').each(function()
+		  {
+			if($(this).val())
+			{
+			  filter_list[$(this).attr('name')] = $(this).val();
+			}
+		  }); 
+	  }
+	  
+	  $.ajax({
+	  type:'POST',
+	  url:url,
+	  data:filter_list,
+	  success:function(data)
+	  {
+	   $('#guest_list').html(data.info);
+	  }
+
+	  });	
+	}
+	
+	//分页ajax效果
+	function table_order_page(obj)
+	{
+	  //获取cookie存储的查询条件--后期有待改进加密
+	  var filter_list = getCookie('SEARCH_INFO');
+	  
+	   if(filter_list)
+	   {
+	      filter_list =  JSON.parse(filter_list);
+		  if(obj != 0)
+		  {
+		   filter_list['p'] = obj;
+		  }
+		  
+		  //获取上方筛选信息
+		  $('#select_value_id .ajax_search_btn_input').each(function()
+		  {
+			if($(this).val())
+			{
+			  filter_list[$(this).attr('name')] = $(this).val();
+			}else
+			{
+			  filter_list[$(this).attr('name')] = '';
+			}
+		  });  
+	   }
+
+	  var url = "{:U('Report/ajax_query')}";
+	  $.ajax({
+	  type:'POST',
+	  url:url,
+	  data:filter_list,
+	  success:function(data)
+	  {
+	   $('#guest_list').html(data.info);
+	  }
+	  });
+	
+	}
+	
+	
+	//获取cookie的值
+	function getCookie(name)
+	{
+	var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+	if(arr=document.cookie.match(reg))
+	return unescape(arr[2]);
+	else
+	return null;
+	}
+	
+	</script>
+	
+	
+	<script type="text/javascript">
+	
+	//黄线可开始写业绩排行js
+	
+	
+	//点击今年跳转时间并统计数据
+	
+	function change_times(obj)
+	{
+	  //先给时间框赋值
+	  
+	  //js拼接出今年的开始时间
+	  
+	  var date =new Date();
+	  
+	  var year = date.getFullYear();
+	  
+	  var mounth = date.getMonth()+1;
+	  
+	  var day = date.getDate();
+	  
+	  var hours = date.getHours();
+	  
+	  var minutes = date.getMinutes();	  
+	  
+	  var this_year = year+'-01-01 00:00';
+	  
+	  var this_mounth = year+'-'+mounth+'-01 00:00';
+	  
+	  var this_day = year+'-'+mounth+'-'+day+' 00:00';
+	  
+	  var now_time = year+'-'+mounth+'-'+day+' '+hours+':'+minutes;
+
+	  
+	  switch(obj)
+		{
+		case 'year':
+		  $("input[name='begin_time']").val(this_year);
+	      
+		  break;
+		case 'mounth':
+		  $("input[name='begin_time']").val(this_mounth);
+	      
+		  break;
+		case 'day':
+		  $("input[name='begin_time']").val(this_day);
+	     
+		  break;
+		default:
+		  $("input[name='begin_time']").val(this_day);
+	      
+		}
+		
+	  $("input[name='end_time']").val(now_time);
+	  
+	  //执行搜索函数
+	  
+	  table_order_page(1);
+	 
+
+	
+	}
+	
+	
+	
+	</script>
+	
+	<script type="text/javascript">
+	
+	//黄先科好累开始写js
+	
+	//回车事件绑定调取收货单位
+    $('#hhhhyu').bind('keyup', function(event) {
+	    var keywords = $(this).val();
+        if (event.keyCode == "13") {
+            //回车执行查询
+        var url = "__APP__/Admin/Ajaxquery/select_guest/keywords/"+keywords+"/type/guest";
+		layer.open({
+			type: 2,
+			title: '选择客户',
+			shadeClose: false,
+			shade: 0.8,
+			shift:5,
+			area: ['900px', '500px'],
+			content: url //iframe的url
+		});
+		 $(this).blur();
+        }
+    });
+	
+	//回车事件绑定调取所属部门
+    $('#department_id').bind('keyup', function(event) {
+	    var keywords = $(this).val();
+        if (event.keyCode == "13") {
+            //回车执行查询
+        var url = "__APP__/Admin/Ajaxquery/select_bumen/keywords/"+keywords+"/type/bumen";
+		layer.open({
+			type: 2,
+			title: '选择所属部门',
+			shadeClose: false,
+			shade: 0.8,
+			shift:5,
+			area: ['900px', '500px'],
+			content: url //iframe的url
+		}); 
+		$(this).blur();
+        }
+    });
+	
+	function check_info(obj)
+	{
+	  if(obj.value != obj.title)
+	  {
+	    obj.value = '';
+		$(obj).parent().find('input').eq(1).val('');
+	  }
+	
+	}
+	
+	
+	
+	//修改客户资料弹出框
+	function show_order(obj)
+	{
+	 //iframe层
+	  var url = "__APP__/Admin/Order/order_info/id/"+obj;
+		layer.open({
+			type: 2,
+			title: '查看订单详细',
+			shadeClose: false,
+			shade: 0.8,
+			shift:5,
+			area: ['1500px', '800px'],
+			content: url //iframe的url
+		}); 
+	
+	
+	}
+	
+	function delete_order(obj)
+	{
+		//iframe层
+		  var url = "__APP__/Admin/Order/delete/id/"+obj;
+			layer.confirm(
+			'确定要删除吗？',
+			{icon: 3, title:'提示'},
+			function(index){
+              location.href = url;
+              layer.close(index);
+            });
+	}
+	</script>
+</block>

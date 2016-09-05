@@ -1,0 +1,102 @@
+<style type="text/css">
+.class_td{
+border:1px solid #000;
+padding:0px !important
+}
+.class_td div{
+border-bottom:1px solid #000;
+width:100%
+
+}
+</style>
+<div class="data-table table-striped">
+	<table class="">
+    <thead>
+		<tr>
+		<th>姓名</th>
+		<th>头像</th>	
+		<th><div>日</div><div>周</div></th>
+		<volist name="table_tr" id="vo">
+		<th><div>{$vo.d}</div><div <if condition="$vo['w'] eq '日'" >style="color:red"</if>>{$vo.w}</div></th>
+		</volist>
+		<th><div>出勤</div><div>天</div></th>
+		<th><div>加班</div><div>天</div></th>
+		<th><div>休假</div><div>天</div></th>
+		<th><div>事假</div><div>天</div></th>
+		<th><div>出差</div><div>天</div></th>
+		<th><div>旷工</div><div>天</div></th>
+		<th><div>迟到</div><div>天</div></th>
+		<th><div>早退</div><div>天</div></th>
+		
+		</tr>
+    </thead>
+    <tbody>
+		<notempty name="list">
+		<volist name="list" id="vo">
+		<tr>
+            
+			
+			
+			<td>{$vo.name}</td>
+			<td><img src="{$vo.headurl}" style="width:50px;height:50px;border-radius:50%"></td>
+			<td ><div>上</div><div>下</div></td>
+			
+			
+			
+			<volist name="vo['kaoqin']" id="vk">
+			<td>
+			
+			<div>	
+			<switch name="vk['morning']" >
+			<case value="8"><i class="fa fa-circle" style="color:#000"></i></case>
+			<case value="1"><i class="fa fa-check" style="color:green"></i></case>
+			<case value="2"><i class="fa fa-circle-o" style="color:#f70"></i></case>
+			<case value="3"><i class="fa fa-plus" style="color:green"></i></case>
+			<case value="4"><i class="fa fa-close" style="color:red"></i></case>
+			<case value="5"><i class="fa fa-exclamation-circle" style="color:red"></i></case>
+			<case value="6"><i class="fa fa-warning" style="color:red"></i></case>
+			<case value="7"><i class="fa fa-plane" style="color:blue"></i></case>
+			<default />无
+			</switch>
+			</div>
+			
+			<div>
+			<switch name="vk['afternoon']" >
+			<case value="8"><i class="fa fa-circle" style="color:#000"></i></case>
+			<case value="1"><i class="fa fa-check" style="color:green"></i></case>
+			<case value="2"><i class="fa fa-circle-o" style="color:#f70"></i></case>
+			<case value="3"><i class="fa fa-plus" style="color:green"></i></case>
+			<case value="4"><i class="fa fa-close" style="color:red"></i></case>
+			<case value="5"><i class="fa fa-exclamation-circle" style="color:red"></i></case>
+			<case value="6"><i class="fa fa-warning" style="color:red"></i></case>
+			<case value="7"><i class="fa fa-plane" style="color:blue"></i></case>
+			<default />无
+			</switch>
+			</td>
+			</volist>
+			
+			<td >{$vo.c}</td>
+			<td >{$vo.x}</td>
+			<td >{$vo.q}</td>
+			<td >{$vo.j}</td>
+			<td >{$vo.d}</td>
+			<td >{$vo.s}</td>
+			<td >{$vo.b}</td>
+			<td >{$vo.k}</td>
+			
+			
+			
+			
+			
+		</tr>
+		</volist>
+		<else/>
+		<td colspan="9" class="text-center"> aOh! 暂时还没有内容! </td>
+		</notempty>
+	</tbody>
+    </table>
+	</div>
+    <div class="page" style="padding-left:15px">
+        {$page}
+    </div>
+	

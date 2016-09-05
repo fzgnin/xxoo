@@ -1,0 +1,381 @@
+<extend name="Public/basechild"/>
+<block name="body">
+<link rel="stylesheet" href="__CSS__/style.default.css" type="text/css" />
+<link rel="stylesheet" href="__CSS__/order_css.css" type="text/css" />
+<link rel="stylesheet" href="__CSS__/font-awesome.min.css" type="text/css" />
+<style type="text/css">
+.select_type_style{
+padding: 6px 5px;height:34px;border: medium none;width: 100%;color:red;
+}
+</style>
+<div class="bill-container ng-scope">
+<form name="xsckd" id="xsckd" action="{:U('OtherFinance/insert')}" method="post">
+    <div class="ng-scope" ><div class="bill-header ng-scope">
+    <div class="bill-subject">
+        <div class="bill-subject-left">
+            <div class="subject pull-left">
+                <h1>
+                    <if condition="$order_info.order_type eq 12 " >
+					
+					<input value="其他收款单" type="text" style="background: rgb(33, 179, 61) none repeat scroll 0% 0%;color: rgb(255, 255, 255);box-shadow:none">
+					<else/>
+					<input value="其他付款单" type="text" style="background: rgb(179, 64, 33) none repeat scroll 0% 0%;color: rgb(255, 255, 255);box-shadow:none">
+					</if>
+					
+                </h1>
+            </div>
+            <div class="company-info pull-left">
+                <big class="ng-binding"><if condition="$order_info.order_type eq 12 " >上海国际雅兰收款单<else/>上海国际雅兰付款单</if></big>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="bill-footer-input row">
+            <div class="bill-footer-input-item">
+                <div class="input-group ng-scope">
+				<span class="input-group-addon">录单日期</span>
+				<input value="{$order_info.add_time|date='Y-m-d',###}" placeholder="请选择时间" class="form-control input_widget_datetime ng-pristine ng-untouched ng-valid time" name="add_time" type="text">
+				</div>
+            </div>
+			
+			<div class="bill-footer-input-item">
+                <div class="input-group ng-scope">
+				<span class="input-group-addon">单据编号</span>
+				<span class="form-control input_widget_number ng-pristine ng-untouched ng-valid">{$order_info.order_sn}</span>
+				<input value="{$order_info.order_sn}" name="order_sn" type="hidden">
+				</div>
+            </div>
+        
+			<div class="bill-footer-input-item">
+                <div class="input-group ng-scope">
+				<span class="input-group-addon"><if condition="$order_info.order_type eq 12 " >付款单位<else/>收款单位</if></span>
+				<input class="form-control input_widget_number ng-pristine ng-untouched ng-valid" type="text" id="mname_id" value="{$order_info.mname}" title="{$order_info.mname}" onblur="check_info(this)" onkeydown="enter_up(this,'subject')" name="mname">
+				<input type="hidden" name="mid" id="mid" value="{$order_info.mid}">
+				<input type="hidden" name="mtype" id="mtype" value="{$order_info.mtype}">
+				</div>
+            </div>
+			
+			<div id="fuzhu_div">
+			
+			<volist name="assist_list" id="vo">
+			
+			<div class="bill-footer-input-item"><div class="input-group ng-scope">
+			<span class="input-group-addon">辅助{$vo.assist_name}</span>
+			<input class="form-control input_widget_number ng-pristine ng-untouched ng-valid" value="{$vo.assist_childname}" title="{$vo.assist_childname}" onblur="check_info(this)" onkeydown="enter_up(this,'{$vo.assist_tags}')" name="assist_childname[]" type="text">
+			<input name="assist_childid[]" value="{$vo.assist_childid}" type="hidden">
+			<input name="assist_id[]" value="{$vo.assist_id}" type="hidden">
+			<input name="oa_id[]" value="{$vo.id}" type="hidden">
+			</div></div>
+			
+			</volist>
+
+			
+			</div>
+
+		
+        </div>
+</div>
+    <div class="bill-body">
+        <div config="bill_config" class="bill-rows ng-isolate-scope">
+    <table class="table table-bordered bill-rows-table">
+        <thead>
+            <tr>
+                <th width="60" style="text-align:center"><i class="fa fa-plus" style="cursor: pointer;"></i></th>
+                <th class="text-center" width="50">#</th>
+                <if condition="$order_info.order_type eq 12 " >
+				
+				
+                <th class="ng-scope" >
+                    <label class="ng-binding">收款账户</label>      
+                </th>
+				<th class="ng-scope" >
+                    <label class="ng-binding">收入类别</label>     
+                </th>
+				
+				<th class="ng-scope" >
+                    <label class="ng-binding">收款账号</label>      
+                </th>
+				<th class="ng-scope" >
+                    <label class="ng-binding">收款金额</label>         
+                </th>
+				
+				<else/>
+				<th class="ng-scope" >
+                    <label class="ng-binding">付款账户</label>      
+                </th>
+				<th class="ng-scope" >
+                    <label class="ng-binding">支出类别</label>     
+                </th>
+				
+				<th class="ng-scope" >
+                    <label class="ng-binding">付款账号</label>      
+                </th>
+				<th class="ng-scope" >
+                    <label class="ng-binding">付款金额</label>         
+                </th>
+				</if>
+				
+				<th class="ng-scope" >
+                    <label class="ng-binding">款项用途</label>    
+                </th>
+					
+            </tr>
+        </thead>
+        <tbody id="tbody_id" onkeydown="keyDown(event)">
+            
+			<volist name="money_list" id="vo">
+			<tr>
+                <td class="text-center">
+                    <i class="fa fa-trash-o" style="cursor: pointer;"></i>
+                </td>
+                <td class="text-center">#<span class="paixu">{$key+1}</span></td>
+				   
+				<td class="td_huang">
+					<input class="form-control form-huang" type="text"  onkeydown="enter_up(this,'money')" value="{$vo.cname}" title="{$vo.cname}" name="cname[]"  onblur="check_info(this)"><input type="hidden" name="cid[]" value="{$vo.cid}" />
+                </td>
+				
+				<td class="td_huang">
+				<select class="select_type_style"  name="pay_type[]" onfocus="select_paytype(this);"> 					  
+				<option value="{$vo.pay_type}">{$vo.type_name}</option>  			     
+				</select>
+				</td>
+				
+				<td style="width:80px"><span>{$vo.cart_id}</span><input type="hidden" name="cart_id[]" value="{$vo.cart_id}" /></td>
+				
+				<td class="td_huang" style="width: 100px !important;"><input class="form-control form-huang" type="text" name="money[]" value="{$vo.money}"  onblur="calculate_money()"/></td>
+
+				<td class="td_huang" style="width: 200px !important;">
+                 <input class="form-control form-huang" type="text" name="purpose[]" value="{$vo.purpose}" /> 
+                </td>
+                <input type="hidden" name="order_goods_id[]" value="{$vo.id}" /> 
+            </tr>
+			</volist>
+        </tbody>
+        <tfoot>
+            <tr>
+               <td colspan="2" align="center"><strong class="ng-binding">合计</strong></td>
+               <td class="ng-scope"></td>
+			   <td class="ng-scope"></td>
+			   <td class="ng-scope"></td>
+			   <td class="ng-scope">
+			   <span id="total_money">{$order_info.amount}</span><input type="hidden" name="total_money" id="total_money_input" value="{$order_info.amount}" />
+			   </td>
+			   
+			   <td class="ng-scope">
+			   
+			   </td>
+ 
+            </tr>
+        </tfoot>
+    </table>
+</div>
+    </div>
+    <div class="bill-footer">
+        <div class="bill-footer-input row">
+            <div class="input-group bill-footer-input-item" style="width: auto">
+                <span class="input-group-addon ng-binding">备注</span>
+                <input class="form-control ng-pristine ng-untouched ng-valid" name="remarks" value="{$order_info.remarks}" type="text">
+            </div>
+        </div>
+
+        <div class="bill-footer-meta">
+            <span class="label label-primary">
+                <span class="ng-binding">制单人</span>
+                <span class="ng-binding">TEam Swift
+ 管理员</span>
+            </span>
+            <div class="pull-right">
+                <input type="hidden" value="{$order_info.order_type}"name="order_type"/>
+				<input type="hidden" value="{$order_info.id}"name="id"/>
+				<input type="button" value="提交" onclick="form_submit('{:U('insert')}','{:U('orderlist')}',2)"  class="btn btn-primary btn-lg ng-binding"/>
+            </div>
+        </div>
+
+    </div>
+	</form>
+</div>
+
+    
+</block>
+
+<block name="script">
+<link href="__STATIC__/datetimepicker/css/datetimepicker.css" rel="stylesheet" type="text/css">
+<php>if(C('COLOR_STYLE')=='blue_color') echo '<link href="__STATIC__/datetimepicker/css/datetimepicker_blue.css" rel="stylesheet" type="text/css">';</php>
+<link href="__STATIC__/datetimepicker/css/dropdown.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="__STATIC__/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="__STATIC__/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+<script type="text/javascript">
+
+Think.setValue("type", {$data.type|default='""'});
+Think.setValue("display", {$data.display|default=0});
+
+$('#submit').click(function(){
+	$('#form').submit();
+});
+
+$(function(){
+    $('.time').datetimepicker({
+        format: 'yyyy-mm-dd hh:ii',
+        language:"zh-CN",
+        minView:2,
+        autoclose:true
+    });
+    showTab();
+
+});
+</script>
+<script type="text/javascript">
+var URL_JS = "__URL__";
+var APP = "__APP__";
+</script>
+<script type="text/javascript" src="__JS__/order.js"/></script>
+
+
+<script type="text/javascript">
+
+//增加一行
+$('.fa-plus').bind('click',function(){
+ var res = '<tr><td class="text-center"><i class="fa fa-trash-o" style="cursor: pointer;"></i></td><td class="text-center">#<span class="paixu">1</span></td><td class="td_huang"><input class="form-control form-huang" type="text"  onkeydown="enter_up(this,&quot;money&quot;)" value="" name="cname[]"  onblur="check_info(this)"><input type="hidden" name="cid[]" value="" /></td><td class="td_huang"><select class="select_type_style"  name="pay_type[]" onfocus="select_paytype(this);"><option value="0">请选择收支类别</option></select></td><td style="width:80px"><span></span><input type="hidden" name="card_id[]" value="" /></td><td class="td_huang" style="width: 100px !important;"><input class="form-control form-huang" type="text" name="money[]" value="" onblur="calculate_money()" /></td><td class="td_huang" style="width: 200px !important;"><input class="form-control form-huang" type="text" name="purpose[]" value="" /></td></tr>';
+ $('#tbody_id').append(res);
+ 
+ //重拍序列号
+ $('.paixu').each(function(i){
+   $(this).html(i+1);
+ });
+ 
+ //动态绑定事件
+ $(".fa-trash-o").on("click", function() {
+		$(this).parent().parent().remove();
+	
+	 //重拍序列号
+	 $('.paixu').each(function(i){
+	   $(this).html(i+1);
+	 });
+	calculate_money(); 
+ });
+});
+
+
+
+
+function calculate_money()
+ {
+   var tr_length = $('#tbody_id tr').length;
+   
+   var total_money = 0;
+    
+   for(var i=0;i<tr_length;i++)
+   {
+    //获取信息
+	
+	var money = $('#tbody_id tr').eq(i).find('input').eq(3).val();
+
+	//计算总价
+	if(money)
+	{
+	 total_money = accAdd(total_money,money);
+	}
+   }
+   
+   //赋总值
+   $('#total_money').html(total_money);
+   $('#total_money_input').val(total_money);
+   
+ }
+
+
+
+function call_back(obj)
+{
+	//回调函数赋值到页面
+	
+	
+	
+	//判断是否有辅助核算（有加入部门选项，无删除部门选项）
+	
+	if(4 == obj.mtype)
+	{
+		$('#mname_id').val(obj.name);
+		$('#mname_id').attr('title',obj.name);
+		$('#mid').val(obj.id);
+		$('#mtype').val(obj.mtype);
+		
+		if(obj.assist)
+		{
+			var str = '';
+			
+			for(var i=0;i<obj.assist.length;i++)
+			{
+				//显示部门选项框
+				//拼接str
+				str += '<div class="bill-footer-input-item"><div class="input-group ng-scope">';
+				str += '<span class="input-group-addon">辅助'+obj.assist[i].name+'</span>';
+				str += '<input class="form-control input_widget_number ng-pristine ng-untouched ng-valid" value="" onblur="check_info(this)" onkeydown="enter_up(this,&quot;'+obj.assist[i].tags+'&quot;)" name="assist_childname[]" type="text">';
+				str += '<input name="assist_childid[]" value="" type="hidden"><input name="assist_id[]" value="'+obj.assist[i].id+'" type="hidden"></div></div>';
+			}
+			
+			$('#fuzhu_div').html(str);
+			
+		}else
+		{
+			$('#fuzhu_div').html('');
+		}
+	
+	}else
+	{
+		//有data-selected的input赋值
+		$('.data-selected').val(obj.name);
+		$('.data-selected').attr('title',obj.name);
+		$('.data-selected').parent().find('input').eq(1).val(obj.id);
+	}
+	
+
+}
+
+function select_paytype(obj)
+{
+	
+	
+	var str = '';
+	
+	if(1 >= $(obj).find('option').length)
+	{
+		str += '<?php 
+		foreach($plist as $k=>$v)
+		{
+			  echo '<option value="'.$v['id'].'">'.$v['name'].'</option>';
+		}
+		?>'
+		
+		$(obj).html(str);
+	}
+
+}
+
+
+function make_str(obj)
+{
+	var str = '';
+	
+	for(var i=0;i<obj.length;i++)
+	{
+		str += '<tr><td class="text-center"><i class="fa fa-trash-o" style="cursor: pointer;"></i></td>';
+		str += '<td class="text-center">#<span class="paixu">1</span></td>';
+		str += '<td class="td_huang"><input class="form-control form-huang" type="text"  onkeydown="enter_up(this,&quot;money&quot;)" value="'+obj[i]['cname']+'" title="'+obj[i]['cname']+'" name="cname[]"  onblur="check_info(this)">';
+		str += '<input type="hidden" name="cid[]" value="'+obj[i]['co_id']+'" /></td>';
+		str += '<td class="td_huang"><select class="select_type_style"  name="pay_type[]" onfocus="select_paytype(this);"><option value="0">请选择收支类别</option></select></td>';
+		str += '<td style="width:80px"><span>'+obj[i]['cid']+'</span><input type="hidden" name="card_id[]" value="'+obj[i]['cid']+'" /></td>';
+		str += '<td class="td_huang" style="width: 100px !important;"><input class="form-control form-huang" type="text" name="money[]" value="" onblur="calculate_money()" /></td>';
+		str += '<td class="td_huang" style="width: 200px !important;"><input class="form-control form-huang" type="text" name="purpose[]" value="" /></td></tr>';
+		
+	}
+	
+	
+	add_goods(str);
+	
+
+}
+</script>
+
+</block>

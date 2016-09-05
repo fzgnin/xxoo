@@ -1,0 +1,47 @@
+<div class="data-table table-striped">
+	<table class="">
+    <thead>
+        <tr>
+		<th class="">ID</th>
+		<th class="">账户名称</th>
+		<th class="">账户账号</th>
+		<th class="">添加时间</th>
+		<th class="">初始金额</th>
+		<th class="">当前金额</th>
+		<th class="">操作</th>
+		</tr>
+    </thead>
+    <tbody>
+		<notempty name="list">
+		<volist name="list" id="vo">
+		<tr>
+            
+			<td>{$vo.id} </td>
+			<td>{$vo.cname}</td>
+			<td>{$vo.cid}</td>
+			<td>{$vo.add_time|date='Y-m-d H:i',###}</td>
+			<td>{$vo.b_money}</td>		
+			<td>{$vo.money}</td>
+			<td>
+				<a class="btn_list_1" href="javascript:;" onclick="change_bmoney({$vo.id},3)">更改初始金额</a>         
+                </td>
+		</tr>
+		</volist>
+		<else/>
+		<td colspan="9" class="text-center"> aOh! 暂时还没有内容! </td>
+		</notempty>
+	</tbody>
+    </table>
+	</div>
+    <div class="page">
+        {$page}
+		<select style="height:32px;border-radius:0px;min-width:100px;outline:none;float:left"  name="page_num" id="page_num" onchange="table_order_page(1)">                   
+									  <option value="10" <eq name="filter.page_num" value="10">selected</eq>>10个</option>
+									  <option value="20" <eq name="filter.page_num" value="20">selected</eq>>20个</option>
+									  <option value="50" <eq name="filter.page_num" value="50">selected</eq>>50个</option>
+									  <option value="100" <eq name="filter.page_num" value="100">selected</eq>>100个</option>				  		     
+		</select>
+		<span style="float:right;display:none">总业绩：{$a_amount|default="0"}元</span>
+    </div>
+	
+	

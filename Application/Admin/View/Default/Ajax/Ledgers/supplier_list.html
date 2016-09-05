@@ -1,0 +1,46 @@
+<div class="data-table table-striped">
+	<table class="">
+    <thead>
+        <tr>
+		
+		<th class="" onClick="table_order('onethink_supplier.id')">ID</th>
+		<th class="">供应商</th>
+		<th class="">区域</th>
+		<th class="">地址</th>
+		<th class="">负责人</th>
+		<th class="">联系方式</th>
+		<th >应收应付</th>
+		<th >资金</th>
+		<th class="">操作</th>
+		</tr>
+    </thead>
+    <tbody>
+		<notempty name="list">
+		<volist name="list" id="vo">
+		<tr>
+            
+			<td>{$vo.id} </td>
+			<td>{$vo.suppliername}</td>
+			<td>{$vo.province}</td>
+			<td>{$vo.address}</td>
+			<td>{$vo.manager}</td>
+			<td>{$vo.phone}</td>
+			<td><if condition="$vo.sf eq 1 "><span style="color:red">应付</span><else/><span style="color:green">应收</span></if></td>
+			<td>{$vo.money}</td>
+			<td>	
+				<a href="{:U('supplier_loglist',array('id'=>$vo['id']))}" class="btn_list_1">资金往来明细</a> 
+                </td>
+		</tr>
+		</volist>
+		<else/>
+		<td colspan="9" class="text-center"> aOh! 暂时还没有内容! </td>
+		</notempty>
+	</tbody>
+    </table>
+	<input type="hidden" id="SORT_BY_ID" value="{$sort_by}">
+	</div>
+    <div class="page">
+        {$page}
+    </div>
+	
+	

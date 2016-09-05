@@ -1,0 +1,95 @@
+<extend name="Public/basechild"/>
+
+<block name="body">
+<style type="text/css">
+
+.btn_list_1:hover{ background-color:#4BBD00 !important;}
+</style>
+	<!-- 标题栏 -->
+	<div class="main-title">
+		<h2>用户列表</h2>
+	</div>
+	<div class="cf">
+		<div class="fl">
+            <a class="btn" href="{:U('add')}">新 增</a>
+            
+        </div>
+
+		<div class="fl" id="select_value_id">
+	
+			<div class="search-form fr cf" >
+			<div class="sleft">
+				<input type="text" name="keywords" class="ajax_search_btn_input search-input" value="" placeholder="请输入供应商名字" >
+				<a class="sch-btn" href="javascript:;" id="search" url="{:U('ajax_query')}"><i class="btn-search"></i></a>
+			</div>
+		    </div>
+			
+			
+        </div>
+		
+    </div>
+    <!-- 数据列表 -->
+	<div id="guest_list">
+    <include file="Default:Ajax:supplier:supplier_list" />
+	</div>
+</block>
+
+<block name="script">
+	<script type="text/javascript">
+	var url = "{:U('Supplier/ajax_query')}";
+	var APP = "__APP__";
+	var URL_JS = "__URL__";
+	</script>
+	<script src="__STATIC__/thinkbox/jquery.thinkbox.js"></script>
+	<script type="text/javascript" src="__JS__/huang.js"/></script>
+
+	<script type="text/javascript">
+	//搜索功能
+	$("#search").click(function(){
+		var url = $(this).attr('url');
+		var filter_list = getCookie('SEARCH_INFO');
+		filter_list = JSON.parse(filter_list);
+		filter_list['keywords'] = $('.search-input').val();
+		filter_list['p'] = 1;
+        $.ajax({
+		type:'POST',
+		url:url,
+		data:filter_list,
+		error:function(){
+		alert('网络传输错误！');
+		},
+		success:function(data)
+		{
+		$('#guest_list').html(data.info);
+		}
+		});
+	});
+	//回车搜索
+	$(".search-input").keyup(function(e){
+		if(e.keyCode === 13){
+			$("#search").click();
+			return false;
+		}
+	});
+	
+	//修改客户资料弹出框
+	function edit(obj)
+	{
+	 //iframe层
+	  var url = "__URL__/edit/id/"+obj;
+		layer.open({
+			type: 2,
+			title: '修改客户资料',
+			shadeClose: false,
+			shade: 0.8,
+			shift:5,
+			area: ['900px', '800px'],
+			content: url //iframe的url
+		}); 
+	
+	}
+	
+	
+	
+	</script>
+</block>

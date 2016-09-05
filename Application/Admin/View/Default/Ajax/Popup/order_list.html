@@ -1,0 +1,49 @@
+<div class="data-table table-striped">
+	<table class="">
+    <thead>
+        <tr>
+		<th class="row-selected row-selected"><input class="check-all" type="checkbox"/></th>
+		<th class="" onClick="table_order('onethink_order.id')">ID</th>
+		<th class="">订单编号</th>
+		<th class="">客户单位</th>
+		<th class="">所属部门</th>
+		<th class="">总价</th>
+		<th class="">开单折后总价</th>
+		<th class="">过账折后总价</th>
+		<th class="">仓库</th>
+		<th class="">备注</th>
+		<th class="">操作</th>
+		</tr>
+    </thead>
+    <tbody>
+		<notempty name="list">
+		<volist name="list" id="vo">
+		<tr>
+            <td><input class="ids" type="checkbox" name="id[]" value="{$vo.id}" /></td>
+			<td>{$vo.id} </td>
+			<td>{$vo.order_sn}</td>
+			<td>{$vo.guestname}</td>
+			<td>{$vo.bname}</td>
+			<td>{$vo.amount}</td>
+			<td>{$vo.k_amount}</td>
+			<td>{$vo.g_amount}</td>
+			<td>{$vo.warehouse}</td>
+			<td>{$vo.remarks}</td>
+			<td>
+				<a href="{:U('Order/edit',array('id'=>$vo['id']))}">编辑</a>
+				<a href="javascript:;" onclick="show_order({$vo.id})">查看详细</a>
+				<a href="javascript:;" onclick="delete_order({$vo.id})">删除</a>	          
+                </td>
+		</tr>
+		</volist>
+		<else/>
+		<td colspan="9" class="text-center"> aOh! 暂时还没有内容! </td>
+		</notempty>
+	</tbody>
+    </table>
+	</div>
+    <div class="page">
+        {$page}
+    </div>
+	
+	

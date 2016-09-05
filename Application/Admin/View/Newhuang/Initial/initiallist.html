@@ -1,0 +1,181 @@
+<extend name="Public/basechild"/>
+
+<block name="body">
+<style type="text/css">
+
+.btn_list_1:hover{ background-color:#4BBD00 !important;}
+
+.show_input_money{
+margin-left: 15px;
+background-color: rgb(255, 255, 255);
+border-width: 1px;
+border-style: solid;
+border-color: rgb(192, 192, 192) rgb(217, 217, 217) rgb(217, 217, 217);
+box-shadow: 0px 1px 3px rgb(221, 221, 221) inset;
+padding: 5px;
+}
+</style>
+	<!-- 标题栏 -->
+	<div class="main-title">
+		<h2 class="btn_h2_style">初始化金额</h2>
+	</div>
+	<div class="cf">
+		
+
+		<div class="fl" id="select_value_id">
+			
+			<div class="ajax_search_btn_div">
+			<span class="ajax_search_btn_span">单据类型</span>
+			<select class="ajax_search_btn_input" style="height:30px;border-radius:0px;min-width:100px;outline:none;" onchange="table_order_page(1)"  name="gs_type">                   
+									  <option value="1">供应商</option>
+									  <option value="2">店家</option>
+									  <option value="3">公司账户</option>	     
+									</select>
+			
+			</div>
+			
+			
+			<div class="ajax_search_btn_div">
+			<span class="ajax_search_btn_span">客户状态</span>
+			<select class="ajax_search_btn_input" style="height:30px;border-radius:0px;min-width:100px;outline:none;" onchange="table_order_page(1)"  name="status">                   
+									  <option value="0">请选择</option>
+									  <option value="1">未合作</option>
+									  <option value="2">已合作</option>	     
+									</select>
+			
+			</div>
+			
+			
+			<div class="search-form fr cf" >
+			<div class="sleft">
+				<input type="text" name="keywords" class="ajax_search_btn_input search-input" value="" placeholder="请输入用户昵称或者ID" >
+				<a class="sch-btn" href="javascript:;" id="search" url="{:U('ajax_query')}"><i class="btn-search"></i></a>
+			</div>
+		    </div>
+			
+        </div>
+        <!-- 高级搜索 -->
+	
+
+        <!-- 高级搜索 -->
+		
+    </div>
+    <!-- 数据列表 -->
+	<div id="guest_list">
+    <include file="Default:Ajax:Initial:supplier_list" />
+	</div>
+</block>
+
+<block name="script">
+
+<link href="__STATIC__/datetimepicker/css/datetimepicker.css" rel="stylesheet" type="text/css">
+<php>if(C('COLOR_STYLE')=='blue_color') echo '<link href="__STATIC__/datetimepicker/css/datetimepicker_blue.css" rel="stylesheet" type="text/css">';</php>
+<link href="__STATIC__/datetimepicker/css/dropdown.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="__STATIC__/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="__STATIC__/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+<script type="text/javascript">
+	$(function(){
+		$('.time').datetimepicker({
+			format: 'yyyy-mm-dd',
+			language:"zh-CN",
+			minView:2,
+			autoclose:true
+		});
+	});
+
+	//搜索功能
+	$("#search").click(function(){
+		table_order_page(1);
+	});
+	//回车搜索
+	$(".search-input").keyup(function(e){
+		if(e.keyCode === 13){
+			$("#search").click();
+			return false;
+		}
+	});
+	
+	
+	
+</script>
+
+	<script type="text/javascript">
+	var url = "{:U('Initial/ajax_query')}";
+	var APP = "__APP__";
+	var URL_JS = "__URL__";
+	</script>
+	
+	<script src="__STATIC__/thinkbox/jquery.thinkbox.js"></script>
+	<script type="text/javascript" src="__JS__/huang.js"/></script>
+	<script type="text/javascript" src="__JS__/order.js"/></script>
+	
+	<script type="text/javascript">
+	
+	function change_bmoney(oaj,obj)
+	{
+		//直接写js形成弹出框
+		$.ajax({
+			type:'post',
+			data:{'id':oaj,'gs_type':obj},
+			url:"{:U('Initial/change_bmoney')}",
+			success:function(data)
+			{
+				if(data.status)
+				{
+					var _str = '';
+						_str += '<div style="padding: 15px;">';
+						_str += '<p style="padding: 5px;">当前余额：<span style="margin-left:15px">'+data.info.n_money+'</span>元</p>';
+						_str += '<p style="padding: 5px;">初始金额：<input id="money_id" onchange="change_inputmoney(this);" class="show_input_money" type="text" value="'+data.info.b_money+'"></p>';
+						_str += '<p style="padding: 5px;">调整后余额：<span style="margin-left:15px">'+data.info.n_money+'</span>元</p>';
+						_str += '<input type="hidden" id="r_money_id" value="'+data.info.money+'"/></div>';
+						
+					
+					layer.open({
+							type: 1,
+							title: data.info.name,
+							skin: 'layui-layer-demo', //加上边框
+							area: ['430px', '230px'], //宽高
+							btn: ['确认'],
+							yes: function(index, layero){
+								//按钮【按钮一】的回调
+								$.ajax({
+									type:'post',
+									data:{'id':oaj,'gs_type':obj,'b_money':$('#money_id').val()},
+									url:"{:U('Initial/save_bmoney')}",
+									success:function(da)
+									{
+										layer.msg(da.info,{icon:1,time:1000});
+										table_order_page(0);
+										layer.closeAll();
+									},
+									error:function()
+									{
+										layer.msg('网络传输错误，稍后再试！',{icon:2,time:3000});
+									}
+								});
+							},
+							content: _str
+					});
+				}
+			},
+			error:function()
+			{
+				layer.msg('网络传输错误，稍后再试！',{icon:2,time:3000});
+			}
+		});
+	
+	}
+	
+	
+	function change_inputmoney(obj)
+	{
+		//获取当前余额和初始金额
+		var money = $('#r_money_id').val();
+		var c_money = obj.value;
+		
+		//计算调整过后余额
+		$(obj).parent().parent().find('span').eq(1).html(accAdd(money,c_money));
+	}
+	
+	</script>
+</block>

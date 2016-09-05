@@ -1,0 +1,102 @@
+<extend name="Public/base"/>
+
+<block name="body">
+<link rel="stylesheet" href="__CSS__/style.default.css" type="text/css" />
+<script type="text/javascript" src="__JS__/general.js"></script>
+    <div class="bodywrapper">
+  <!--头部-->
+
+    <!--子菜单结束-->
+    <div class="centercontent">
+    
+        <div class="pageheader">
+           
+            
+            <ul class="hornav">
+                <li class="current"><a href="#basicform">填写用户组信息</a></li>
+                
+            </ul>
+        </div><!--pageheader-->
+        
+        <div id="contentwrapper" class="contentwrapper">
+        	<form  id="mpostForm" name="mpostForm" class="stdform" action="{:U('GuestGroup/insert')}" method="post">
+        	<div id="basicform" class="subcontent"><!--contenttitle-->
+                          <p>
+                        	<label>用户组名称</label>
+                            <span class="field"><input type="text" name="groupname"  class="smallinput" /></span>
+                            <small class="desc">请填写全称</small>
+                        </p>
+						
+						<p>
+                        	<label>所属部门</label>
+							<span class="field">
+                           	<input class="smallinput" placeholder="请按enter键选择" id="bumen_select" value="" title="" onblur="check_info(this)" onkeydown="enter_up(this,'bumen')" name="bname" type="text">
+							<input type="hidden" name="bumen_id" id="bumen_id" value="">
+                            </span>
+							
+							<small class="desc">创建后不可更改</small>
+                        </p> 
+						</div>   
+                        <!--隐藏字段-->
+                         <input type="hidden" name="writer" value="{$_SESSION['onethink_admin']['user_auth']['username']}">
+                        <p class="stdformbutton">
+                        	<input style="width:100px; margin: 0; font-weight: bold; color: #eee; background: #FB9337; border: 1px solid #F0882C; padding: 7px 10px; 
+  -moz-box-shadow: none; -webkit-box-shadow: none; box-shadow: none; cursor: pointer; -moz-border-radius: 2px; -webkit-border-radius: 2px;
+  border-radius: 2px;" type="button" class="submit radius2" value="提交" onClick="myFunction()">
+                        </p>
+                    
+</form>
+            </div><!--subcontent-->
+        
+        </div><!--contentwrapper-->
+        
+	</div><!-- centercontent -->
+</div>
+</block>
+
+<block name="script">  
+
+	<script type="text/javascript">
+	var URL_JS = "__URL__";
+	var APP = "__APP__";
+	</script>
+
+	<script type="text/javascript" src="__JS__/huang.js"/></script>
+	
+	<script type="text/javascript">
+	
+	function myFunction()
+	{
+		if(mpostForm.groupname.value==""){alert("请输入用户组名称！");
+			mpostForm.groupname.focus();
+			return false;
+		}
+		if(mpostForm.bumen_id.value==""){alert("请选择部门！");
+			mpostForm.bumen_select.focus();
+			return false;
+		}
+		
+		if (confirm("你确认要提交吗？"))
+			document.mpostForm.submit()
+	}
+	
+	
+	$('.btn_anniu').click(function(){
+	
+	var html_span = $('.formwrapper').eq(1).prop("outerHTML");
+	
+	$('#add_xuanxiang').append(html_span);
+	
+	
+	})
+
+	
+	function call_back(data)
+	{
+		$('#bumen_select').val(data.name);
+		$('#bumen_select').attr('title',data.name);
+		$('#bumen_id').val(data.id);
+	
+	}
+	</script>
+</block>

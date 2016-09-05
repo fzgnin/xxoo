@@ -1,0 +1,73 @@
+<table class="">
+    <thead>
+        <tr>
+		<th class="">ID</th>
+		<th class="">科目名称</th>
+		<th class="">辅助核算</th>
+		</tr>
+    </thead>
+    <tbody style="cursor: pointer;">
+		<notempty name="list">
+		<volist name="list" id="vo">
+		<tr class="checksss">
+			<td>{$vo.id}</td>
+			<td>{$vo.name}</td>
+			<td>		
+			<volist name="vo.assist" id="vs">
+			
+			<span>
+			<a href="javascript:;" class="btn_list_1">{$vs.name}</a>
+			<input type="hidden" name="assist_id" value="{$vs.id}">
+			<input type="hidden" name="assist_name" value="{$vs.name}">
+			<input type="hidden" name="assist_tags" value="{$vs.tags}">
+			</span>
+			</volist>
+			</td>	
+		</tr>
+		</volist>
+		<else/>
+		<td colspan="9" class="text-center"> aOh! 暂时还没有内容! </td>
+		</notempty>
+	</tbody>
+    </table>
+	
+	<div class="page">
+        {$page}
+    </div><script type="text/javascript">
+	
+	//单击变色
+	$('.checksss').bind("click",function(){
+	 //变色效果
+	 $(this).addClass("tr_select").siblings().removeClass("tr_select");
+    });
+	
+	//双击选中
+	$('.checksss').bind("dblclick",function(){
+	 //获取信息
+	 var guest_id = $(this).children('td').eq(0).html();
+	 var guestname = $(this).children('td').eq(1).html();
+	 
+	 //是否有辅助核算
+	 var span_assist = $(this).find('span');
+	 var assist = [];
+	 
+	 if(span_assist.length > 0)
+	 {
+	 	for(var i=0;i<span_assist.length;i++)
+		{
+			var assist_list = {
+			'id':span_assist.eq(i).find('input').eq(0).val(),
+			'name':span_assist.eq(i).find('input').eq(1).val(),
+			'tags':span_assist.eq(i).find('input').eq(2).val(),
+			};
+			assist.push(assist_list);
+		}
+	 }
+
+	 var back_ob = {id:guest_id,name:guestname,mtype:4,assist:assist};
+	 
+	 parent.call_back(back_ob);
+	 
+	 parent.layer.closeAll();
+    });
+	</script>

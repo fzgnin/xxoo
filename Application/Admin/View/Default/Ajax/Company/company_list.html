@@ -1,0 +1,42 @@
+<div class="data-table table-striped">
+	<table class="">
+    <thead>
+        <tr>
+		
+		<th class="" onClick="table_order('onethink_order.id')">ID</th>
+		<th class="">账户名</th>
+		<th class="">账户账号</th>
+		<th class="">账上金额</th>
+		<th class="">操作</th>
+		
+		</tr>
+    </thead>
+    <tbody>
+		<notempty name="list">
+		<volist name="list" id="vo">
+		<tr>
+            
+			<td>{$vo.id} </td>
+			<td>{$vo.cname}</td>
+			<td>{$vo.cid}</td>
+			<td>{$vo.money}</td>
+			<td>
+				
+				<a class="btn_list_1" style="background-color: #C03204;" href="{:U('Ledgers/company_loglist',array('id'=>$vo['id']))}" >查看详细</a>
+				<a class="btn_list_1" href="javascript:;" onclick="delete_order({$vo.id})">删除</a>
+				
+                </td>
+		</tr>
+		</volist>
+		<else/>
+		<td colspan="9" class="text-center"> aOh! 暂时还没有内容! </td>
+		</notempty>
+	</tbody>
+    </table>
+	</div>
+    <div class="page">
+        {$page}
+		<span style="float:right">总金额：{$a_amount|default="0"}元</span>
+    </div>
+	
+	

@@ -1,0 +1,172 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="__CSS__/base.css" media="all">
+    <link rel="stylesheet" type="text/css" href="__CSS__/module.css"> 
+	<link rel="stylesheet" type="text/css" href="__CSS__/default_color.css"> 
+	<style type="text/css">
+	.tr_select{color:#fff !important; background-color:#666666 !important;}
+	</style>
+     <!--[if lt IE 9]>
+    <script type="text/javascript" src="__STATIC__/jquery-1.10.2.min.js"></script>
+	<script type="text/javascript" src="__LAYER__/layer.js"></script>
+    <![endif]--><!--[if gte IE 9]><!-->
+    <script type="text/javascript" src="__STATIC__/jquery-2.0.3.min.js"></script> 
+	<script type="text/javascript" src="__LAYER__/layer.js"></script>
+    <!--<![endif]-->
+    
+</head>
+<body>
+    <div class="bodywrapper">
+  <!--头部-->
+
+    <!--子菜单结束-->
+    <div class="data-table table-striped" id="guest_list" style="margin:10px 10px">
+	<include file="Default:Ajax:order_guest_list" />
+	</div>
+    <!--contentwrapper-->
+        
+	</div><!-- centercontent -->
+    
+    
+</div>
+</block>
+
+<block name="script">
+	
+	<script type="text/javascript">
+	var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+	
+	var url = parent.document.location;
+	
+	function myFunction()
+	{ 
+		layer.confirm("你确认要提交吗？",function(index1){
+	  
+	    $.ajax({
+                type: "POST",
+                url:"{:U('Admin/Goods/update')}",
+                data:$('#mpostForm').serialize(),// 你的formid
+                async: false,
+                error: function(request) {
+                    alert("网络传输错误");
+                },
+                success: function(data) {
+                    
+					if(data.status)
+					{
+										
+						parent.layer.alert(data.info,{icon: 1,shift: 6,closeBtn: 0},function(index2)
+						{
+						  parent.table_order_page(0);
+						  parent.layer.closeAll();
+						});	
+					}else
+					{
+						layer.close(index1);
+						parent.layer.msg(data.info);
+					}
+                }
+            });
+  
+	     })
+		 
+		 return false;
+		
+	}
+	
+	//更改排序方式
+	function table_order(obj)
+	{
+	  
+	  //分页url
+	  var url = "{:U('Order/ajax_query')}";
+	  
+	  //获取分页的排序条件
+	  var filter_list = getCookie('SEARCH_INFO');
+	  
+	  
+	  if(filter_list)
+	  {
+		  filter_list =  JSON.parse(filter_list);
+		  
+		  //更改分页的排序方式		  
+		  filter_list['order_by'] = obj;
+		  
+		  if(filter_list['sort_by'] == 'ASC')
+		  {
+		  
+		    filter_list['sort_by'] = 'DESC';
+		  }else
+		  {
+		  
+		    filter_list['sort_by'] = 'ASC';
+		  }
+	  }
+	  
+	  $.ajax({
+	  type:'POST',
+	  url:url,
+	  data:filter_list,
+	  success:function(data)
+	  {
+	   $('#guest_list').html(data.info);
+	  }
+
+	  });	
+	}
+	
+	//分页ajax效果
+	function table_order_page(obj)
+	{
+	  //获取cookie存储的查询条件--后期有待改进加密
+	  var filter_list = getCookie('SEARCH_INFO');
+	  
+	   if(filter_list)
+	   {
+	      filter_list =  JSON.parse(filter_list);
+		  if(obj != 0)
+		  {
+		   filter_list['p'] = obj;
+		  }
+		  
+		  //获取上方筛选信息
+		  $('#select_value_id .ajax_search_btn_input').each(function()
+		  {
+			
+			  filter_list[$(this).attr('name')] = $(this).val();
+			
+		  });  
+	   }
+
+	  var url = "{:U('Order/ajax_query')}";
+	  $.ajax({
+	  type:'POST',
+	  url:url,
+	  data:filter_list,
+	  success:function(data)
+	  {
+	   $('#guest_list').html(data.info);
+	  }
+	  });
+	
+	}
+	
+	//获取cookie的值
+	function getCookie(name)
+	{
+	var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+	if(arr=document.cookie.match(reg))
+	return unescape(arr[2]);
+	else
+	return null;
+	}
+	
+	
+	//光标定位
+	
+	</script>
+
+</body>
+</html>

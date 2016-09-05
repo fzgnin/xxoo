@@ -1,0 +1,31 @@
+<div class="data-table table-striped">
+	<table class="">
+    <thead>
+        <tr>
+		<th class="">日期</th>
+		<th class=""><if condition="$filter.sign_type eq 0 ">签到人数<else/>签退人数</if></th>
+		<th class=""><if condition="$filter.sign_type eq 0 ">未签到人数<else/>未签退人数</if></th>
+		<th class=""><if condition="$filter.sign_type eq 0 ">签到率<else/>签退率</if></th>
+		</tr>
+    </thead>
+    <tbody>
+		<notempty name="list">
+		<volist name="list" id="vo">
+		<tr>
+			<td>{$vo.tt} </td>
+			<td>{$vo.num}</td>
+			<td><a href="{:U('Attendance/nosignlist',array('time'=>$vo['tt'],'sign_type'=>$filter['sign_type']))}">{$vo.w_num}</a></td>
+			<td>{$vo.qdl}</td>
+		</tr>
+		</volist>
+		<else/>
+		<td colspan="9" class="text-center"> aOh! 暂时还没有内容! </td>
+		</notempty>
+	</tbody>
+    </table>
+	</div>
+    <div class="page">
+        {$page}
+    </div>
+	
+	

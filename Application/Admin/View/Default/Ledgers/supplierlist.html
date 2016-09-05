@@ -1,0 +1,81 @@
+<extend name="Public/base" />
+
+<block name="body">
+<style type="text/css">
+
+.btn_list_1:hover{ background-color:#4BBD00 !important;}
+</style>
+	<!-- 标题栏 -->
+	<div class="main-title">
+		<h2 class="btn_h2_style">供应商金额明细</h2>
+	</div>
+	<div class="cf">
+		
+
+		<div class="fl" id="select_value_id">
+		
+		<div class="ajax_search_btn_div">
+			<span class="ajax_search_btn_span">应收应付</span>
+			<select class="ajax_search_btn_input" style="height:30px;border-radius:0px;min-width:100px;outline:none;"  name="pay_type" onchange="table_order_page(1);"> 
+									  <option value="0" <if condition="$filter.status eq 0 ">selected = "selected"</if> >请选择</option>
+                                      <option value="1" <if condition="$filter.status eq 1 ">selected = "selected"</if> >应收</option>  
+									  <option value="2" <if condition="$filter.status eq 2 ">selected = "selected"</if> >应付</option>     
+									</select>
+			
+			</div>
+
+		<div class="search-form fr cf" >
+			<div class="sleft">
+				<input type="text" name="keywords" class="ajax_search_btn_input search-input" value="" placeholder="请输入供应商名字" >
+				<a class="sch-btn" href="javascript:;" id="search" url="{:U('ajax_query')}"><i class="btn-search"></i></a>
+			</div>
+		    </div>
+			<input type="hidden" class="ajax_search_btn_input" name="type" value="supplier" />
+        </div>
+     
+		
+    </div>
+    <!-- 数据列表 -->
+	<div id="guest_list">
+    <include file="Default:Ajax:Ledgers:supplier_list" />
+	</div>
+</block>
+
+<block name="script">
+	<script type="text/javascript">
+	var url = "{:U('Ledgers/ajax_query')}";
+	var APP = "__APP__";
+	var URL_JS = "__URL__";
+	</script>
+	<script src="__STATIC__/thinkbox/jquery.thinkbox.js"></script>
+	<script type="text/javascript" src="__JS__/huang.js"/></script>
+<link href="__STATIC__/datetimepicker/css/datetimepicker.css" rel="stylesheet" type="text/css">
+<php>if(C('COLOR_STYLE')=='blue_color') echo '<link href="__STATIC__/datetimepicker/css/datetimepicker_blue.css" rel="stylesheet" type="text/css">';</php>
+<link href="__STATIC__/datetimepicker/css/dropdown.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="__STATIC__/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="__STATIC__/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+<script type="text/javascript">
+$(function(){
+    $('.time').datetimepicker({
+        format: 'yyyy-mm-dd',
+        language:"zh-CN",
+        minView:2,
+        autoclose:true
+    });
+});
+</script>
+
+	<script type="text/javascript">
+	//搜索功能
+	$("#search").click(function(){
+		table_order_page(1);
+	});
+	//回车搜索
+	$(".search-input").keyup(function(e){
+		if(e.keyCode === 13){
+			$("#search").click();
+			return false;
+		}
+	});
+	</script>
+</block>

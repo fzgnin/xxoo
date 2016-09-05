@@ -1,0 +1,211 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="__CSS__/base.css" media="all">
+    <link rel="stylesheet" type="text/css" href="__CSS__/module.css"> 
+	<link rel="stylesheet" type="text/css" href="__CSS__/default_color.css"> 
+	<style type="text/css">
+	.tr_select{color:#fff !important; background-color:#666666 !important;}
+	</style>
+     <!--[if lt IE 9]>
+    <script type="text/javascript" src="__STATIC__/jquery-1.10.2.min.js"></script>
+	<script type="text/javascript" src="__LAYER__/layer.js"></script>
+    <![endif]--><!--[if gte IE 9]><!-->
+    <script type="text/javascript" src="__STATIC__/jquery-2.0.3.min.js"></script> 
+	<script type="text/javascript" src="__LAYER__/layer.js"></script>
+    <!--<![endif]-->
+    
+</head>
+<body>
+    <div class="bodywrapper">
+  <!--头部-->
+
+    <!--子菜单结束-->
+    <div class="data-table table-striped" id="guest_list" style="margin:10px 10px">
+	<include file="Default:Ajax:Popup:ajax_guests_list" />
+	</div>
+	<div style="text-align: center;margin: 10px;" id="goods_select_id">
+	<a href="javascript:;" onClick="tijiao_a()" class="btn">选择</a>
+	</div>
+    <!--contentwrapper-->
+        
+	</div><!-- centercontent -->
+    
+    
+</div>
+</block>
+
+<block name="script">
+	
+	<script type="text/javascript">
+	var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+	var url = parent.document.location;
+	//更改排序方式
+	function table_order(obj)
+	{ 
+	  //分页url
+	  var url = "{:U('Ajaxquery/ajax_query')}";
+	  
+	  //获取分页的排序条件
+	  var filter_list = getCookie('SEARCH_INFO');
+	  
+	  
+	  if(filter_list)
+	  {
+		  filter_list =  JSON.parse(filter_list);
+		  
+		  //更改分页的排序方式		  
+		  filter_list['order_by'] = obj;
+		  
+		  if(filter_list['sort_by'] == 'ASC')
+		  {
+		  
+		    filter_list['sort_by'] = 'DESC';
+		  }else
+		  {
+		  
+		    filter_list['sort_by'] = 'ASC';
+		  }
+	  }
+	  
+	  $.ajax({
+	  type:'POST',
+	  url:url,
+	  data:filter_list,
+	  success:function(data)
+	  {
+	   $('#guest_list').html(data.info);
+	  }
+
+	  });	
+	}
+	
+	//分页ajax效果
+	function table_order_page(obj)
+	{
+	  //获取cookie存储的查询条件--后期有待改进加密
+	  var filter_list = getCookie('SEARCH_INFO');
+	  
+	   if(filter_list)
+	   {
+	      filter_list =  JSON.parse(filter_list);
+		  if(obj != 0)
+		  {
+		   filter_list['p'] = obj;
+		  }
+		  
+		  //获取上方筛选信息
+		  $('#select_value_id .ajax_search_btn_input').each(function()
+		  {
+			
+			  filter_list[$(this).attr('name')] = $(this).val();
+			
+		  });  
+	   }
+
+	  var url = "{:U('Ajaxquery/ajax_query')}";
+	  $.ajax({
+	  type:'POST',
+	  url:url,
+	  data:filter_list,
+	  success:function(data)
+	  {
+	   $('#guest_list').html(data.info);
+	   //给已经选中的checkbox重新加上选中效果
+	   
+	   for(i=0;i<$('#guest_list').find('input').length;i++)
+	   {   
+		for(k=0;k<$('#goods_select_id').find('input').length;k++)
+		{
+		  if($('#guest_list').find('input').eq(i).val() == $('#goods_select_id').find('input').eq(k).val())
+		  {
+		   $('#guest_list').find('input').eq(i).prop("checked",'true');
+		  }
+		}
+	   }
+	  }
+	  });
+	}
+	
+	//获取cookie的值
+	function getCookie(name)
+	{
+	var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+	if(arr=document.cookie.match(reg))
+	return unescape(arr[2]);
+	else
+	return null;
+	}
+	
+	function give_goods_id(obj,ocj)
+	{
+		
+	 //被选中的checkbox,选中增加未选中删除
+	 if(obj.checked)
+	 {
+	   if(!document.getElementById('goods_ide_'+obj.value))
+	   { 
+	   var guestname = obj.getAttribute("h-guestname");
+	   var province = obj.getAttribute("h-province");
+	   var address = obj.getAttribute("h-address");
+	   var manager = obj.getAttribute("h-manager");
+	   $('#goods_select_id').append("<input type='hidden' id='goods_ide_"+obj.value+"' value='"+obj.value+"' h-guestname='"+guestname+"' h-province='"+province+"' h-address='"+address+"' h-manager='"+manager+"'>");   
+	   }
+	   
+	 }else
+	 {
+	   if(document.getElementById('goods_ide_'+obj.value))
+	   {
+	    $('#goods_ide_'+obj.value).remove();
+	   }
+	 }
+	 
+	 //阻止冒泡
+		var e=(ocj)?ocj:window.event; //判断浏览器的类型，在基于ie内核的浏览器中的使用cancelBubble
+		if (window.event) {
+			e.cancelBubble=true;
+		} else {
+		//e.preventDefault(); //在基于firefox内核的浏览器中支持做法stopPropagation
+			e.stopPropagation();
+		}
+	 
+	}
+	
+	//提交数据到表格
+	
+	function tijiao_a()
+	{
+	  if($('#goods_select_id').find('input').length <= 0) 
+	  {
+	    alert('请先选择店家！');
+		return false;
+	  }
+
+	  //生成字符串
+	  var str_t = '';
+	  var bg_info = [];
+	  
+	  for(k=0;k<$('#goods_select_id').find('input').length;k++)
+	  { 
+		var guestname = $('#goods_select_id').find('input').eq(k).attr('h-guestname');
+		var province = $('#goods_select_id').find('input').eq(k).attr('h-province');
+		var address = $('#goods_select_id').find('input').eq(k).attr('h-address');
+		var manager = $('#goods_select_id').find('input').eq(k).attr('h-manager');
+		var id = $('#goods_select_id').find('input').eq(k).val();
+		var str_obj = {'id':id,'guestname':guestname,'province':province,'address':address,'manager':manager};
+		bg_info.push(str_obj);
+	  }
+	  
+	  //把字符串插入到订单表后面
+	  parent.make_str(bg_info);
+
+	  //关闭弹出层
+	  parent.layer.closeAll();
+	  //alert(str_t);
+	}
+	
+	</script>
+
+</body>
+</html>

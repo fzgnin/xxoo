@@ -1,0 +1,121 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<LINK rel="Bookmark" href="/favicon.ico" >
+<LINK rel="Shortcut Icon" href="/favicon.ico" />
+<!--[if lt IE 9]>
+<script type="text/javascript" src="__STATIC__/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="__LAYER__/layer.js"></script>
+<script type="text/javascript" src="__JS__/json2.js"></script>
+<script type="text/javascript" src="__HUI__/lib/html5.js"></script>
+<script type="text/javascript" src="__HUI__/lib/respond.min.js"></script>
+<script type="text/javascript" src="__HUI__/lib/PIE_IE678.js"></script>
+<![endif]-->
+
+<link rel="stylesheet" type="text/css" href="__HUI__/static/h-ui/css/H-ui.css" />
+<link rel="stylesheet" type="text/css" href="__HUI__/static/h-ui.admin/css/H-ui.admin.css" />
+<link rel="stylesheet" type="text/css" href="__HUI__/lib/Hui-iconfont/1.0.7/iconfont.css" />
+<link rel="stylesheet" type="text/css" href="__HUI__/lib/icheck/icheck.css" />
+<link rel="stylesheet" type="text/css" href="__HUI__/static/h-ui.admin/skin/default/skin.css" id="skin" />
+<link rel="stylesheet" type="text/css" href="__HUI__/static/h-ui.admin/css/style.css" />
+
+
+<link rel="stylesheet" type="text/css" href="__CSS__/base.css" media="all">
+<link rel="stylesheet" type="text/css" href="__CSS__/common.css" media="all">
+<link rel="stylesheet" type="text/css" href="__CSS__/module.css">
+<link rel="stylesheet" type="text/css" href="__CSS__/style.css" media="all">
+<link rel="stylesheet" type="text/css" href="__CSS__/{$Think.config.COLOR_STYLE}.css" media="all">
+
+<script type="text/javascript" src="__HUI__/lib/jquery/1.9.1/jquery.min.js"></script> 
+<script type="text/javascript" src="__JS__/jquery.mousewheel.js"></script>
+<script type="text/javascript" src="__HUI__/lib/layer/2.1/layer.js"></script> 
+<script type="text/javascript" src="__HUI__/static/h-ui/js/H-ui.js"></script> 
+<script type="text/javascript" src="__HUI__/static/h-ui.admin/js/H-ui.admin.js"></script> 
+
+
+<!--[if IE 6]>
+<script type="text/javascript" src="http://lib.h-ui.net/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+<title>{$meta_title}ERP管理系统</title>
+<meta name="keywords" content="ERP管理系统">
+<meta name="description" content="ERP管理系统">
+<block name="style"></block>
+</head>
+<body style="padding-top:20px;padding-left:20px">
+
+<block name="body"></block>
+
+
+
+<script type="text/javascript">
+    (function(){
+        var ThinkPHP = window.Think = {
+            "ROOT"   : "__ROOT__", //当前网站地址
+            "APP"    : "__APP__", //当前项目地址
+            "PUBLIC" : "__PUBLIC__", //项目公共目录地址
+            "DEEP"   : "{:C('URL_PATHINFO_DEPR')}", //PATHINFO分割符
+            "MODEL"  : ["{:C('URL_MODEL')}", "{:C('URL_CASE_INSENSITIVE')}", "{:C('URL_HTML_SUFFIX')}"],
+            "VAR"    : ["{:C('VAR_MODULE')}", "{:C('VAR_CONTROLLER')}", "{:C('VAR_ACTION')}"]
+        }
+    })();
+</script>
+<script type="text/javascript" src="__STATIC__/think.js"></script>
+<script type="text/javascript" src="__JS__/common.js"></script>
+
+
+<script type="text/javascript">
+/*资讯-添加*/
+function article_add(title,url){
+	var index = layer.open({
+		type: 2,
+		title: title,
+		content: url
+	});
+	layer.full(index);
+}
+/*图片-添加*/
+function picture_add(title,url){
+	var index = layer.open({
+		type: 2,
+		title: title,
+		content: url
+	});
+	layer.full(index);
+}
+/*产品-添加*/
+function product_add(title,url){
+	var index = layer.open({
+		type: 2,
+		title: title,
+		content: url
+	});
+	layer.full(index);
+}
+/*用户-添加*/
+function member_add(title,url,w,h){
+	layer_show(title,url,w,h);
+}
+</script> 
+<block name="script"></block>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

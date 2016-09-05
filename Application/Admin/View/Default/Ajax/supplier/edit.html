@@ -1,0 +1,232 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    
+     <!--[if lt IE 9]>
+    <script type="text/javascript" src="__STATIC__/jquery-1.10.2.min.js"></script>
+	<script type="text/javascript" src="__LAYER__/layer.js"></script>
+    <![endif]--><!--[if gte IE 9]><!-->
+    <script type="text/javascript" src="__STATIC__/jquery-2.0.3.min.js"></script>
+   
+	<script type="text/javascript" src="__LAYER__/layer.js"></script>
+    <!--<![endif]-->
+    
+</head>
+<body>
+
+<link rel="stylesheet" href="__CSS__/style.default.css" type="text/css" />
+<script type="text/javascript" src="__JS__/general.js"></script>
+    <div class="bodywrapper">
+  <!--头部-->
+
+    <!--子菜单结束-->
+    <div class="centercontent">
+    
+        <div class="pageheader">
+           
+            
+            <ul class="hornav">
+                <li class="current"><a href="#basicform">填写供应商信息</a></li>
+            </ul>
+        </div><!--pageheader-->
+        
+        <div id="contentwrapper" class="contentwrapper">
+        	<form  id="mpostForm" name="mpostForm" class="stdform" action="{:U('Admin/Supplier/update')}" method="post">  
+        	<div id="basicform" class="subcontent"><!--contenttitle-->
+
+                  
+                          <p>
+                        	<label>供应商名称</label>
+                            <span class="field"><input type="text" name="suppliername"  value="{$info['suppliername']}" class="smallinput" /></span>
+                            <small class="desc">请填写全称</small>
+                        </p>
+                        
+                         <p>
+                        	<label>选择所在区域</label>
+                            <span class="formwrapper">
+                            	<select data-placeholder="请选择地区....." id="province" class="chzn-select"  name="province" style="width:350px;" tabindex="2">
+                                  <option value="{$info['province']}" select="selectd">{$info['province']}</option> 
+                                  <option value="北京市">北京市</option>
+                                  <option value="天津市">天津市</option>
+                                  <option value="上海市">上海市</option>
+                                  <option value="重庆市">重庆市</option>
+                                  <option value="河北省">河北省</option> 
+                                  <option value="山西省">山西省</option>
+                                  <option value="内蒙古">内蒙古</option>
+                                  <option value="辽宁省">辽宁省</option>
+                                  <option value="吉林省">吉林省</option>
+                                  <option value="黑龙江省">黑龙江省</option>
+                                  <option value="江苏省">江苏省</option>
+                                  <option value="浙江省">浙江省</option>
+                                  <option value="安徽省">安徽省</option>
+                                  <option value="福建省">福建省</option>
+                                  <option value="江西省">江西省</option>
+                                  <option value="山东省">山东省</option>
+                                  <option value="河南省">河南省</option>
+                                  <option value="湖北省">湖北省</option>
+                                  <option value="湖南省">湖南省</option>
+                                  <option value="广东省">广东省</option>
+                                  <option value="广西">广西</option>
+                                  <option value="海南省">海南省</option>
+                                  <option value="四川省">四川省</option>
+                                  <option value="贵州省">贵州省</option>
+                                  <option value="云南省">云南省</option>
+                                  <option value="西藏">西藏</option>
+                                  <option value="陕西省">陕西省</option>
+                                  <option value="甘肃省">甘肃省</option>
+                                  <option value="青海省">青海省</option>
+                                  <option value="宁夏">宁夏</option>
+                                  <option value="新疆">新疆</option>
+                                  <option value="香港">香港</option>
+                                  <option value="澳门">香港</option>
+                                  <option value="台湾省">台湾省</option>
+                                </select>
+                            </span>
+                        </p>
+                        
+                        <p>
+                        	<label>地址</label>
+                            <span class="field"><textarea  rows="3"  name="address" class="longinput" style="width:40%"/ >{$info['address']}</textarea></span> 
+                        </p>
+                        
+                          <p>
+                        	<label>负责人</label>
+                            <span class="field"><input type="text"  name="manager" value="{$info['manager']}"  class="smallinput" /></span>
+                            <small class="desc">只需填写一位负责人</small>
+                        </p>
+                        
+                        <p>
+                        	<label>负责人联系方式</label>
+                            <span class="field"><input type="text" name="phone" value="{$info['phone']}"  class="smallinput" /></span>
+                            <small class="desc">填写该负责人的联系方式：手机号码</small>
+                        </p>
+                        
+
+                       
+                         <p>
+                        	<label>备注信息</label>
+                            <span class="field"><textarea  rows="3"  name="remark" class="longinput" style="width:40%"/ >{$info['remark']}</textarea></span> 
+                        </p>
+    
+                         <p>
+                            <label>修改人</label>
+                            <span class="field">【{$_SESSION['onethink_admin']['user_auth']['username']}】</span>
+                          
+                        </p>
+                        <!--隐藏字段-->
+<input type="hidden" name="id" value="{$info['id']}" />
+                        
+                        <p class="stdformbutton">
+                        	<input style="width:100px; margin: 0; font-weight: bold; color: #eee; background: #FB9337; border: 1px solid #F0882C; padding: 7px 10px; 
+  -moz-box-shadow: none; -webkit-box-shadow: none; box-shadow: none; cursor: pointer; -moz-border-radius: 2px; -webkit-border-radius: 2px;
+  border-radius: 2px;" type="button" class="submit radius2" value="提交" onClick="myFunction()">
+                        </p>
+                    
+
+            </div><!--subcontent-->
+
+            
+        </form>
+        </div><!--contentwrapper-->
+        
+	</div><!-- centercontent -->
+    
+    
+</div>
+</block>
+
+<block name="script">
+	
+	<script type="text/javascript">
+	var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+	
+	var url = parent.document.location;
+	
+	function myFunction()
+	{ var province=document.getElementById("province");
+	  var jid=document.getElementById("province");
+	  var bid=document.getElementById("city");
+	
+	 if(mpostForm.suppliername.value==""){alert("请输入供应商名称！");
+		mpostForm.suppliername.focus();
+		return false;
+	   }
+	
+	if(province.value==""){alert("请选择供应商所在区域！");
+	return false;
+	}
+	 if(mpostForm.address.value==""){alert("请输入供应商地址！");
+		mpostForm.address.focus();
+		return false;
+	   }
+	
+	  if($('#stus').val() == 1 && ($('#tid_id').val() == 0 || $('#bid_id').val() == 0))
+	  {alert("请选择所属军团和部门！");
+	  return false;
+	} 
+	
+	
+	  layer.confirm("你确认要提交吗？",function(index1){
+	  
+	  $.ajax({
+                type: "POST",
+                url:"{:U('Admin/Supplier/update')}",
+                data:$('#mpostForm').serialize(),// 你的formid
+                async: false,
+                error: function(request) {
+                    alert("网络传输错误");
+                },
+                success: function(data) {
+                    
+					if(data.status)
+					{
+										
+						parent.layer.alert(data.info,{icon: 1,shift: 6,closeBtn: 0},function(index2)
+						{
+						  parent.table_order_page(0);
+						  parent.layer.closeAll();
+						});
+						
+						
+					}else
+					{
+						layer.close(index1);
+						parent.layer.msg(data.info);
+					}
+                }
+            });
+  
+	  })
+	  
+	}
+	
+	
+	jQuery('.btn_anniu').click(function(){
+	
+	var html_span = jQuery('.formwrapper').eq(1).prop("outerHTML");
+	
+	jQuery('#add_xuanxiang').append(html_span);
+	
+	
+	})
+	
+	function show_bumen(obj)
+	{
+	 if(obj == 1)
+	 {
+	   $('#bumen_id').show();
+	 }else
+	 {
+	  $('#bumen_id').hide();
+	  $('#tid_id').val(0);
+	  $('#bid_id').val(0);
+	  
+	 }
+	}
+	</script>
+
+
+
+</body>
+</html>

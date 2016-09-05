@@ -1,0 +1,238 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    
+     <!--[if lt IE 9]>
+    <script type="text/javascript" src="__STATIC__/jquery-1.10.2.min.js"></script>
+	<script type="text/javascript" src="__LAYER__/layer.js"></script>
+    <![endif]--><!--[if gte IE 9]><!-->
+    <script type="text/javascript" src="__STATIC__/jquery-2.0.3.min.js"></script>
+   
+	<script type="text/javascript" src="__LAYER__/layer.js"></script>
+    <!--<![endif]-->
+    
+</head>
+<body>
+
+<link rel="stylesheet" href="__CSS__/style.default.css" type="text/css" />
+<script type="text/javascript" src="__JS__/general.js"></script>
+    <div class="bodywrapper">
+  <!--头部-->
+
+    <!--子菜单结束-->
+    <div class="centercontent">
+    
+        <div class="pageheader">
+           
+            
+            <ul class="hornav">
+                <li class="current"><a href="#basicform">填写商品信息</a></li>
+                <li class=""><a href="#secondform">待开发。。。</a></li>
+            </ul>
+        </div><!--pageheader-->
+        
+        <div id="contentwrapper" class="contentwrapper">
+        	<form  id="mpostForm" name="mpostForm" class="stdform" action="" method="post">
+        	<div id="basicform" class="subcontent"><!--contenttitle-->
+
+                  	
+                        
+                          <p>
+                        	<label>商品名称</label>
+                            <span class="field"><input type="text" name="goodsname"  class="smallinput" value="{$info.goodsname}" /></span>
+                            <small class="desc">请填写全称</small>
+                        </p>
+                        
+                         <p>
+                        	<label>选择品牌</label>
+                            <span class="formwrapper">
+                            	<select data-placeholder="请选择品牌....." id="brand_id" class="chzn-select"  name="brand_id" style="width:350px;height: 37px;" tabindex="2">
+                                  <option value="" >请选择</option> 
+								  <volist name="brand_list" id="v">
+                                  <option value="{$v.id}"     <if condition="$v.id eq $info['brand_id']">selected </if>>{$v.name}</option>
+								  </volist>
+                                </select>
+                            </span>
+                        </p>
+     
+                          <p>
+                        	<label>商品编号</label>
+                            <span class="field"><input type="text"  name="code"  class="smallinput" value="{$info.code}" /></span>
+                            <small class="desc">格式1-0001，-前是品牌id后面是商品序列号</small>
+                        </p>
+						
+						
+						 <p>
+                        	<label>商品单位</label>
+                            <span class="formwrapper">
+                            	<select data-placeholder="请选择商品单位....." id="calculation" class="chzn-select"  name="calculation" style="width:350px;height: 37px;" tabindex="2">
+                                  <option value="{$info.calculation}" select="selectd">{$info.calculation}</option> 
+								  
+								  <volist name="guige" id="v">
+								  <option value="{$v}">{$v}</option>
+								  </volist>	  
+
+                                </select>
+                            </span>
+                        </p>
+                        
+                        <p>
+                        	<label>商品价格</label>
+                            <span class="field"><input type="text" name="price"  class="smallinput" value="{$info.price}"/></span>
+                            <small class="desc">商品价格备注</small>
+                        </p>
+                        
+
+                        <p>
+                            <label>成本价1</label>
+                            <span class="field"><input type="text" name="cost_one"  class="smallinput"  value="{$info.cost_one}"/></span>
+                            <small class="desc">商品价格备注</small>
+                        </p>
+
+                        <p>
+                        	<label>成本价2</label>
+                            <span class="field"><input type="text" name="cost_two"  class="smallinput"  value="{$info.cost_two}"/></span> 
+							<small class="desc">商品价格备注</small>
+                        </p>
+						
+						 <p>
+                        	<label>商品规格</label>
+                            <span class="field"><input type="text" name="format"  class="smallinput"  value="{$info.format}"/></span> 
+							<small class="desc">商品规格备注</small>
+                        </p>
+						
+						
+						<p>
+                        	<label>备注</label>
+                            <span class="field"><textarea  rows="3"  name="remarks" class="longinput" style="width:40%"/ >{$info.remarks}</textarea></span> 
+							<small class="desc">备注</small>
+                        </p>
+                        
+                        <!--隐藏字段-->
+                        <p class="stdformbutton">
+						<input type="hidden" name="id" value="{$info.id}">
+                        <input style="width:100px; margin: 0; font-weight: bold; color: #eee; background: #FB9337; border: 1px solid #F0882C; padding: 7px 10px; 
+  -moz-box-shadow: none; -webkit-box-shadow: none; box-shadow: none; cursor: pointer; -moz-border-radius: 2px; -webkit-border-radius: 2px;
+  border-radius: 2px;" type="button" class="submit radius2" value="提交" onClick="myFunction()">
+                        </p>
+                    
+
+            </div><!--subcontent-->
+
+            <div id="secondform" class="subcontent" style="display:none">
+             
+
+
+            </div>
+        </form>
+        </div><!--contentwrapper-->
+        
+	</div><!--contentwrapper-->
+        
+	</div><!-- centercontent -->
+    
+    
+</div>
+</block>
+
+<block name="script">
+    <script type="text/javascript">
+        //导航高亮
+        highlight_subnav('{:U('User/index')}');
+    </script>
+	
+	<script type="text/javascript">
+	var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+	
+	var url = parent.document.location;
+	
+	function myFunction()
+	{ 
+	
+		if(mpostForm.goodsname.value==""){alert("请输入商品名称！");
+		mpostForm.goodsname.focus();
+		return false;
+		}
+		
+		if(mpostForm.brand_id.value==""){alert("请选商品所属品牌！");
+		return false;
+		}
+		if(mpostForm.code.value==""){alert("请输入商品编号！");
+		mpostForm.code.focus();
+		return false;
+		}
+		
+		if(mpostForm.calculation.value==""){alert("请选择商品单位！");
+		return false;
+		}
+		
+		if(mpostForm.price.value=="" || mpostForm.cost_one.value=="" || mpostForm.cost_two.value=="")
+		{
+		  alert('请完善商品价格');
+		  return false;
+		}
+		
+		if(mpostForm.format.value==""){alert("请选填写商品规格！");
+		mpostForm.format.focus();
+		return false;
+		}
+		
+		if($('#stus').val() == 1 && ($('#tid_id').val() == 0 || $('#bid_id').val() == 0))
+		{alert("请选择军团和部门！");
+		return false;
+		} 
+
+		layer.confirm("你确认要提交吗？",function(index1){
+	  
+	    $.ajax({
+                type: "POST",
+                url:"{:U('Admin/Goods/update')}",
+                data:$('#mpostForm').serialize(),// 你的formid
+                async: false,
+                error: function(request) {
+                    alert("网络传输错误");
+                },
+                success: function(data) {
+                    
+					if(data.status)
+					{
+										
+						parent.layer.alert(data.info,{icon: 1,shift: 6,closeBtn: 0},function(index2)
+						{
+						  parent.table_order_page(0);
+						  parent.layer.closeAll();
+						});	
+					}else
+					{
+						layer.close(index1);
+						parent.layer.msg(data.info);
+					}
+                }
+            });
+  
+	     })
+		 
+		 return false;
+		
+	}
+	</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

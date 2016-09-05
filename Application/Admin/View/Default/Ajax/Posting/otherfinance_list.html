@@ -1,0 +1,74 @@
+<div class="data-table table-striped">
+	<table class="">
+    <thead>
+        <tr>
+		<th class="row-selected row-selected"><input class="check-all" type="checkbox"  onchange="select_all(this);"/></th>
+		<th class="" onClick="table_order('onethink_order.id')">ID</th>
+		<th class="">订单编号</th>
+		<th class="">下单时间</th>
+		<th class="">往来单位</th>
+		<th class="">订单类型</th>
+		<th class="">总金额</th>
+		<th class="">往来银行</th>
+		
+		<th class="">状态</th>
+		<th class="">备注</th>
+		<th class="">操作</th>
+		</tr>
+    </thead>
+    <tbody>
+		<notempty name="list">
+		<volist name="list" id="vo">
+		<tr>
+            <td><input class="ids" type="checkbox" name="id[]" value="{$vo.id}"  data-type="{$vo.order_type}"/></td>
+			<td>{$vo.id} </td>
+			<td>{$vo.order_sn}</td>
+			<td>{$vo.add_time|date='Y-m-d H:i',###}</td>
+			<td>{$vo.mname}</td>
+			<td><if condition=" $vo.order_type eq 12 ">其他收款单<else/>其他付款单</if></td>
+			<td>{$vo.amount}</td>
+			<td>{$vo.account}</td>
+			
+			<td><if condition="$vo.status eq 1 "><span style="color:green">已过账</span><elseif condition="vo.status eq 2"/><span style="color:red">已作废</span><else/><span style="color:rgb(245, 81, 255)">未过账</span></if></td>
+			<td>{$vo.remarks}</td>
+			<td style="min-width:237px">
+				<a class="btn_list_1" style="background-color: #C03204;" href="javascript:;" onclick="show_order({$vo.id},'OtherFinance')">查看详细</a>
+				<if condition="$vo.status neq 1 ">
+				<a class="btn_list_1" style="background-color:#00B0BD;" href="javascript:;" onclick="edit_order({$vo.id},'OtherFinance')">编辑</a>
+				<a class="btn_list_1" href="javascript:;" onclick="delete_order({$vo.id},'OtherFinance')">删除</a>
+				<a class="btn_list_1" href="javascript:;" onclick="posting_order({$vo.id},{$vo.order_type},1)">过账</a>
+				<else/>
+				<a class="btn_list_1" href="javascript:;" onclick="posting_order({$vo.id},{$vo.order_type},2)">反过账</a>
+				
+				</if> 
+				       
+                </td>
+		</tr>
+		</volist>
+		<else/>
+		<td colspan="9" class="text-center"> aOh! 暂时还没有内容! </td>
+		</notempty>
+	</tbody>
+    </table>
+	</div>
+    <div class="page">
+        <select style="height:30px;border-radius:0px;min-width:100px;outline:none;float:left"  name="batch" id="batch_id">                   
+									  <option value="1">过账</option>
+									  <option value="2">反过账</option>					  		     
+		</select>
+		
+		
+		
+		<a href="javascript:;" onclick="posting_all();" class="btn_list_1" style="float:left;color:#fff;border:none">批量操作</a>
+        {$page}
+		
+		<select style="height:32px;border-radius:0px;min-width:100px;outline:none;float:left"  name="page_num" id="page_num" onchange="table_order_page(1)">                   
+									  <option value="10" <eq name="filter.page_num" value="10">selected</eq>>10个</option>
+									  <option value="20" <eq name="filter.page_num" value="20">selected</eq>>20个</option>
+									  <option value="50" <eq name="filter.page_num" value="50">selected</eq>>50个</option>
+									  <option value="100" <eq name="filter.page_num" value="100">selected</eq>>100个</option>				  		     
+		</select>
+		<span style="float:right">总业绩：{$a_amount|default="0"}元</span>
+    </div>
+	
+	

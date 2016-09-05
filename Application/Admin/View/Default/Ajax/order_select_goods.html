@@ -1,0 +1,243 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="__CSS__/base.css" media="all">
+    <link rel="stylesheet" type="text/css" href="__CSS__/module.css"> 
+	<link rel="stylesheet" type="text/css" href="__CSS__/default_color.css"> 
+	<style type="text/css">
+	.tr_select{color:#fff !important; background-color:#666666 !important;}
+	</style>
+     <!--[if lt IE 9]>
+    <script type="text/javascript" src="__STATIC__/jquery-1.10.2.min.js"></script>
+	<script type="text/javascript" src="__LAYER__/layer.js"></script>
+    <![endif]--><!--[if gte IE 9]><!-->
+    <script type="text/javascript" src="__STATIC__/jquery-2.0.3.min.js"></script> 
+	<script type="text/javascript" src="__LAYER__/layer.js"></script>
+    <!--<![endif]-->
+    
+</head>
+<body>
+    <div class="bodywrapper">
+  <!--头部-->
+
+    <!--子菜单结束-->
+    <div class="data-table table-striped" id="guest_list" style="margin:10px 10px">
+	<include file="Default:Ajax:order_goods_list" />
+	</div>
+	<div style="text-align: center;margin: 10px;" id="goods_select_id">
+	<a href="javascript:;" onClick="tijiao_a()" class="btn">选择</a>
+	</div>
+    <!--contentwrapper-->
+        
+	</div><!-- centercontent -->
+    
+    
+</div>
+</block>
+
+<block name="script">
+	
+	<script type="text/javascript">
+	var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+	
+	var url = parent.document.location;
+
+	//更改排序方式
+	function table_order(obj)
+	{
+	  
+	  //分页url
+	  var url = "{:U('Order/ajax_query')}";
+	  
+	  //获取分页的排序条件
+	  var filter_list = getCookie('SEARCH_INFO');
+	  
+	  
+	  if(filter_list)
+	  {
+		  filter_list =  JSON.parse(filter_list);
+		  
+		  //更改分页的排序方式		  
+		  filter_list['order_by'] = obj;
+		  
+		  if(filter_list['sort_by'] == 'ASC')
+		  {
+		  
+		    filter_list['sort_by'] = 'DESC';
+		  }else
+		  {
+		  
+		    filter_list['sort_by'] = 'ASC';
+		  }
+	  }
+	  
+	  $.ajax({
+	  type:'POST',
+	  url:url,
+	  data:filter_list,
+	  success:function(data)
+	  {
+	   $('#guest_list').html(data.info);
+	  }
+
+	  });	
+	}
+	
+	//分页ajax效果
+	function table_order_page(obj)
+	{
+	  //获取cookie存储的查询条件--后期有待改进加密
+	  var filter_list = getCookie('SEARCH_INFO');
+	  
+	   if(filter_list)
+	   {
+	      filter_list =  JSON.parse(filter_list);
+		  if(obj != 0)
+		  {
+		   filter_list['p'] = obj;
+		  }
+		  
+		  //获取上方筛选信息
+		  $('#select_value_id .ajax_search_btn_input').each(function()
+		  {
+			
+			  filter_list[$(this).attr('name')] = $(this).val();
+			
+		  });  
+	   }
+
+	  var url = "{:U('Order/ajax_query')}";
+	  $.ajax({
+	  type:'POST',
+	  url:url,
+	  data:filter_list,
+	  success:function(data)
+	  {
+	   $('#guest_list').html(data.info);
+	   //给已经选中的checkbox重新加上选中效果
+	   
+	   for(i=0;i<$('#guest_list').find('input').length;i++)
+	   {
+	    
+		for(k=0;k<$('#goods_select_id').find('input').length;k++)
+		{
+		  if($('#guest_list').find('input').eq(i).val() == $('#goods_select_id').find('input').eq(k).val())
+		  {
+		   $('#guest_list').find('input').eq(i).prop("checked",'true');
+		  }
+		}
+	   }
+	  }
+	  });
+	
+	}
+	
+	//获取cookie的值
+	function getCookie(name)
+	{
+	var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+	if(arr=document.cookie.match(reg))
+	return unescape(arr[2]);
+	else
+	return null;
+	}
+	
+	function give_goods_id(obj)
+	{
+	 //被选中的checkbox,选中增加未选中删除
+	 if(obj.checked)
+	 {
+	   if(!document.getElementById('goods_ide_'+obj.value))
+	   {
+	   
+	   var goodsname = obj.getAttribute("h-goodsname");
+	   var format = obj.getAttribute("h-format");
+	   var price = obj.getAttribute("h-price");
+	   var code = obj.getAttribute("h-code");
+	   var zhekou = obj.getAttribute("h-zhekou");
+	   var g_zhekou = obj.getAttribute("h-g_zhekou");
+	   $('#goods_select_id').append("<input type='hidden' id='goods_ide_"+obj.value+"' value='"+obj.value+"' h-goodsname='"+goodsname+"' h-format='"+format+"' h-price='"+price+"' h-code='"+code+"' h-zhekou='"+zhekou+"' h-g_zhekou='"+g_zhekou+"' >");   
+	   
+	   }
+	   
+	 }else
+	 {
+	   if(document.getElementById('goods_ide_'+obj.value))
+	   {
+	    $('#goods_ide_'+obj.value).remove();
+	   }
+	 }
+	 
+	}
+	
+	/*$('.ids').bind('click',function(){
+	
+	//被选中的checkbox,选中增加未选中删除
+	 if($(this).is(':checked'))
+	 {
+	   if(!document.getElementById('goods_ide_'+$(this).val()))
+	   {
+	   $('#goods_select_id').append("<input type='hidden' id='goods_ide_"+$(this).val()+"' value='"+$(this).val()+"' >");   
+	   }
+	   
+	 }else
+	 {
+	   if(document.getElementById('goods_ide_'+$(this).val()))
+	   {
+	    $('#goods_ide_'+$(this).val()).remove();
+	   }
+	 }
+	
+	
+	});*/
+	
+	
+	//提交数据到表格
+	
+	function tijiao_a()
+	{
+	  if($('#goods_select_id').find('input').length <= 0) 
+	  {
+	    alert('请先选择产品！');
+		return false;
+	  }
+	  
+	  //生成字符串
+	  var str_t = '';
+	  for(k=0;k<$('#goods_select_id').find('input').length;k++)
+	  {
+	   if(!$('#goods_select_id').find('input').eq(k).attr('h-zhekou'))
+	   {
+	    var zhekou = 1;
+	   }else
+	   {
+	   var zhekou = $('#goods_select_id').find('input').eq(k).attr('h-zhekou');
+	   }
+	   if(!$('#goods_select_id').find('input').eq(k).attr('h-g_zhekou'))
+	   {
+	    var g_zhekou = 1;
+	   }else
+	   {
+	   var g_zhekou = $('#goods_select_id').find('input').eq(k).attr('h-g_zhekou');
+	   }
+	   
+	   str_t += '<tr><td class="text-center"><i class="fa fa-trash-o" style="cursor: pointer;"></i></td><td class="text-center">#<span class="paixu">1</span></td><td class="td_huang"><input class="form-control form-huang" type="text" onkeydown="get_goods(event,this)" value="'+$('#goods_select_id').find('input').eq(k).attr('h-code')+'" title="'+$('#goods_select_id').find('input').eq(k).attr('h-code')+'" name="code[]" onblur="check_info(this)"></td><td class="td_huang" style="width: 200px !important;"><input class="form-control form-huang" type="text" name="goodsname[]" value="'+$('#goods_select_id').find('input').eq(k).attr('h-goodsname')+'"  title="'+$('#goods_select_id').find('input').eq(k).attr('h-goodsname')+'" onblur="check_info(this)" onkeydown="get_goods(event,this)"/><input type="hidden" name="goods_id[]" value="'+$('#goods_select_id').find('input').eq(k).val()+'" /></td><td><span>'+$('#goods_select_id').find('input').eq(k).attr('h-format')+'</span><input type="hidden" name="format[]" value="'+$('#goods_select_id').find('input').eq(k).attr('h-format')+'" /></td><td class="td_huang"><input class="form-control form-huang" type="text" name="num[]" value="1" onBlur="calculate_money()"/></td><td><span>'+$('#goods_select_id').find('input').eq(k).attr('h-price')+'</span><input type="hidden" name="price[]" value="'+$('#goods_select_id').find('input').eq(k).attr('h-price')+'" /></td><td><span></span><input type="hidden" name="price_total[]" value="" /></td><td class="td_huang"><input class="form-control form-huang" type="text" name="zhekou[]" value="'+zhekou+'"  onblur="change_zhekou(this)"/></td><td class="td_huang"><input class="form-control form-huang" type="text" name="z_price[]" value="" onblur="change_zhekou(this)"/></td><td style="border-right: 1px solid #F84141;"><span></span><input type="hidden" name="z_price_total[]" value="" /></td><td class="td_huang" style="border: 1px solid #F84141;"><input class="form-control form-huang_new" type="text" name="g_zhekou[]" value="'+g_zhekou+'" onblur="change_zhekou(this)"/></td><td class="td_huang" style="border: 1px solid #F84141;"><input class="form-control form-huang_new" type="text" name="g_z_price[]" value="" onblur="change_zhekou(this)"/></td><td style="border: 1px solid #F84141;"><span></span><input type="hidden" name="g_z_price_total[]" value="" /></td></tr>';  
+	  }
+	  //先计算
+	  
+	  //把字符串插入到订单表后面
+	  parent.add_goods(str_t);
+	  
+	  //计算价格
+	  parent.calculate_money();
+	  
+	  //关闭弹出层
+	  parent.layer.closeAll();
+	  //alert(str_t);
+	}
+	
+	</script>
+
+</body>
+</html>

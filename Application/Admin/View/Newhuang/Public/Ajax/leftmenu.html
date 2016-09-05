@@ -1,0 +1,28 @@
+
+		<volist name="child" id="sub_menu">
+                    
+                    <notempty name="sub_menu">
+					<dl id="menu-product">
+					
+                        <notempty name="key"><dt><i class="Hui-iconfont">&#xe620;</i> {$key}<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt></notempty>
+                        <dd>
+							<ul>
+						
+						
+                            <volist name="sub_menu" id="menu">
+                                <li>
+                                    <a class="item" _href="{$menu.url|U}"  data-title="{$menu.title}">{$menu.title}</a>
+                                </li>
+                            </volist>
+                        </ul>
+	
+						</dd>
+					</dl>	
+                    </notempty>
+                  
+		</volist>
+		
+		
+		
+		
+		

@@ -1,0 +1,112 @@
+<extend name="Public/basechild"/>
+
+<block name="body">
+<style type="text/css">
+
+.btn_list_1:hover{ background-color:#4BBD00 !important;}
+</style>
+	<!-- 标题栏 -->
+	<div class="main-title">
+		<h2>库存变化明细</h2>
+	</div>
+	<div class="cf">
+		
+
+		<div class="fl" id="select_value_id">
+		
+			<div class="ajax_search_btn_div">
+			<span class="ajax_search_btn_span">起始日期</span>
+			<input value="{$filter.begin_time|date='Y-m-d',###}" placeholder="请选择时间" class="ajax_search_btn_input time" style="padding:5px"   name="begin_time" type="text" onchange="table_order_page(1)">
+			</div>
+			
+			<div class="ajax_search_btn_div">
+			<span class="ajax_search_btn_span">截止日期</span>
+			<input value="{$filter.end_time|date='Y-m-d H:i',###}" placeholder="请选择时间" class="ajax_search_btn_input time" style="padding:5px"  name="end_time" type="text" onchange="table_order_page(1)">
+			</div>
+			
+			<div class="ajax_search_btn_div">
+			<a class="btn" href="javascript:;" onclick="change_times('year')">今 年</a>
+			
+			<a class="btn" href="javascript:;" onclick="change_times('mounth')">本 月</a>
+			
+			<a class="btn" href="javascript:;" onclick="change_times('day')">今 天</a>
+			</div>
+			
+			<div class="ajax_search_btn_div">
+			<span class="ajax_search_btn_span">单据类型</span>
+			<select class="ajax_search_btn_input" style="height:30px;border-radius:0px;min-width:100px;outline:none;" onchange="table_order_page(1)"  name="order_type">                   
+									  <option value="0">请选择单据类型</option>
+									  <option value="1">销售出货单</option>
+									  <option value="2">销售退货单</option>	     
+									</select>
+			
+			</div>
+			
+        </div>
+        <!-- 高级搜索 -->
+	
+
+        <!-- 高级搜索 -->
+		
+    </div>
+    <!-- 数据列表 -->
+	<div id="guest_list">
+    <include file="Default:Ajax:Ledgers:whlog_list" />
+	</div>
+</block>
+
+<block name="script">
+	<script type="text/javascript">
+	var url = "{:U('Ledgers/ajax_query')}";
+	var APP = "__APP__";
+	var URL_JS = "__URL__";
+	</script>
+	<script src="__STATIC__/thinkbox/jquery.thinkbox.js"></script>
+	<script type="text/javascript" src="__JS__/huang.js"/></script>
+<link href="__STATIC__/datetimepicker/css/datetimepicker.css" rel="stylesheet" type="text/css">
+<php>if(C('COLOR_STYLE')=='blue_color') echo '<link href="__STATIC__/datetimepicker/css/datetimepicker_blue.css" rel="stylesheet" type="text/css">';</php>
+<link href="__STATIC__/datetimepicker/css/dropdown.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="__STATIC__/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="__STATIC__/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+<script type="text/javascript">
+$(function(){
+    $('.time').datetimepicker({
+        format: 'yyyy-mm-dd',
+        language:"zh-CN",
+        minView:2,
+        autoclose:true
+    });
+    showTab();
+});
+</script>
+
+	<script type="text/javascript">
+	//搜索功能
+	$("#search").click(function(){
+		var url = $(this).attr('url');
+		var filter_list = getCookie('SEARCH_INFO');
+		filter_list = JSON.parse(filter_list);
+		filter_list['keywords'] = $('.search-input').val();
+		filter_list['p'] = 1;
+        $.ajax({
+		type:'POST',
+		url:url,
+		data:filter_list,
+		error:function(){
+		alert('网络传输错误！');
+		},
+		success:function(data)
+		{
+		$('#guest_list').html(data.info);
+		}
+		});
+	});
+	//回车搜索
+	$(".search-input").keyup(function(e){
+		if(e.keyCode === 13){
+			$("#search").click();
+			return false;
+		}
+	});
+	</script>
+</block>

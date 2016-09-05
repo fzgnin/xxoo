@@ -1,0 +1,39 @@
+<div class="data-table table-striped">
+	<table class="">
+    <thead>
+        <tr>
+		<th >id</th>
+		<th >卡号</th>
+		<th >卡名</th>
+		<th >余额</th>
+		<th >类型</th>
+		<th >操作</th>
+		</tr>
+    </thead>
+    <tbody>
+		<notempty name="list">
+		<volist name="list" id="vo">
+		<tr>
+			<td>{$vo.id}</td>
+			<td>{$vo.cid}</td>
+			<td>{$vo.cname}</td>
+			<td>{$vo.money}</td>
+			<td><if condition="$vo.type eq 0 ">
+			现金
+			<elseif condition="$vo.type eq 1" />
+			银行卡
+			</if></td>
+			
+			<td><a class="btn_list_1" href="{:U('Ledgers/company_loglist',array('id'=>$vo['id']))}">查看本期明细</a></td>
+		</tr>
+		</volist>
+		<else/>
+		<td colspan="9" class="text-center"> aOh! 暂时还没有内容! </td>
+		</notempty>
+	</tbody>
+    </table>
+	</div>
+    <div class="page">
+        {$page}
+		<a href="{:U('Ledgers/company_loglist')}" style="float: right;background-color: rgb(62, 225, 75);color: rgb(255, 255, 255);border: 1px solid rgb(129, 215, 154);display:none">查看本期总资产明细</a><span style="float:right">公司总固有资金：{$a_mount|default="0"}元</span>
+    </div>

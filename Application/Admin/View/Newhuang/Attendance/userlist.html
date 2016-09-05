@@ -1,0 +1,156 @@
+<extend name="Public/basechild"/>
+
+<block name="body">
+	<!-- 标题栏 -->
+	<div class="main-title">
+		<h2 class="btn_h2_style">人员管理</h2>
+	</div>
+	<div class="cf">
+	
+	<div class="fl" >
+            <a class="btn" href="{:U('add')}">新 增</a>
+            
+        </div>
+		
+		
+		<div class="cf" >
+		<div class="fl" id="select_value_id">
+		
+			<div class="ajax_search_btn_div">
+			<span class="ajax_search_btn_span">部门筛选</span>
+			<input class="ajax_search_btn_input" style="padding:5px" type="text" id="did_show" value="{$bname}" title="{$bname}" onblur="check_info(this)" onkeydown="enter_up(this,'bumen')">
+				<input class="ajax_search_btn_input" type="hidden" name="department_id" id="department_id" value="{$filter.department_id}">
+			
+			</div>
+			
+			<div class="ajax_search_btn_div">
+			<span class="ajax_search_btn_span">人员状态</span>
+			<select class="ajax_search_btn_input" style="height:30px;border-radius:0px;min-width:100px;outline:none;" onchange="table_order_page(1)"  name="onjob">                   
+					<option value="0">请选择</option>
+					<option value="1">在职</option>
+					<option value="2">离职</option>				  	     
+			</select>
+			
+			</div>
+			
+			<div class="search-form fr cf" >
+			<div class="sleft">
+				<input type="text" name="keywords" class="ajax_search_btn_input search-input" value="" placeholder="请输入用户昵称或者ID" >
+				<a class="sch-btn" href="javascript:;" id="search" url="{:U('ajax_query')}"><i class="btn-search"></i></a>
+			</div>
+		    </div>
+			
+	    <input class="ajax_search_btn_input" type="hidden" name="type" value="userlist">
+			
+        </div>
+		
+		
+
+        <!-- 高级搜索 -->
+		
+    </div>
+
+    </div>
+    <!-- 数据列表 -->
+	<div id="guest_list">
+    <include file="Default:Ajax:Attendance:users_list" />
+	</div>
+</block>
+
+<block name="script">
+
+    <script type="text/javascript">
+	var url = "{:U('Attendance/ajax_query')}";
+	var APP = "__APP__";
+	</script>
+	<script src="__STATIC__/thinkbox/jquery.thinkbox.js"></script>
+	<script type="text/javascript" src="__JS__/huang.js"/></script>
+	
+	
+	<script type="text/javascript">
+	
+	//搜索功能
+	$("#search").click(function(){
+		table_order_page(1);
+	});
+	//回车搜索
+	$(".search-input").keyup(function(e){
+		if(e.keyCode === 13){
+			$("#search").click();
+			return false;
+		}
+	});
+	
+	function set_user_onjob(obj,ocj)
+	{
+		
+		layer.confirm('确定要执行该操作吗？',function(index)
+			  {
+				$.ajax({
+				type:'POST',
+				data:{'id':obj,'onjob':ocj},
+				url:"{:U('Attendance/set_user_onjob')}",
+				success:function(data)
+					{
+					  if(data.status)
+					  {
+						  layer.msg(data.info,{icon:1,time: 1000});
+						  table_order_page(0);
+					  }else
+					  {
+					      layer.msg(data.info,{icon:2,time: 3000});
+					  }
+					}					
+				});	  
+		})
+	
+	}
+	
+	
+	//修改客户资料弹出框
+	function edit_userinfo(obj)
+	{
+	 //iframe层
+	  var url = "__URL__/edit/id/"+obj;
+		layer.open({
+			type: 2,
+			title: '修改客户资料',
+			shadeClose: false,
+			shade: 0.8,
+			shift:5,
+			area: ['900px', '800px'],
+			content: url //iframe的url
+		}); 
+	
+	}
+	
+	function show_userarchives(obj)
+	{
+		//iframe层
+	  var url = "__URL__/show_userarchives/id/"+obj;
+		layer.open({
+			type: 2,
+			title: '员工档案',
+			shadeClose: false,
+			shade: 0.8,
+			shift:5,
+			area: ['900px', '800px'],
+			content: url //iframe的url
+		}); 
+	
+	}
+	
+	function call_back(obj)
+	{
+	 	//回调函数赋值到页面
+		$('#did_show').val(obj.name);
+		$('#did_show').attr('title',obj.name);
+		$('#department_id').val(obj.id);
+		table_order_page(1);
+	}
+	
+	
+	</script>
+
+
+</block>

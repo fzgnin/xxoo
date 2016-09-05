@@ -1,0 +1,118 @@
+<extend name="Public/base" />
+
+<block name="body">
+<style type="text/css">
+
+.btn_list_1:hover{ background-color:#4BBD00 !important;}
+</style>
+	<!-- 标题栏 -->
+	<div class="main-title">
+		<h2 class="btn_h2_style">账目列表</h2>
+	</div>
+	<div class="cf">
+		
+
+		<div class="fl" id="select_value_id">
+		
+			<div class="ajax_search_btn_div">
+			<span class="ajax_search_btn_span">时间类型</span>
+			<select class="ajax_search_btn_input" style="height:30px;border-radius:0px;min-width:100px;outline:none;" onchange="table_order_page(1)"  name="date_type">                   
+									  <option value="1">下单日期</option>
+									  <option value="2">过账日期</option>	     
+									</select>
+			
+			</div>
+			
+			<div class="ajax_search_btn_div">
+			<span class="ajax_search_btn_span">起始日期</span>
+			<input value="{$filter.begin_time|date='Y-m-d',###}" placeholder="请选择时间" class="ajax_search_btn_input time" style="padding:5px"   name="begin_time" type="text" onchange="table_order_page(1)">
+			</div>
+			
+			<div class="ajax_search_btn_div">
+			<span class="ajax_search_btn_span">截止日期</span>
+			<input value="{$filter.end_time|date='Y-m-d',###}" placeholder="请选择时间" class="ajax_search_btn_input time" style="padding:5px"  name="end_time" type="text" onchange="table_order_page(1)">
+			</div>
+			
+			<div class="ajax_search_btn_div">
+			<a class="btn" href="javascript:;" onclick="change_times('year')">今 年</a>
+			
+			<a class="btn" href="javascript:;" onclick="change_times('mounth')">本 月</a>
+			
+			<a class="btn" href="javascript:;" onclick="change_times('day')">今 天</a>
+			
+			<a class="btn" href="javascript:;" style="background-color:rgb(35, 59, 19)" onclick="change_times('stage')">本 期</a>
+			
+			<input type="hidden" id="benqi" value="{$time|default="1970-01-01"}" />
+			
+			</div>
+			
+			<div class="ajax_search_btn_div">
+			<span class="ajax_search_btn_span">单据类型</span>
+			<select class="ajax_search_btn_input" style="height:30px;border-radius:0px;min-width:100px;outline:none;" onchange="table_order_page(1)"  name="order_type">                   
+									  <option value="1">销售出货单</option>
+									  <option value="2">销售退货单</option>
+									  <option value="3">采购进货单</option>
+									  <option value="4">采购退货单</option>
+									  <option value="5">报溢单</option>
+									  <option value="6">报损单</option>
+									  <!--<option value="7">库存盘点单</option>
+									  <option value="8">库存初始单</option>-->
+									  <option value="10">收款单</option>
+									  <option value="11">付款单</option>
+									  <option value="12">其他收款单</option>
+									  <option value="13">其他付款单</option>			     
+									</select>
+			
+			</div>
+			
+			
+			<div class="ajax_search_btn_div">
+			<span class="ajax_search_btn_span">单据状态</span>
+			<select class="ajax_search_btn_input" style="height:30px;border-radius:0px;min-width:100px;outline:none;" onchange="table_order_page(1)"  name="status">                   
+									  <option value="0">未过账</option>
+									  <option value="1">已过账</option>
+									  <option value="2">已作废</option>		     
+									</select>
+			
+			</div>
+			
+        </div>
+        <!-- 高级搜索 -->
+	
+
+        <!-- 高级搜索 -->
+		
+    </div>
+    <!-- 数据列表 -->
+	<div id="guest_list">
+    <include file="Default:Ajax:Posting:order_list" />
+	</div>
+</block>
+
+<block name="script">
+
+<link href="__STATIC__/datetimepicker/css/datetimepicker.css" rel="stylesheet" type="text/css">
+<php>if(C('COLOR_STYLE')=='blue_color') echo '<link href="__STATIC__/datetimepicker/css/datetimepicker_blue.css" rel="stylesheet" type="text/css">';</php>
+<link href="__STATIC__/datetimepicker/css/dropdown.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="__STATIC__/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="__STATIC__/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+<script type="text/javascript">
+$(function(){
+    $('.time').datetimepicker({
+        format: 'yyyy-mm-dd',
+        language:"zh-CN",
+        minView:2,
+        autoclose:true
+    });
+});
+</script>
+
+	<script type="text/javascript">
+	var url = "{:U('Posting/ajax_query')}";
+	var APP = "__APP__";
+	var URL_JS = "__URL__";
+	</script>
+	
+	<script src="__STATIC__/thinkbox/jquery.thinkbox.js"></script>
+	<script type="text/javascript" src="__JS__/huang.js"/></script>
+</block>

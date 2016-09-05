@@ -1,0 +1,60 @@
+<table class="">
+    <thead>
+        <tr>
+		<th class="row-selected row-selected"></th>
+		<th class="">商品编号</th>
+		<th class="">商品名称</th>
+		<th class="">单位</th>
+		<th class="">规格</th>
+		<th class="">单价</th>
+		<th class="">开单折扣</th>
+		<th class="">过账折扣</th>
+		
+
+		
+		</tr>
+    </thead>
+    <tbody style="cursor: pointer;">
+		<notempty name="list">
+		<volist name="list" id="vo">
+		<tr class="checksss">
+            <td><input class="ids" type="checkbox" name="id[]" value="{$vo.id}" onclick="give_goods_id(this);" h-code="{$vo.code}" h-goodsname="{$vo.goodsname}" h-format="{$vo.format}" h-price="{$vo.price}" h-zhekou="{$vo.zhekou}" h-g_zhekou="{$vo.g_zhekou}"/></td>
+			<td>{$vo.code}</td>
+			<td>{$vo.goodsname}</td>
+			<td>{$vo.calculation}</td>
+			<td>{$vo.format}</td>
+			<td>{$vo.price}</td>
+			<td>{$vo.zhekou}</td>
+			<td>{$vo.g_zhekou}</td>
+							
+		</tr>
+		</volist>
+		<else/>
+		<td colspan="9" class="text-center"> aOh! 暂时还没有内容! </td>
+		</notempty>
+	</tbody>
+    </table>
+	
+	<div class="page">
+        {$page}
+    </div>
+	
+	<script type="text/javascript">
+	
+	//单击变色
+	$('.checksss').bind("click",function(){
+	 //变色效果
+	 $(this).addClass("tr_select").siblings().removeClass("tr_select");
+	 //选中效果先不做
+	 /*if(true == $(this).find("input[type='checkbox']").eq(0).attr("checked"))
+	 {
+	 $(this).find("input[type='checkbox']").eq(0).removeAttr("checked");
+	 }else
+	 {
+	 $(this).find("input[type='checkbox']").eq(0).attr("checked",'checked');
+	 }*/
+	 
+	 
+    });
+	
+	</script>

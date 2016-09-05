@@ -1,0 +1,127 @@
+<extend name="Public/base" />
+
+<block name="body">
+<link href="__CSS__/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!-- 标题栏 -->
+	<div class="main-title">
+		<h2>考勤报表</h2>
+	</div>
+	<div class="cf">
+		
+		
+		<div class="cf" >
+		<div class="fl" id="select_value_id">
+		
+		    <div class="ajax_search_btn_div">
+			<span class="ajax_search_btn_span">选择月份</span>
+			<input value="{$filter.month}" placeholder="请选择时间" class="ajax_search_btn_input time" style="padding:5px"   name="month" type="text" onchange="table_order_page(1)">
+			</div>
+	
+			
+			<div class="ajax_search_btn_div">
+			<span class="ajax_search_btn_span">部门筛选</span>
+			<input class="ajax_search_btn_input" style="padding:5px" type="text" id="did_show" value="" title="" onblur="check_info(this)" onkeydown="enter_up(this,'bumen')">
+				<input class="ajax_search_btn_input" type="hidden" name="department_id" id="department_id" value="">
+			
+			</div>
+			
+			
+			<div class="ajax_search_btn_div">
+			<span class="ajax_search_btn_span">人员状态</span>
+			<select class="ajax_search_btn_input" style="height:30px;border-radius:0px;min-width:100px;outline:none;" onchange="table_order_page(1)"  name="onjob">                   
+					<option value="0">请选择</option>
+					<option value="1">在职</option>
+					<option value="2">离职</option>				  	     
+			</select>
+			
+			</div>
+			
+			
+			
+	    <input class="ajax_search_btn_input" type="hidden" name="type" value="attendlist">
+			
+        </div>
+		
+		
+
+        <!-- 高级搜索 -->
+		
+    </div>
+
+    </div>
+    <!-- 数据列表 -->
+	<div id="guest_list">
+    <include file="Default:Ajax:Attendance:attend_list" />
+	</div>
+</block>
+
+<block name="script">
+<link href="__STATIC__/datetimepicker/css/datetimepicker.css" rel="stylesheet" type="text/css">
+<php>if(C('COLOR_STYLE')=='blue_color') echo '<link href="__STATIC__/datetimepicker/css/datetimepicker_blue.css" rel="stylesheet" type="text/css">';</php>
+<link href="__STATIC__/datetimepicker/css/dropdown.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="__STATIC__/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="__STATIC__/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+<script type="text/javascript">
+$(function(){
+    $('.time').datetimepicker({
+        format: 'yyyy-mm',
+        language:"zh-CN",
+        minView:3,
+		startView:3,
+        autoclose:true
+    });
+    showTab();
+});
+</script>
+    <script type="text/javascript">
+	var url = "{:U('Attendance/ajax_query')}";
+	var APP = "__APP__";
+	</script>
+	<script src="__STATIC__/thinkbox/jquery.thinkbox.js"></script>
+	<script type="text/javascript" src="__JS__/huang.js"/></script>
+	
+	<script type="text/javascript">
+	
+	function export_excel()
+	{
+	  //获取部门和时间
+	  var bid = $('#department_id').val();
+	  var month = $('input[name="month"]').val();
+	  alert(bid);
+	  alert(month);
+	  $.ajax({
+					type:'POST',
+					data:{'bid':bid,'month':month},
+					url:"{:U('Attendance/export_excel')}",
+					success:function(data)
+						{
+						  if(data.status)
+						  {
+							  layer.closeAll();
+							  layer.msg(data.info,{icon:1,time: 1000});
+							  table_order_page(0);
+							  
+						  }else
+						  {
+							  layer.msg(data.info,{icon:2,time: 3000});
+						  }
+						}					
+					});
+	
+	}
+	
+	
+	
+	function call_back(obj)
+	{
+	 	//回调函数赋值到页面
+		$('#did_show').val(obj.name);
+		$('#did_show').attr('title',obj.name);
+		$('#department_id').val(obj.id);
+		table_order_page(1);
+	}
+	
+	</script>
+
+
+</block>

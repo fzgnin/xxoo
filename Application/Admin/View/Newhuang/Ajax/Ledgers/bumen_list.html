@@ -1,0 +1,27 @@
+<div class="data-table table-striped">
+	<table class="">
+    <thead>
+        <tr>
+		<th >部门</th>
+		<th >部门支出费用</th>
+		<th >操作</th>
+		</tr>
+    </thead>
+    <tbody>
+		<notempty name="list">
+		<volist name="list" id="vo">
+		<tr>
+			<td>{$vo.mname}</td>
+			<td>{$vo.amount}</td>
+			<td><a class="btn_list_1" href="{:U('Ledgers/bumen_loglist',array('id'=>$vo['mid']))}">查看本期明细</a></td>
+		</tr>
+		</volist>
+		<else/>
+		<td colspan="9" class="text-center"> aOh! 暂时还没有内容! </td>
+		</notempty>
+	</tbody>
+    </table>
+	</div>
+    <div class="page">
+        {$page}
+    </div>

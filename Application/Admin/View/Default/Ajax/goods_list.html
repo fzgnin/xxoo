@@ -1,0 +1,48 @@
+<div class="data-table table-striped">
+	<table class="">
+    <thead>
+        <tr>
+		<th class="row-selected row-selected"><input class="check-all" type="checkbox"/></th>
+		<th class="" onClick="table_order('onethink_goods.id')">ID</th>
+		<th class="">商品名称</th>
+		<th class="">编号</th>
+		<th class="">单位</th>
+		<th class=""  onClick="table_order('onethink_goods.price')">价格</th>
+		<th class=""  onClick="table_order('onethink_goods.cost_one')">成本价1</th>
+		<th class=""  onClick="table_order('onethink_goods.cost_two')">成本价2</th>
+		<th class="">规格</th>
+		<th class="">备注</th>
+		<th class="">操作</th>
+		</tr>
+    </thead>
+    <tbody>
+		<notempty name="list">
+		<volist name="list" id="vo">
+		<tr>
+            <td><input class="ids" type="checkbox" name="id[]" value="{$vo.id}" /></td>
+			<td>{$vo.id} </td>
+			<td>{$vo.goodsname}</td>
+			<td>{$vo.code}</td>
+			<td>{$vo.calculation}</td>
+			<td>{$vo.price}</td>
+			<td>{$vo.cost_one}</td>
+			<td>{$vo.cost_two}</td>
+			<td>{$vo.format}</td>
+			<td>{$vo.remarks}</td>
+			<td>
+				<a href="javascript:;" onclick="edit_guest({$vo.id})">修改</a>	
+				<a href="javascript:;" class="authorize"  onclick="d_goods({$vo.id})">删除</a>            
+                </td>
+		</tr>
+		</volist>
+		<else/>
+		<td colspan="9" class="text-center"> aOh! 暂时还没有内容! </td>
+		</notempty>
+	</tbody>
+    </table>
+	</div>
+    <div class="page">
+        {$page}
+    </div>
+	
+	

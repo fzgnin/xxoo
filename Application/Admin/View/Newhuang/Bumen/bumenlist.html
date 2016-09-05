@@ -1,0 +1,70 @@
+<extend name="Public/basechild"/>
+
+<block name="body">
+	<!-- 标题栏 -->
+	<div class="main-title">
+		<h2 class="btn_h2_style">部门列表</h2>
+	</div>
+	<div class="cf">
+		<div class="fl">
+            <a class="btn" href="{:U('add')}">新 增</a>
+            
+        </div>
+
+        <!-- 高级搜索 -->
+		
+    </div>
+    <!-- 数据列表 -->
+    <div id="guest_list">
+    <include file="Default:Ajax:Bumen:bumen_list" />
+	</div>
+    <!--<div class="page">
+        {$page}
+    </div>-->
+</block>
+
+<block name="script">
+	<script type="text/javascript">
+	//分页url
+	var url = "{:U('Bumen/ajax_query')}";
+	var APP = "__APP__";
+	</script>
+	<script src="__STATIC__/thinkbox/jquery.thinkbox.js"></script>
+	<script type="text/javascript" src="__JS__/huang.js"/></script>
+
+	<script type="text/javascript">
+	
+	
+	function change_status(obj,ocj)
+	{
+		
+		layer.confirm('确定修改吗？',function(index)
+		{
+			
+			
+			$.ajax({
+			type:'POST',
+			data:{'id':obj,'status':ocj},
+			url:"{:U('Bumen/change_status')}",
+			success:function(data)
+				{
+				  if(data.status)
+				  {
+					  layer.closeAll();
+					  layer.msg(data.info,{icon:1,time: 1000});
+					  table_order_page(0);
+				  }else
+				  {
+					  
+					  layer.closeAll();
+					  layer.msg(data.info,{icon:2,time: 3000});    
+				  }
+				},
+			error:function(){
+				layer.msg('数据传输错误！',{icon:2,time: 3000});
+			}					
+			});
+		});
+	}
+	</script>
+</block>

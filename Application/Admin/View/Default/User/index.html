@@ -1,0 +1,206 @@
+<extend name="Public/base" />
+
+<block name="body">
+	<!-- 标题栏 -->
+	<div class="main-title">
+		<h2 class="btn_h2_style">用户列表</h2>
+	</div>
+	<div class="cf">
+		<div class="fl">
+            <a class="btn" href="{:U('User/add')}">新 增</a>
+            <button class="btn ajax-post" url="{:U('User/changeStatus',array('method'=>'resumeUser'))}" target-form="ids">启 用</button>
+            <button class="btn ajax-post" url="{:U('User/changeStatus',array('method'=>'forbidUser'))}" target-form="ids">禁 用</button>
+            <button class="btn ajax-post confirm" url="{:U('User/changeStatus',array('method'=>'deleteUser'))}" target-form="ids">删 除</button>
+        </div>
+
+        <!-- 高级搜索 -->
+		<div class="search-form fr cf">
+			<div class="sleft">
+				<input type="text" name="nickname" class="search-input" value="{:I('nickname')}" placeholder="请输入用户昵称或者ID">
+				<a class="sch-btn" href="javascript:;" id="search" url="{:U('index')}"><i class="btn-search"></i></a>
+			</div>
+		</div>
+    </div>
+    <!-- 数据列表 -->
+    <div class="data-table table-striped">
+	<table class="">
+    <thead>
+        <tr>
+		<th class="row-selected row-selected"><input class="check-all" type="checkbox"/></th>
+		<th class="">UID</th>
+		<th class="">昵称</th>
+		<th class="">积分</th>
+		<th class="">登录次数</th>
+		<th class="">最后登录时间</th>
+		<th class="">最后登录IP</th>
+		<th class="">状态</th>
+		<th class="">操作</th>
+		</tr>
+    </thead>
+    <tbody>
+		<notempty name="_list">
+		<volist name="_list" id="vo">
+		<tr>
+            <td><input class="ids" type="checkbox" name="id[]" value="{$vo.uid}" /></td>
+			<td>{$vo.uid} </td>
+			<td>{$vo.nickname}</td>
+			<td>{$vo.score}</td>
+			<td>{$vo.login}</td>
+			<td><span>{$vo.last_login_time|time_format}</span></td>
+			<td><span>{:long2ip($vo['last_login_ip'])}</span></td>
+			<td>{$vo.status_text}</td>
+			<td><eq name="vo.status" value="1">
+				<a href="{:U('User/changeStatus?method=forbidUser&id='.$vo['uid'])}" class="btn_list_1 ajax-get">禁用</a>
+				<else/>
+				<a href="{:U('User/changeStatus?method=resumeUser&id='.$vo['uid'])}" class="btn_list_1 ajax-get">启用</a>
+				</eq>
+				<a href="{:U('AuthManager/group?uid='.$vo['uid'])}" class="btn_list_1 confirm ajax-get">删除</a>
+				
+				<a href="javascript:;" onclick="show_userbid({$vo.uid})" class="btn_list_1">军团管理</a>
+                </td>
+		</tr>
+		</volist>
+		<else/>
+		<td colspan="9" class="text-center"> aOh! 暂时还没有内容! </td>
+		</notempty>
+	</tbody>
+    </table>
+	</div>
+    <div class="page">
+        {$_page}
+    </div>
+</block>
+
+<block name="script">
+	<script src="__STATIC__/thinkbox/jquery.thinkbox.js"></script>
+
+	<script type="text/javascript">
+	//搜索功能
+	$("#search").click(function(){
+		var url = $(this).attr('url');
+        var query  = $('.search-form').find('input').serialize();
+        query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g,'');
+        query = query.replace(/^&/g,'');
+        if( url.indexOf('?')>0 ){
+            url += '&' + query;
+        }else{
+            url += '?' + query;
+        }
+		window.location.href = url;
+	});
+	//回车搜索
+	$(".search-input").keyup(function(e){
+		if(e.keyCode === 13){
+			$("#search").click();
+			return false;
+		}
+	});
+    //导航高亮
+    highlight_subnav('{:U('User/index')}');
+	
+	
+	function show_userbid(obj)
+	{
+		//获取军团列表
+		
+		$.ajax({
+		type:'post',
+		data:{'uid':obj},
+		url:"{:U('User/select_uidbid')}",
+		success:function(data)
+		{
+			if(data)
+			{
+				var str = '<form method="post" action="" name="tbform" id="tbform">';
+				
+				for(var i=0;i<data.length;i++)
+				{
+					str += '<dl class="checkmod" style="border:none;border-bottom: 1px solid #ebebeb;margin-bottom:0px">';
+					
+					str += '<dd class="bd" style="padding-left:30px">';
+						
+					str += '<div class="rule_check">';
+					
+					str += '<label class="checkbox">';
+
+					
+					if(data[i]['ubid'])
+					{
+						str += '<input class="auth_rules rules_row" type="checkbox" checked="true" name="bid[]" value="'+data[i]['id']+'"/>'+data[i]['title_show'];
+						str += '<input type="hidden" name="ubid[]" value="'+data[i]['ubid']+'"/>';
+					}else
+					{
+						str += '<input class="auth_rules rules_row" type="checkbox"  name="bid[]" value="'+data[i]['id']+'"/>'+data[i]['title_show'];
+					}
+					
+					
+							
+					str += '</label></div>';
+					
+					str += '</dd></dl>';
+
+				}
+				
+				str += '<input type="hidden" name="uid" value="'+obj+'"></form>';
+				
+				layer.open({
+					type:1,
+					title: '军团管理权限',
+					shadeClose: false,
+					shade: 0.8,
+					shift:5,
+					area: ['380px', '800px'],
+					btn: ['确认'],
+					yes: function(index, layero){
+						//提交到后台
+						
+						$.ajax({
+							type:'post',
+							url:"{:U('User/insert_uidbid')}",
+							data:$('#tbform').serialize(),
+							success:function(data)
+							{
+								if(data.status)
+								{
+									layer.msg(data.info,{icon:1,time: 1000});
+									layer.close(index); //如果设定了yes回调，需进行手工关闭
+								}else
+								{
+									layer.msg(data.info,{icon:2,time: 3000});
+								}
+								
+							},
+							error:function()
+							{
+								alert('传输错误！');
+							},
+						});
+						
+						
+					},
+					content: str //iframe的url
+				});
+			}
+		},
+		error:function()
+		{
+			alert('传输错误');
+		}
+		});
+		
+		
+		
+		
+		
+
+	}
+	
+	
+	//全选
+	
+	function check_all(obj)
+	{
+		$(obj).closest('dl').find('dd').find('input').prop('checked', obj.checked);
+	}
+	</script>
+</block>

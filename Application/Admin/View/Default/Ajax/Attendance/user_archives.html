@@ -1,0 +1,439 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    
+     <!--[if lt IE 9]>
+    <script type="text/javascript" src="__STATIC__/jquery-1.10.2.min.js"></script>
+	<script type="text/javascript" src="__LAYER__/layer.js"></script>
+    <![endif]--><!--[if gte IE 9]><!-->
+    <script type="text/javascript" src="__STATIC__/jquery-2.0.3.min.js"></script>
+   
+	<script type="text/javascript" src="__LAYER__/layer.js"></script>
+    <!--<![endif]-->
+	
+	<style type="text/css">
+
+.demo-huang{
+max-height:500px
+}
+</style>
+    
+</head>
+<body>
+<link rel="stylesheet" href="__CSS__/style.css" type="text/css" />
+<link rel="stylesheet" href="__CSS__/base.css" type="text/css" />
+<link rel="stylesheet" href="__CSS__/style.default.css" type="text/css" />
+<link rel="stylesheet" href="__CSS__/module.css" type="text/css" />
+
+<script type="text/javascript" src="__JS__/general.js"></script>
+    <div class="bodywrapper">
+  <!--头部-->
+
+    <!--子菜单结束-->
+    <div class="centercontent">
+    
+        <div class="pageheader">
+           
+            
+            <ul class="hornav">
+                <li class="current"><a href="#basicform">员工基础档案</a></li>
+                <li class=""><a href="#secondform">家属关系</a></li>
+				<li class=""><a href="#thirdform">银行账户</a></li>
+				<li class=""><a href="#fourthform">其他信息</a></li>
+            </ul>
+        </div><!--pageheader-->
+        
+        <div id="contentwrapper" class="contentwrapper">
+        	<form  id="mpostForm" name="mpostForm" class="stdform" action="{:U('Admin/Attendance/insert')}" method="post">  
+        	<div id="basicform" class="subcontent"><!--contenttitle-->
+
+                  
+                        <p>
+                        	<label>姓名</label>
+                            <span class="field"><input type="text" name="name"  value="{$user_info.name}" class="smallinput" /></span>
+                            <small class="desc">请填写在职人员姓名</small>
+                        </p>
+						
+						<p>
+                        	<label>性别</label>
+                            <span class="field">
+								<select data-placeholder=""  class="chzn-select"  name="sex" style="width:350px;height:37px" tabindex="2">											  
+								  <option value="0">无</option>
+								  <option value="1" <if condition="$user_info.sex  eq 1 "> selected="selected" </if> >女</option> 
+								  <option value="2" <if condition="$user_info.sex  eq 2 "> selected="selected" </if> >男</option> 
+                                </select>
+							</span>
+                           
+                        </p>
+						
+						 <p>
+                        	<label>生日</label>
+                            <span class="field"><input type="text" name="name"  value="{$user_info.brith}" class="smallinput" /></span>
+                           
+                        </p>
+						
+						
+						 <p>
+                        	<label>籍贯</label>
+                            <span class="field"><input type="text" name="name"  value="{$user_info.jiguan}" class="smallinput" /></span>
+                           
+                        </p>
+						
+						<p>
+                        	<label>身份证</label>
+                            <span class="field"><input type="text" name="name"  value="{$user_info.shenfenzheng}" class="smallinput" /></span>
+                           
+                        </p>
+						
+						<p>
+                        	<label>现住址</label>
+                            <span class="field"><input type="text" name="name"  value="{$user_info.address}" class="smallinput" /></span>
+                           
+                        </p>
+						
+						<p>
+                        	<label>家庭电话</label>
+                            <span class="field"><input type="text" name="name"  value="{$user_info.home_phone}" class="smallinput" /></span>
+                           
+                        </p>
+						
+						<p>
+                        	<label>手机</label>
+                            <span class="field"><input type="text" name="name"  value="{$user_info.phone}" class="smallinput" /></span>
+                           
+                        </p>
+                       
+                        
+                        <!--隐藏字段-->
+
+
+            </div><!--subcontent-->
+
+            <div id="secondform" class="subcontent" style="display:none"> 
+                         
+
+                   		<p>
+                        	<label>关系</label>
+                            <span class="field"><input type="text" name="name"  value="{$user_info.guanxi}" class="smallinput" /></span>
+                           
+                        </p>
+						
+						<p>
+                        	<label>家属姓名</label>
+                            <span class="field"><input type="text" name="name"  value="{$user_info.j_name}" class="smallinput" /></span>
+                           
+                        </p>
+						
+						<p>
+                        	<label>工作单位</label>
+                            <span class="field"><input type="text" name="name"  value="{$user_info.j_job}" class="smallinput" /></span>
+                           
+                        </p> 
+						<p>
+                        	<label>居住地</label>
+                            <span class="field"><input type="text" name="name"  value="{$user_info.j_address}" class="smallinput" /></span>
+                           
+                        </p>
+						<p>
+                        	<label>电话</label>
+                            <span class="field"><input type="text" name="name"  value="{$user_info.j_phone}" class="smallinput" /></span>
+                           
+                        </p>   
+                       
+
+            </div>
+			
+			<div id="thirdform" class="subcontent" style="display:none"> 
+                         
+
+                   		<p>
+                        	<label>开户名</label>
+                            <span class="field"><input type="text" name="name"  value="{$user_info.huming}" class="smallinput" /></span>
+                           
+                        </p>
+						
+						<p>
+                        	<label>开户银行</label>
+                            <span class="field"><input type="text" name="name"  value="{$user_info.bank}" class="smallinput" /></span>
+                           
+                        </p>
+						
+						<p>
+                        	<label>银行卡号</label>
+                            <span class="field"><input type="text" name="name"  value="{$user_info.bank_card}" class="smallinput" /></span>
+                           
+                        </p> 
+            </div>
+			
+			
+			<div id="fourthform" class="subcontent" style="display:none"> 
+                         
+
+                   		<p>
+                        	<label>入职时间</label>
+                            <span class="field"><input type="text" name="name"  value="{$user_info.r_time}" class="smallinput" /></span>
+                           
+                        </p>
+						
+						<p>
+                        	<label>入职部门</label>
+                            <span class="field"><input type="text" name="name"  value="{$user_info.r_bumen}" class="smallinput" /></span>
+                           
+                        </p>
+						
+						<p>
+                        	<label>入职职位</label>
+                            <span class="field"><input type="text" name="name"  value="{$user_info.n_zhiwei}" class="smallinput" /></span>
+                           
+                        </p> 
+						<p>
+                        	<label>入职前工作经历</label>
+                            <span class="field">
+							<textarea rows="5" name="address" class="longinput" style="width:40%">{$user_info.jl_job}</textarea>
+							</span>
+                           
+                        </p>
+						 
+                       
+
+            </div>
+        </form>
+        </div><!--contentwrapper-->
+        
+	</div><!-- centercontent -->
+    
+    
+</div>
+</block>
+
+<block name="script">
+  
+	
+	<script type="text/javascript">
+	var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+	
+	var url = parent.document.location;
+	
+	function myFunction()
+	{ 
+	 if(mpostForm.name.value==""){alert("请输入名字！");
+		mpostForm.name.focus();
+		return false;
+	   }
+	
+	 if(mpostForm.username.value==""){alert("请输入登陆账号！");
+		mpostForm.username.focus();
+		return false;
+	   }
+	
+	  
+	
+	
+	  layer.confirm("你确认要提交吗？",function(index1){
+	  
+	  $.ajax({
+                type: "POST",
+                url:"{:U('Admin/Attendance/insert')}",
+                data:$('#mpostForm').serialize(),// 你的formid
+                async: false,
+                error: function(request) {
+					parent.layer.msg("网络传输错误");
+                },
+                success: function(data) {
+                    
+					if(data.status)
+					{				
+						parent.layer.alert(data.info,{icon: 1,shift: 6,closeBtn: 0},function(index2)
+						{
+						  parent.table_order_page(0);
+						  parent.layer.closeAll();
+						});
+						
+						
+					}else
+					{
+						layer.close(index1);
+						parent.layer.msg(data.info);
+					}
+                }
+            });
+  
+	  })
+	  
+	}
+	
+	
+	jQuery('.btn_anniu').click(function(){
+	
+	var html_span = jQuery('.formwrapper').eq(1).prop("outerHTML");
+	
+	jQuery('#add_xuanxiang').append(html_span);
+	
+	
+	})
+	
+	
+	
+	function show_userbid(obj)
+	{
+		//获取军团列表
+		
+		$.ajax({
+		type:'post',
+		data:{'gid':obj},
+		url:"{:U('Guest/select_uidbid')}",
+		success:function(data)
+		{
+			if(data)
+			{
+				var str = '<form method="post" action="" name="tbform" id="tbform">';
+				
+				for(var i=0;i<data.length;i++)
+				{
+					str += '<dl class="checkmod"><dt class="hd">';
+					
+					str += '<label class="checkbox"><input class="auth_rules rules_all" onclick="check_all(this)" type="checkbox" name="tid[]" value="'+data[i]['tid']+'">'+data[i]['tname']+'</label></dt>';
+					
+					str += '<dd class="bd" style="padding-left:30px">';
+					
+					if(data[i]['blist'])
+					{
+						for(var k=0;k<data[i]['blist'].length;k++)
+						{
+							str += '<div class="rule_check"><div>';
+							
+							str += '<label class="checkbox">';
+							
+							if(data[i]['blist'][k]['ubid'])
+							{
+								str += '<input class="auth_rules rules_row" type="checkbox" checked="true" name="bid[]" value="'+data[i]['blist'][k]['bid']+'"/>'+data[i]['blist'][k]['bname'];
+								str += '<input type="hidden" name="ubid[]" value="'+data[i]['blist'][k]['ubid']+'"/>';
+							}else
+							{
+								str += '<input class="auth_rules rules_row" type="checkbox"  name="bid[]" data-name="'+data[i]['blist'][k]['bname']+'" value="'+data[i]['blist'][k]['bid']+'"/>'+data[i]['blist'][k]['bname'];
+							}
+
+							
+							str += '</label></div></div>';
+						}
+					}
+
+					str += '</dd></dl>';
+
+				}
+				
+				str += '<input type="hidden" name="uid" value="'+obj+'"></form>';
+				
+				layer.open({
+					type:1,
+					title: '军团管理权限',
+					shadeClose: false,
+					shade: 0.8,
+					shift:5,
+					area: ['300px', 'auto'],
+					skin: 'demo-huang',
+					btn: ['确认'],
+					success: function(layero, index){
+						//获取页面现存部门id
+						$('#gbumen_id').find('input[name="gbid[]"]').each(function(){
+						
+						    var that = this;
+							$('#tbform').find('input[name="bid[]"]').each(function(){
+							//形成数据插入页面
+								if($(that).val() == $(this).val())
+								{
+									$(this).attr("checked","checked");
+								}
+							});
+						}); 
+					},
+					yes: function(index, layero){
+						//提交到后台
+						
+						var str = '';
+						$('#tbform').find('input[name="bid[]"]').each(function(){
+							//形成数据插入页面
+						
+						var bid_f = $(this).val();
+						
+						if($(this).prop('checked'))
+						{
+							//检查选中项是否已存在
+							var open_f = true;
+							
+							$('#gbumen_id').find('input[name="gbid[]"]').each(function(){
+								if(bid_f == $(this).val())
+								{
+									open_f = false;
+								}
+							});
+							
+							if(open_f)
+							{
+								str += '<a href="javascript:;" id="gbid_'+bid_f+'" class="btn_list_1" style="background-color:rgb(35, 59, 19);">'+$(this).attr('data-name')+'</a>';
+								
+								str += '<input type="hidden" name="gbid[]" value="'+bid_f+'" />';
+								
+							}
+						}else
+						{
+							//删除未选中
+							$('#gbumen_id').find('input[name="gbid[]"]').each(function(){
+								if(bid_f == $(this).val())
+								{
+									$(this).remove();
+									$('#gbid_'+bid_f).remove();
+									
+								}
+							});
+						}
+							 
+						
+						}); 
+						
+						$('#gbumen_id').append(str);
+						
+						layer.close(index); //如果设定了yes回调，需进行手工关闭
+						
+						
+						
+					},
+					content: str //iframe的url
+				});
+			}
+		},
+		error:function()
+		{
+			alert('传输错误');
+		}
+		});
+
+
+	}
+	
+	function check_all(obj)
+	{
+		$(obj).closest('dl').find('dd').find('input').prop('checked', obj.checked);
+	}
+	
+	</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

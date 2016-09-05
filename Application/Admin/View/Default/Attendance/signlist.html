@@ -1,0 +1,53 @@
+<extend name="Public/base" />
+
+<block name="body">
+	<!-- 标题栏 -->
+	<div class="main-title">
+		<h2>按日期查看签到报表</h2>
+	</div>
+	
+	
+	<div class="cf">
+		
+		
+		<div class="cf" >
+		<div class="fl" id="select_value_id">
+
+			<div class="ajax_search_btn_div">
+			<span class="ajax_search_btn_span">签到签退</span>
+			<select id="calculation" class="ajax_search_btn_input" style="height:30px;border-radius:0px;min-width:100px;outline:none;" onchange="table_order_page(1)"  name="sign_type"> 
+									  
+                                      <option value="0" <if condition="$filter.sign_type eq 0 ">selected = "selected"</if> >签到</option>
+									  <option value="1" <if condition="$filter.sign_type eq 1 ">selected = "selected"</if> >签退</option>
+									</select>
+			
+			</div>
+			
+	    <input class="ajax_search_btn_input" type="hidden" name="type" value="signlist">
+			
+        </div>
+		
+		
+
+        <!-- 高级搜索 -->
+		
+    </div>
+
+    </div>
+	
+    <!-- 数据列表 -->
+	<div id="guest_list">
+    <include file="Default:Ajax:Attendance:sign_list" />
+	</div>
+</block>
+
+<block name="script">
+	<script src="__STATIC__/thinkbox/jquery.thinkbox.js"></script>
+
+	<script type="text/javascript">
+	var url = "{:U('Attendance/ajax_query')}";
+	var APP = "__APP__";
+	</script>
+	<script type="text/javascript" src="__JS__/huang.js"/></script>
+	
+</block>

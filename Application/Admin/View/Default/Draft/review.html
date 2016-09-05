@@ -1,0 +1,361 @@
+<extend name="Public/base"/>
+<block name="body">
+<link rel="stylesheet" href="__CSS__/style.default.css" type="text/css" />
+<link rel="stylesheet" href="__CSS__/order_css.css" type="text/css" />
+<link rel="stylesheet" href="__CSS__/font-awesome.min.css" type="text/css" />                      
+
+<style type="text/css">
+
+
+div.metro_na{
+	position : relative;
+	font-family : 'Segoe UI Semibold', 'Segoe UI', 'Helvetica', 'Arial', 'sans-serif'; 
+	font-size : 16px;
+	height : 160px;
+	overflow: hidden;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	cursor : default;
+}
+
+
+div.metro_na>div.nav_title{
+	position : relative;
+	float : none;
+	width :auto;
+	background-color : transparent;
+	color : black;
+	font-size : 20px;
+	text-align : left;
+	height : 30px;
+	line-height : 30px;
+	margin: 5px;
+	margin: 5px 40px;
+}
+
+div.metro_na>ul{
+	position: relative;
+	height : 86px;
+	margin: 0;
+	margin-top : 15px;
+	padding : 0;
+	list-style : none;
+	white-space : nowrap;
+	overflow : hidden;
+	margin: 15px 0 0 40px;
+}
+
+div.metro_na>ul>li{
+	position: relative;
+	width : 116px;
+	height : 86px;
+	margin: 0;
+	top: 0px;
+	display : inline-block;
+}
+
+div.metro_na>ul>li>ul{
+	display : none;
+}
+
+div.metro_na>ul>li>a{
+	display : block;
+	height : 80px;
+	width : 110px;
+	position:relative;
+	left : 3px;
+	top: 3px;
+	text-decoration : none;
+	border-radius: 5px;
+	background-color: rgb(164, 163, 167);
+}
+
+.select_new{
+	background-color: rgb(1, 1, 167) !important;
+}
+
+div.metro_na>ul>li>a:hover{
+	border-bottom:none;
+	transform: scale(0.95, 0.95);
+}
+
+div.metro_na>ul>li>a>img{
+	height : 50%;
+	display: block;
+	margin: auto;
+	position: relative;
+	top : 10px;
+}
+
+div.metro_na>ul>li>a>span{
+	display : block;
+	color: white;
+    font-size: 13px;
+    margin-left: 5px;
+    top: 20px;
+    position: relative;
+	text-align: center;
+}
+
+
+div.metro_na>.scroll_bar{
+	position:absolute;
+	bottom : 0;
+	width: 100%;
+	height : 15px;
+}
+
+
+
+
+</style>
+
+
+
+<div style="background-color: transparent; display: block;" class="metro_na">
+		<div class="nav_title">订单品牌审核明细</div>
+		
+		<ul>
+		
+		<volist name="oblist" id="vo" key="k">
+			
+			
+			<li style="background-color: transparent; transform: scale(1, 1);">
+				<a  href="#" onclick="show_draftorder(this,{$vo.id})">
+				<if condition="$vo.is_f eq 1 ">
+				<img src="__IMG__/duihao.png">
+    			<else />
+				<img src="__IMG__/chahao.png">
+    			</if>
+
+				<span>{$vo.name}</span>
+				</a>
+			</li>
+		
+		
+		</volist>
+			
+
+		</ul>
+	</div>
+	
+	<input type="hidden" name="order_id" id="order_id_id" value="{$id}" />
+
+
+
+
+
+
+	<div id="order_info">
+    
+	</div>
+
+    
+</block>
+
+<block name="script">
+<link href="__STATIC__/datetimepicker/css/datetimepicker.css" rel="stylesheet" type="text/css">
+<php>if(C('COLOR_STYLE')=='blue_color') echo '<link href="__STATIC__/datetimepicker/css/datetimepicker_blue.css" rel="stylesheet" type="text/css">';</php>
+<link href="__STATIC__/datetimepicker/css/dropdown.css" rel="stylesheet" type="text/css">
+
+<script type="text/javascript" src="__STATIC__/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="__STATIC__/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+<script type="text/javascript">
+
+Think.setValue("type", {$data.type|default='""'});
+Think.setValue("display", {$data.display|default=0});
+
+$('#submit').click(function(){
+	$('#form').submit();
+});
+
+$(function(){
+    $('.time').datetimepicker({
+        format: 'yyyy-mm-dd hh:ii',
+        language:"zh-CN",
+        minView:2,
+        autoclose:true
+    });
+
+});
+</script>
+<script type="text/javascript">
+var URL_JS = "__URL__";
+var APP = "__APP__";
+</script>
+<script type="text/javascript" src="__JS__/order.js"/></script>
+
+<script type="text/javascript">
+
+function show_draftorder(obj,ocj)
+{
+
+	$(obj).parent().parent().find('a').removeClass('select_new');
+	$(obj).addClass('select_new');
+	
+	//获取订单信息
+	var id = $('#order_id_id').val();
+	
+	$.ajax({
+		type:'post',
+		data:{'brand_id':ocj,'id':id},
+		url:"{:U('Draft/get_orderbrand')}",
+		success:function(data)
+		{
+			if(data.success)
+			{
+				$('#order_info').html(data.info);
+				calculate_money();
+				$('.time').datetimepicker({
+					format: 'yyyy-mm-dd hh:ii',
+					language:"zh-CN",
+					minView:2,
+					autoclose:true
+				});
+			}
+			
+		},
+		error:function()
+		{
+			alert('传输错误！');
+		}
+	});
+	
+
+}
+
+
+function calculate_money()
+ {
+   var tr_length = $('#tbody_id tr').length;
+   var s_price = 0;
+   var z_price = 0;
+   var g_z_price = 0;
+   var s_z_price = 0;
+   var total_num = 0;
+   var total_s_price = 0;
+   var total_s_z_price = 0;
+   var total_s_g_z_price = 0;
+    
+   for(var i=0;i<tr_length;i++)
+   {
+    //获取信息
+	var num = parseInt($('#tbody_id tr').eq(i).find('input').eq(4).val());
+	var price = $('#tbody_id tr').eq(i).find('input').eq(5).val();
+	var zhekou = $('#tbody_id tr').eq(i).find('input').eq(7).val();
+	var g_zhekou = $('#tbody_id tr').eq(i).find('input').eq(10).val();
+	s_price = accMul(num,price);
+	z_price = accMul(zhekou,price);
+	g_z_price = accMul(g_zhekou,price);
+	//计算每行的价格和折扣然后赋值
+	$('#tbody_id tr').eq(i).find('input').eq(6).val(s_price);
+	$('#tbody_id tr').eq(i).find('span').eq(3).html(s_price);
+	
+	if($('#tbody_id tr').eq(i).find('input').eq(8).val() == '')
+	{
+	 $('#tbody_id tr').eq(i).find('input').eq(8).val(z_price);
+	}
+	
+	if($('#tbody_id tr').eq(i).find('input').eq(11).val() == '')
+	{
+	  $('#tbody_id tr').eq(i).find('input').eq(11).val(g_z_price);
+	}
+	
+
+	s_z_price = accMul($('#tbody_id tr').eq(i).find('input').eq(8).val(),num);
+	$('#tbody_id tr').eq(i).find('input').eq(9).val(s_z_price);
+	$('#tbody_id tr').eq(i).find('span').eq(4).html(s_z_price);
+	
+	s_g_z_price = accMul($('#tbody_id tr').eq(i).find('input').eq(11).val(),num);
+	s_g_z_price = s_g_z_price.toFixed(2);
+	$('#tbody_id tr').eq(i).find('input').eq(12).val(s_g_z_price);
+	$('#tbody_id tr').eq(i).find('span').eq(5).html(s_g_z_price);
+	
+	//计算总价
+	if(num)
+	{
+	 total_num = accAdd(total_num,num);
+	}
+	if(s_price)
+	{
+	 total_s_price = accAdd(total_s_price,s_price);
+	}
+	
+	if(s_z_price)
+	{
+	 total_s_z_price =  accAdd(total_s_z_price,s_z_price);
+	}
+	
+	if(s_g_z_price)
+	{
+	 total_s_g_z_price =  accAdd(total_s_g_z_price,s_g_z_price);
+	}
+	
+   }
+   
+   //赋总值
+   $('#total_num').html(total_num);
+   $('#total_num_input').val(total_num);
+   $('#total_s_price').html(total_s_price);
+   $('#total_s_price_input').val(total_s_price);
+   $('#total_s_z_price').html(total_s_z_price);
+   $('#total_s_z_price_input').val(total_s_z_price);
+   $('#total_s_g_z_price').html(total_s_g_z_price);
+   $('#total_s_g_z_price_input').val(total_s_g_z_price);
+ }
+ 
+ 
+ function set_all_zhekou(obj)
+{
+	
+	var s_name = $(obj).attr('h-name');
+	
+	if(obj.value)
+	{
+		for(i=0;i<$('#tbody_id').find("input[name='"+s_name+"[]']").length;i++)
+		{
+			var that = $('#tbody_id').find("input[name='"+s_name+"[]']").eq(i);
+			that.val(obj.value);
+			change_zhekou(that[0]);
+			
+		}		
+	}
+	
+}
+
+
+function change_zhekou(obj)
+ {
+  //获取是开单折扣还是过账折扣
+  
+  var price = obj.parentNode.parentNode.getElementsByTagName("input")[5].value;
+  
+  if(obj.name == 'zhekou[]')
+  {  
+	  //计算折后单价并赋值
+	  obj.parentNode.parentNode.getElementsByTagName("input")[8].value = accMul(price,obj.value);
+	  
+  }else if(obj.name == 'z_price[]')
+  {	 	  
+	  var zhekou = accDiv(obj.value,price);
+	  zhekou = zhekou.toFixed(2);  
+	  obj.parentNode.parentNode.getElementsByTagName("input")[7].value = zhekou;
+	  
+  }else if(obj.name == 'g_zhekou[]')
+  {  
+	  //计算折后单价并赋值
+	  obj.parentNode.parentNode.getElementsByTagName("input")[11].value = accMul(price,obj.value);
+	  
+  }else if(obj.name == 'g_z_price[]')
+  {  
+	  var zhekou = accDiv(obj.value,price);
+	  zhekou = zhekou.toFixed(2);  
+	  obj.parentNode.parentNode.getElementsByTagName("input")[10].value = zhekou;
+  }  
+  calculate_money();
+ }
+
+
+</script>
+</block>

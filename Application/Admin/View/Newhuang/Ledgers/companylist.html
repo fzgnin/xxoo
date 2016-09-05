@@ -1,0 +1,55 @@
+<extend name="Public/basechild"/>
+
+<block name="body">
+<style type="text/css">
+
+.btn_list_1:hover{ background-color:#4BBD00 !important;}
+</style>
+	<!-- 标题栏 -->
+	<div class="main-title">
+		<h2 class="btn_h2_style">公司固有资金明细</h2>
+	</div>
+	<div class="cf">
+		<div class="fl" id="select_value_id">
+		<input type="hidden" name="type" value="company" class="ajax_search_btn_input" />		
+        </div>
+
+		
+        <!-- 高级搜索 -->
+		<a href="javascript:;" onclick="export_excel()" class="btn_list_1">导出excel</a>
+
+        <!-- 高级搜索 -->
+		
+    </div>
+    <!-- 数据列表 -->
+	<div id="guest_list">
+    <include file="Default:Ajax:Ledgers:company_list" />
+	</div>
+</block>
+
+<block name="script">
+	<script type="text/javascript">
+	var url = "{:U('Ledgers/ajax_query')}";
+	var APP = "__APP__";
+	var URL_JS = "__URL__";
+	</script>
+	<script src="__STATIC__/thinkbox/jquery.thinkbox.js"></script>
+	<script type="text/javascript" src="__JS__/huang.js"/></script>
+
+	<script type="text/javascript">
+
+	function call_back()
+	{
+	 table_order_page(1);
+	}
+	
+	function export_excel()
+	{
+	   
+	  window.location.href = APP+'/Admin/Ledgers/download_excel/exc_type/company';
+
+	}
+	
+	
+	</script>
+</block>

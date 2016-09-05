@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>APP</title>
+    <link rel="stylesheet" type="text/css" href="./css/aui.css" />
+	<script type="text/javascript" src="./js/jquery-2.0.3.min.js"></script>
+</head>
+<style>
+body { background: #f7f9f8;}
+</style>
+<body>
+    <p class="aui-text-center">今日业绩总揽</p>
+    <div class="aui-content">
+        <ul class="aui-list-view">
+            <li class="aui-list-view-cell" data-win="list_arrow">
+                <div class="aui-arrow-left">今日全国业绩：<span id="t_money"></span></div>
+            </li>
+            <li class="aui-list-view-cell" data-win="list_thumb">
+                <div class="aui-arrow-right">本月全国业绩：<span id="m_money"></span></div>
+            </li>
+            <li class="aui-list-view-cell" data-win="list-image">
+                <div class="aui-arrow-right aui-ellipsis-1">
+                今年全国业绩：<span id="a_money"></span>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="aui-content">
+        <ul class="aui-list-view">
+            <li class="aui-list-view-cell" data-win="list_arrow">
+                <a class="aui-arrow-right" href="3.html">
+                今日进货店家排行
+                <span class="aui-badge">12</span>
+                </a>
+            </li>
+            <li class="aui-list-view-cell" data-win="list_arrow">
+                <a class="aui-arrow-right">
+                今日军团业绩排行
+                <span class="aui-badge aui-badge-info">12</span>
+                </a>
+            </li>
+            <li class="aui-list-view-cell" data-win="list_arrow">
+                <a class="aui-arrow-right">
+                今日部门业绩排行
+                <span class="aui-badge aui-badge-warning">12</span>
+                </a>
+            </li>
+            <li class="aui-list-view-cell" data-win="list_thumb">
+                <a class="aui-arrow-right">
+                    今日单品销量排行
+                    <span class="aui-badge aui-badge-danger">12</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    
+</body>
+<script type="text/javascript" src="../script/api.js" ></script>
+<script type="text/javascript">
+
+$.ajax({
+type:'POST',
+url:'http://127.0.0.1/thinkphproot/one/index.php?s=/Admin/Api/get_yeji',
+success:function(data)
+{
+  var ddd = eval('(' + data + ')');
+  $('#t_money').html(ddd.t_money+'元');
+  $('#m_money').html(ddd.m_money+'元');
+  $('#a_money').html(ddd.all_money+'元');
+  
+},
+error: function()
+{
+alert('传输错误！');
+}
+});
+</script>
+</html>

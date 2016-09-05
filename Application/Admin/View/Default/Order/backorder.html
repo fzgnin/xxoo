@@ -1,0 +1,415 @@
+<extend name="Public/base"/>
+<block name="body">
+<link rel="stylesheet" href="__CSS__/style.default.css" type="text/css" />
+<link rel="stylesheet" href="__CSS__/order_css.css" type="text/css" />
+<link rel="stylesheet" href="__CSS__/font-awesome.min.css" type="text/css" />
+<div class="bill-container ng-scope">
+<form name="xsckd" id="xsckd" action="{:U('Order/insert')}" method="post">
+    <div class="ng-scope" ><div class="bill-header ng-scope">
+    <div class="bill-subject">
+        <div class="bill-subject-left">
+            <div class="subject pull-left">
+                <h1>
+                    <input value="销售退货单" type="text" style="background: rgb(179, 64, 33) none repeat scroll 0% 0%;color: rgb(255, 255, 255);box-shadow:none">
+                </h1>
+            </div>
+            <div class="company-info pull-left">
+                <big class="ng-binding">上海国际雅兰退货单</big>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="bill-footer-input row">
+            <div class="bill-footer-input-item">
+                <div class="input-group ng-scope">
+				<span class="input-group-addon">录单日期</span>
+				<input value="{$time}" placeholder="请选择时间" class="form-control input_widget_datetime ng-pristine ng-untouched ng-valid time" name="add_time" type="text">
+				</div>
+            </div>
+			
+			<div class="bill-footer-input-item">
+                <div class="input-group ng-scope">
+				<span class="input-group-addon">退货单编号</span>
+				<span class="form-control input_widget_number ng-pristine ng-untouched ng-valid">{$order_num}</span>
+				<input value="{$order_num}" name="order_sn" type="hidden">
+				</div>
+            </div>
+			
+			
+			<div class="bill-footer-input-item">
+                <div class="input-group ng-scope">
+				<span class="input-group-addon">店家名称</span>
+				<input class="form-control input_widget_number ng-pristine ng-untouched ng-valid" type="text" id="hhhhyu" value="" title="" onblur="check_info(this)" onkeydown="enter_up(this,'guest')" name="gname">
+				<input type="hidden" name="guest_id" id="guest_id" value="">
+				</div>
+            </div>
+			
+            <div class="bill-footer-input-item">
+                <div class="input-group ng-scope">
+				<span class="input-group-addon">入库仓库</span>
+				<input class="form-control input_widget_number ng-pristine ng-untouched ng-valid" name="warehouse" type="text" value="上海总部库">
+				</div>
+            </div>
+			
+			
+			<div class="bill-footer-input-item">
+                <div class="input-group ng-scope">
+				<span class="input-group-addon">经手人</span>
+				<input class="form-control input_widget_number ng-pristine ng-untouched ng-valid" type="text" id="department_id" value="" title="" onblur="check_info(this)" onkeydown="enter_up(this,'bumen')" name="bname">
+				<input type="hidden" name="bumen_id" id="bumen_id" value="">
+				</div>
+            </div>
+			
+        </div>
+</div>
+    <div class="bill-body">
+        <div config="bill_config" class="bill-rows ng-isolate-scope">
+    <table class="table table-bordered bill-rows-table">
+        <thead>
+            <tr>
+                <th width="60" style="text-align:center"><i class="fa fa-plus" style="cursor: pointer;"></i></th>
+                <th class="text-center" width="50">#</th>
+                <th style="" class="ng-scope">
+                    <label class="ng-binding">商品编号</label>
+                </th><th class="ng-scope">
+                    <label class="ng-binding">商品全名</label>          
+                </th><th class="ng-scope">
+                    <label class="ng-binding">规格</label>      
+                </th><th class="ng-scope">
+                    <label class="ng-binding">数量</label>            
+                </th><th class="ng-scope">
+                    <label class="ng-binding">单价</label>             
+                </th><th class="ng-scope">
+                    <label class="ng-binding">金额</label>              
+                </th><th style="" class="ng-scope">
+                    <label class="ng-binding">开单折扣</label>                 
+                </th><th class="ng-scope">
+                    <label class="ng-binding">折后单价</label>            
+                </th><th class="ng-scope" style="border-right: 1px solid rgb(248, 65, 65);">
+                    <label class="ng-binding">折后金额</label>      
+                </th>			
+				<th style="border: 1px solid #F84141;" class="ng-scope">
+                    <label class="ng-binding">过账折扣</label>             
+                </th><th class="ng-scope" style="border: 1px solid #F84141;">
+                    <label class="ng-binding">过账折后单价</label>           
+                </th><th class="ng-scope" style="border: 1px solid #F84141;">
+                    <label class="ng-binding">过账折后金额</label>               
+                </th>			
+            </tr>
+        </thead>
+        <tbody id="tbody_id" onkeydown="keyDown(event)">
+            <tr>
+                <td class="text-center">
+                    <i class="fa fa-trash-o" style="cursor: pointer;"></i>
+                </td>
+                <td class="text-center">#<span class="paixu">1</span></td>
+                <td class="td_huang">
+					<input class="form-control form-huang" type="text" onkeydown="enter_up(this,'goods')" value="" name="code[]"  onblur="check_info(this)">
+                </td>
+				<td class="td_huang" style="width: 200px !important;"><input class="form-control form-huang" type="text" name="goodsname[]" value="" onblur="check_info(this)" onkeydown="enter_up(this,'goods')"/><input type="hidden" name="goods_id[]" value="" /></td>
+				<td><span></span><input type="hidden" name="format[]" value="" /></td>
+				<td class="td_huang">
+                  <input class="form-control form-huang" type="text" name="num[]" value="" onBlur="calculate_money()"/>
+                </td>
+				<td>
+                 <span></span><input type="hidden" name="price[]" value="" />
+                </td>
+				<td>
+                  <span></span><input type="hidden" name="price_total[]" value="" />
+                </td>
+				<td class="td_huang">
+                   <input class="form-control form-huang" type="text" name="zhekou[]" value="" onblur="change_zhekou(this)"/>
+                </td>
+				<td class="td_huang">
+                   <input class="form-control form-huang" type="text" name="z_price[]" value="" onblur="change_zhekou(this)"/>
+                </td>
+				<td style="border-right: 1px solid rgb(248, 65, 65);">
+                 <span></span><input type="hidden" name="z_price_total[]" value="" />
+                </td>
+				<td class="td_huang" style="border: 1px solid rgb(248, 65, 65);">
+                   <input class="form-control form-huang_new" type="text" name="g_zhekou[]" value="" onblur="change_zhekou(this)"/>
+                </td>
+				<td class="td_huang" style="border: 1px solid rgb(248, 65, 65);">
+                   <input class="form-control form-huang_new" type="text" name="g_z_price[]" value="" onblur="change_zhekou(this)"/>
+                </td>
+				<td style="border: 1px solid rgb(248, 65, 65);">
+                 <span class="form-huang_new"></span><input type="hidden" name="g_z_price_total[]" value="" />
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+               <td colspan="2" align="center"><strong class="ng-binding">合计</strong></td>
+               <td class="ng-scope"></td>
+			   <td class="ng-scope"></td>
+			   <td class="ng-scope"></td>
+			   <td class="ng-scope">
+			   <span id="total_num"></span><input type="hidden" name="total_num" id="total_num_input" value="" />
+			   </td>
+			   <td class="ng-scope"></td>
+			   <td class="ng-scope">
+			   <span id="total_s_price"></span><input type="hidden" name="total_s_price" id="total_s_price_input" value="" />
+			   </td>
+			   <td class="ng-scope td_huang" ><input class="form-control form-huang_new" type="text" onblur="set_all_zhekou(this)" h-name="zhekou"></td>
+			   <td class="ng-scope" ></td>
+			   <td class="ng-scope"  style="border-right: 1px solid rgb(248, 65, 65);">
+			   <span id="total_s_z_price"></span><input type="hidden" name="total_s_z_price" id="total_s_z_price_input" value="" />
+			   </td>
+			   <td class="ng-scope td_huang" style="border: 1px solid rgb(248, 65, 65);"><input class="form-control form-huang_new" type="text" onblur="set_all_zhekou(this)" h-name="g_zhekou"></td>
+			   <td class="ng-scope" style="border: 1px solid rgb(248, 65, 65);"></td>
+			   <td class="ng-scope" style="border: 1px solid rgb(248, 65, 65);">
+			   <span id="total_s_g_z_price"></span><input type="hidden" name="total_s_g_z_price" id="total_s_g_z_price_input" value="" />
+			   </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+    </div>
+    <div class="bill-footer">
+
+        <div class="bill-footer-input row">
+            <div class="input-group bill-footer-input-item" style="width: auto">
+                <span class="input-group-addon ng-binding">备注</span>
+                <input class="form-control ng-pristine ng-untouched ng-valid" name="remarks" value="" type="text">
+            </div>
+        </div>
+
+        <div class="bill-footer-meta">
+            <span class="label label-primary">
+                <span class="ng-binding">制单人</span>
+                <span class="ng-binding">TEam Swift
+ 管理员</span>
+            </span>
+            <div class="pull-right">
+                <input type="hidden" value="2"name="order_type"/>
+				<input type="button" value="提交" onclick="form_submit('{:U('insert')}','{:U('orderlist')}',0)"  class="btn btn-primary btn-lg ng-binding"/>
+				<input type="button" value="提交并新增" onclick="form_submit('{:U('insert')}','{:U('orderlist')}',1)"  class="btn btn-primary btn-lg ng-binding" style="background-color:rgb(255, 5, 5)"/>
+            </div>
+        </div>
+
+    </div>
+	</form>
+</div>
+</block>
+<block name="script">
+<link href="__STATIC__/datetimepicker/css/datetimepicker.css" rel="stylesheet" type="text/css">
+<php>if(C('COLOR_STYLE')=='blue_color') echo '<link href="__STATIC__/datetimepicker/css/datetimepicker_blue.css" rel="stylesheet" type="text/css">';</php>
+<link href="__STATIC__/datetimepicker/css/dropdown.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="__STATIC__/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="__STATIC__/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+<script type="text/javascript">
+
+Think.setValue("type", {$data.type|default='""'});
+Think.setValue("display", {$data.display|default=0});
+
+$('#submit').click(function(){
+	$('#form').submit();
+});
+
+$(function(){
+    $('.time').datetimepicker({
+        format: 'yyyy-mm-dd hh:ii',
+        language:"zh-CN",
+        minView:2,
+        autoclose:true
+    });
+    showTab();
+
+});
+</script>
+<script type="text/javascript">
+var URL_JS = "__URL__";
+var APP = "__APP__";
+</script>
+<script type="text/javascript" src="__JS__/order.js"/></script>
+
+
+<script type="text/javascript">
+
+
+function calculate_money()
+ {
+   var tr_length = $('#tbody_id tr').length;
+   var s_price = 0;
+   var z_price = 0;
+   var g_z_price = 0;
+   var s_z_price = 0;
+   var total_num = 0;
+   var total_s_price = 0;
+   var total_s_z_price = 0;
+   var total_s_g_z_price = 0;
+    
+   for(var i=0;i<tr_length;i++)
+   {
+    //获取信息
+	var num = parseInt($('#tbody_id tr').eq(i).find('input').eq(4).val());
+	var price = $('#tbody_id tr').eq(i).find('input').eq(5).val();
+	var zhekou = $('#tbody_id tr').eq(i).find('input').eq(7).val();
+	var g_zhekou = $('#tbody_id tr').eq(i).find('input').eq(10).val();
+	s_price = accMul(num,price);
+	z_price = accMul(zhekou,price);
+	g_z_price = accMul(g_zhekou,price);
+	//计算每行的价格和折扣然后赋值
+	$('#tbody_id tr').eq(i).find('input').eq(6).val(s_price);
+	$('#tbody_id tr').eq(i).find('span').eq(3).html(s_price);
+	
+	if($('#tbody_id tr').eq(i).find('input').eq(8).val() == '')
+	{
+	 $('#tbody_id tr').eq(i).find('input').eq(8).val(z_price);
+	}
+	
+	if($('#tbody_id tr').eq(i).find('input').eq(11).val() == '')
+	{
+	  $('#tbody_id tr').eq(i).find('input').eq(11).val(g_z_price);
+	}
+	
+
+	s_z_price = accMul($('#tbody_id tr').eq(i).find('input').eq(8).val(),num);
+	$('#tbody_id tr').eq(i).find('input').eq(9).val(s_z_price);
+	$('#tbody_id tr').eq(i).find('span').eq(4).html(s_z_price);
+	
+	s_g_z_price = accMul($('#tbody_id tr').eq(i).find('input').eq(11).val(),num);
+	s_g_z_price = s_g_z_price.toFixed(2);
+	$('#tbody_id tr').eq(i).find('input').eq(12).val(s_g_z_price);
+	$('#tbody_id tr').eq(i).find('span').eq(5).html(s_g_z_price);
+	
+	//计算总价
+	if(num)
+	{
+	 total_num = accAdd(total_num,num);
+	}
+	if(s_price)
+	{
+	 total_s_price = accAdd(total_s_price,s_price);
+	}
+	
+	if(s_z_price)
+	{
+	 total_s_z_price =  accAdd(total_s_z_price,s_z_price);
+	}
+	
+	if(s_g_z_price)
+	{
+	 total_s_g_z_price =  accAdd(total_s_g_z_price,s_g_z_price);
+	}
+	
+   }
+   
+   //赋总值
+   $('#total_num').html(total_num);
+   $('#total_num_input').val(total_num);
+   $('#total_s_price').html(total_s_price);
+   $('#total_s_price_input').val(total_s_price);
+   $('#total_s_z_price').html(total_s_z_price);
+   $('#total_s_z_price_input').val(total_s_z_price);
+   $('#total_s_g_z_price').html(total_s_g_z_price);
+   $('#total_s_g_z_price_input').val(total_s_g_z_price);
+ }
+ 
+ //增加一行
+$('.fa-plus').bind('click',function(){
+ var res = '<tr><td class="text-center"><i class="fa fa-trash-o" style="cursor: pointer;"></i></td><td class="text-center">#<span class="paixu">1</span></td><td class="td_huang"><input class="form-control form-huang" type="text" onkeydown="enter_up(this,&quot;goods&quot;)" value="" name="code[]" onblur="check_info(this)"></td><td class="td_huang" style="width: 200px !important;"><input class="form-control form-huang" type="text" name="goodsname[]" value=""  onblur="check_info(this)" onkeydown="enter_up(this,&quot;goods&quot;)"/><input type="hidden" name="goods_id[]" value="" /></td><td><span></span><input type="hidden" name="format[]" value="" /></td><td class="td_huang"><input class="form-control form-huang" type="text" name="num[]" value="" onBlur="calculate_money()"/></td><td><span></span><input type="hidden" name="price[]" value="" /></td><td><span></span><input type="hidden" name="price_total[]" value="" /></td><td class="td_huang"><input class="form-control form-huang" type="text" name="zhekou[]" value="" onblur="change_zhekou(this)"/></td><td class="td_huang"><input class="form-control form-huang" type="text" name="z_price[]" value="" onblur="change_zhekou(this)"/></td><td style="border-right: 1px solid #F84141;"><span></span><input type="hidden" name="z_price_total[]" value="" /></td><td class="td_huang" style="border: 1px solid #F84141;"><input class="form-control form-huang_new" type="text" name="g_zhekou[]" value="" onblur="change_zhekou(this)"/></td><td class="td_huang" style="border: 1px solid #F84141;"><input class="form-control form-huang_new" type="text" name="g_z_price[]" value="" onblur="change_zhekou(this)"/></td><td style="border: 1px solid rgb(248, 65, 65);"><span></span><input type="hidden" name="g_z_price_total[]" value="" /></td></tr>';
+ $('#tbody_id').append(res);
+ 
+ //重拍序列号
+ $('.paixu').each(function(i){
+   $(this).html(i+1);
+ });
+ 
+ //动态绑定事件
+ $(".fa-trash-o").on("click", function() {
+		$(this).parent().parent().remove();
+	
+	 //重拍序列号
+	 $('.paixu').each(function(i){
+	   $(this).html(i+1);
+	 });
+	calculate_money(); 
+ });
+});
+ 
+ 
+function set_all_zhekou(obj)
+{
+	
+	var s_name = $(obj).attr('h-name');
+	
+	if(obj.value)
+	{
+		for(i=0;i<$('#tbody_id').find("input[name='"+s_name+"[]']").length;i++)
+		{
+			var that = $('#tbody_id').find("input[name='"+s_name+"[]']").eq(i);
+			that.val(obj.value);
+			change_zhekou(that[0]);
+			
+		}		
+	}
+
+	
+	
+}
+
+
+function change_zhekou(obj)
+ {
+  //获取是开单折扣还是过账折扣
+  
+  var price = obj.parentNode.parentNode.getElementsByTagName("input")[5].value;
+  
+  if(obj.name == 'zhekou[]')
+  {  
+	  //计算折后单价并赋值
+	  obj.parentNode.parentNode.getElementsByTagName("input")[8].value = accMul(price,obj.value);
+	  
+  }else if(obj.name == 'z_price[]')
+  {	 	  
+	  var zhekou = accDiv(obj.value,price);
+	  zhekou = zhekou.toFixed(2);  
+	  obj.parentNode.parentNode.getElementsByTagName("input")[7].value = zhekou;
+	  
+  }else if(obj.name == 'g_zhekou[]')
+  {  
+	  //计算折后单价并赋值
+	  obj.parentNode.parentNode.getElementsByTagName("input")[11].value = accMul(price,obj.value);
+	  
+  }else if(obj.name == 'g_z_price[]')
+  {  
+	  var zhekou = accDiv(obj.value,price);
+	  zhekou = zhekou.toFixed(2);  
+	  obj.parentNode.parentNode.getElementsByTagName("input")[10].value = zhekou;
+  }  
+  calculate_money();
+ }
+
+ 
+ 
+ 
+
+function call_back(obj)
+{
+	//alert(JSON.stringify(obj));
+	//alert(obj.mtype);
+	
+	switch(obj.mtype)
+	{
+		case 1:
+			//回调函数赋值到页面
+			$('#hhhhyu').val(obj.name);
+			$('#hhhhyu').attr('title',obj.name);
+			$('#guest_id').val(obj.id);
+			
+			$('#department_id').val(obj.bname);
+			$('#department_id').attr('title',obj.bname);
+			$('#bumen_id').val(obj.bid);
+			break;
+		case 3:
+			$('#department_id').val(obj.name);
+			$('#department_id').attr('title',obj.name);
+			$('#bumen_id').val(obj.id);
+			break;
+	}
+}
+
+</script>
+</block>

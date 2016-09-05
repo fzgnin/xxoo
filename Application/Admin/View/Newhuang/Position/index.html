@@ -1,0 +1,204 @@
+<extend name="Public/basechild"/>
+
+<block name="body">
+
+	<link rel="stylesheet" href="__ZTREE__/zTreeStyle.css" type="text/css">
+	<script type="text/javascript" src="__ZTREE__/jquery.ztree.core-3.5.js"></script>
+	<!--  <script type="text/javascript" src="../../../js/jquery.ztree.excheck-3.5.js"></script>
+	  <script type="text/javascript" src="../../../js/jquery.ztree.exedit-3.5.js"></script>-->
+	<SCRIPT type="text/javascript">
+		<!--
+		var setting = {
+			data: {
+				simpleData: {
+					enable: true
+				}
+			}
+		};
+
+		var zNodes ={$d_list};
+
+		$(document).ready(function(){
+			$.fn.zTree.init($("#treeDemo"), setting, zNodes);
+		});
+		//-->
+	</SCRIPT>
+	<!-- 标题栏 -->
+	<div class="main-title">
+		<h2>用户列表</h2>
+	</div>
+	<div class="cf">
+		<div class="fl">
+            <a class="btn" href="{:U('add')}">新 增</a>
+            <button class="btn ajax-post" url="{:U('changeStatus?method=resumeUser')}" target-form="ids">启 用</button>
+            <button class="btn ajax-post" url="{:U('changeStatus?method=forbidUser')}" target-form="ids">禁 用</button>
+            <button class="btn ajax-post confirm" url="{:U('changeStatus?method=deleteUser')}" target-form="ids">删 除</button>
+        </div>
+
+        <!-- 高级搜索 -->
+		<div class="search-form fr cf">
+			<div class="sleft">
+				<input type="text" name="nickname" class="search-input" value="{:I('nickname')}" placeholder="请输入用户昵称或者ID">
+				<a class="sch-btn" href="javascript:;" id="search" url="{:U('ajax_query')}"><i class="btn-search"></i></a>
+			</div>
+		</div>
+    </div>
+    <!-- 数据列表 -->
+	<div class="data-table table-striped" style="width: 14%;float:left;padding-top: 10px;
+padding-right: 1%;">
+	<ul id="treeDemo" class="ztree"></ul>
+	</div>
+	<div id="guest_list">
+    <include file="Default:Ajax:user_list"/>
+	</div>
+</block>
+
+<block name="script">
+	<script src="__STATIC__/thinkbox/jquery.thinkbox.js"></script>
+
+	<script type="text/javascript">
+	//搜索功能
+	$("#search").click(function(){
+		var url = $(this).attr('url');
+        var filter_list = getCookie('SEARCH_INFO');
+		filter_list = JSON.parse(filter_list);
+		filter_list['keywords'] = $('.search-input').val();
+		filter_list['p'] = 1;
+        $.ajax({
+		type:'POST',
+		url:url,
+		data:filter_list,
+		error:function(){
+		alert('网络传输错误！');
+		},
+		success:function(data)
+		{
+		$('#guest_list').html(data.info);
+		}
+		});
+	});
+	//回车搜索
+	$(".search-input").keyup(function(e){
+		if(e.keyCode === 13){
+			$("#search").click();
+			return false;
+		}
+	});
+    //导航高亮
+    highlight_subnav('{:U('User/index')}');
+	
+	
+	
+	var url = "{:U('Department/ajax_query')}";
+	
+	//更改排序方式
+	function table_order(obj)
+	{
+	  
+	  //分页url
+	  
+	  
+	  //获取分页的排序条件
+	  var filter_list = getCookie('SEARCH_INFO');
+	  
+	  
+	  if(filter_list)
+	  {
+		  filter_list =  JSON.parse(filter_list);
+		  
+		  //更改分页的排序方式		  
+		  filter_list['order_by'] = obj;
+		  
+		  if(filter_list['sort_by'] == 'ASC')
+		  {
+		  
+		    filter_list['sort_by'] = 'DESC';
+		  }else
+		  {
+		  
+		    filter_list['sort_by'] = 'ASC';
+		  }
+	  }
+	  
+	  $.ajax({
+	  type:'POST',
+	  url:url,
+	  data:filter_list,
+	  success:function(data)
+	  {
+	   $('#guest_list').html(data.info);
+	  }
+
+	  });	
+	}
+	
+	//分页ajax效果
+	function table_order_page(obj)
+	{
+	  //获取cookie存储的查询条件--后期有待改进加密
+	  var filter_list = getCookie('SEARCH_INFO');
+	  
+	   if(filter_list)
+	   {
+	      filter_list =  JSON.parse(filter_list);
+		  if(obj != 0)
+		  {
+		   filter_list['p'] = obj;
+		  }
+		  
+		  //获取上方筛选信息
+		  $('#select_value_id .ajax_search_btn_input').each(function()
+		  {
+			if($(this).val())
+			{
+			  filter_list[$(this).attr('name')] = $(this).val();
+			}
+		  });  
+	   }
+
+	  
+	  $.ajax({
+	  type:'POST',
+	  url:url,
+	  data:filter_list,
+	  success:function(data)
+	  {
+	   $('#guest_list').html(data.info);
+	  }
+	  });
+	
+	}
+
+	//获取cookie的值
+	function getCookie(name)
+	{
+	var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+	if(arr=document.cookie.match(reg))
+	return unescape(arr[2]);
+	else
+	return null;
+	}
+	
+	function table_department(obj)
+	{
+		var filter_list = getCookie('SEARCH_INFO');
+		filter_list = JSON.parse(filter_list);
+		filter_list['department_id'] = obj;
+		filter_list['p'] = 1;
+		filter_list['keywords'] = '';
+        $.ajax({
+		type:'POST',
+		url:url,
+		data:filter_list,
+		error:function(){
+		alert('网络传输错误！');
+		},
+		success:function(data)
+		{
+		$('#guest_list').html(data.info);
+		}
+		});
+	}
+		
+	</script>
+</block>

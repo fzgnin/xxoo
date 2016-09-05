@@ -1,0 +1,178 @@
+<extend name="Public/basechild"/>
+
+<block name="body">
+	<!-- 标题栏 -->
+	<div class="main-title">
+		<h2>品牌列表</h2>
+	</div>
+	<div class="cf">
+		<div class="fl">
+            <a class="btn" href="{:U('add')}">新 增</a>
+            
+        </div>
+
+        <!-- 高级搜索 -->
+		<div class="search-form fr cf" style="display:none">
+			<div class="sleft">
+				<input type="text" name="nickname" class="search-input" value="{:I('nickname')}" placeholder="请输入用户昵称或者ID">
+				<a class="sch-btn" href="javascript:;" id="search" url="{:U('index')}"><i class="btn-search"></i></a>
+			</div>
+		</div>
+    </div>
+    <!-- 数据列表 -->
+	<div id="guest_list">
+    <include file="Default:Ajax:brand_list" />
+	</div>
+</block>
+
+<block name="script">
+	<script src="__STATIC__/thinkbox/jquery.thinkbox.js"></script>
+
+	<script type="text/javascript">
+	//搜索功能
+	$("#search").click(function(){
+		var url = $(this).attr('url');
+        var query  = $('.search-form').find('input').serialize();
+        query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g,'');
+        query = query.replace(/^&/g,'');
+        if( url.indexOf('?')>0 ){
+            url += '&' + query;
+        }else{
+            url += '?' + query;
+        }
+		window.location.href = url;
+	});
+	//回车搜索
+	$(".search-input").keyup(function(e){
+		if(e.keyCode === 13){
+			$("#search").click();
+			return false;
+		}
+	});
+    //导航高亮
+    highlight_subnav('{:U('User/index')}');
+	
+	
+	//修改客户资料弹出框
+	function edit_guest(obj)
+	{
+	 //iframe层
+	  var url = "__URL__/edit/id/"+obj;
+		layer.open({
+			type: 2,
+			title: '修改商品资料',
+			shadeClose: false,
+			shade: 0.8,
+			shift:5,
+			area: ['900px', '800px'],
+			content: url //iframe的url
+		}); 
+	
+	
+	}
+
+	
+	//更改排序方式
+	function table_order(obj)
+	{
+	  
+	  //分页url
+	  var url = "{:U('Brand/ajax_query')}";
+	  
+	  //获取分页的排序条件
+	  
+	  if($('#filter_id').html())
+	  {
+		  var filter_list = $('#filter_id').html();
+		  filter_list =  JSON.parse(filter_list);
+		  
+		  //更改分页的排序方式		  
+		  filter_list['order_by'] = obj;
+		  
+		  if(filter_list['sort_by'] == 'ASC')
+		  {
+		  
+		    filter_list['sort_by'] = 'DESC';
+		  }else
+		  {
+		  
+		    filter_list['sort_by'] = 'ASC';
+		  }
+	  }
+	  
+	  $.ajax({
+	  type:'POST',
+	  url:url,
+	  data:filter_list,
+	  success:function(data)
+	  {
+	   $('#guest_list').html(data.info);
+	  }
+
+	  });	
+	}
+	
+	//分页ajax效果
+	function table_order_page(obj)
+	{
+	  if($('#filter_id').html())
+	  {
+		  var filter_list = $('#filter_id').html();
+		  filter_list =  JSON.parse(filter_list);
+		  if(obj != 0)
+		  {
+		   filter_list['p'] = obj;
+		  }  
+	  }
+	  var url = "{:U('Brand/ajax_query')}";
+	  $.ajax({
+	  type:'POST',
+	  url:url,
+	  data:filter_list,
+	  success:function(data)
+	  {
+	   $('#guest_list').html(data.info);
+	  }
+	  });
+	
+	}
+	
+	//删除品牌
+	function d_brand(obj)
+	{
+		  layer.confirm("你确认要删除吗？",function(index1){
+		  
+		  $.ajax({
+					type: "POST",
+					url:"{:U('Admin/Brand/delete_brand')}",
+					data:{'id':obj},// 你的formid
+					async: false,
+					error: function(request) {
+						alert("网络传输错误");
+					},
+					success: function(data) {
+						
+						if(data.status)
+						{
+											
+							layer.alert(data.info,{icon: 1,shift: 6,closeBtn: 0},function(index2)
+							{
+							  table_order_page(0);
+							  layer.closeAll();
+							});
+							
+							
+						}else
+						{
+							layer.close(index1);
+							layer.msg(data.info);
+							table_order_page(0);
+						}
+					}
+				});
+	  
+		  })
+		  
+	}
+	</script>
+</block>

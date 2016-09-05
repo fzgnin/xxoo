@@ -1,0 +1,55 @@
+<extend name="Public/base"/>
+
+<block name="body">
+    <div class="main-title">
+        <h2 class="btn_h2_style">编辑收支类别</h2>
+    </div>
+    <form action="{:U('insert')}" method="post" class="form-horizontal">
+        <div class="form-item">
+            <label class="item-label">科目名称</label>
+            <div class="controls">
+                <input type="text" class="text input-large" name="name" value="{$info.name}">
+            </div>
+        </div>
+		
+		<div class="form-item">
+            <label class="item-label">科目类型</label>
+            <div class="controls">
+                <select class="ajax_search_btn_input" style="height:30px;border-radius:0px;outline:none;"  name="type"> 					  
+				  <option value="1" <if condition="$info.type eq 1 ">selected = "selected"</if> >收入类</option>
+				  <option value="2" <if condition="$info.type eq 2 ">selected = "selected"</if> >支出类</option>				     
+				</select>
+            </div>
+        </div>
+		
+		
+		
+        <div class="form-item">
+            <label class="item-label">上级科目<span class="check-tips">（不选则无上级）</span></label>
+            <div class="controls">
+                <select name="pid">
+				<option value="0">无</option>
+                    <volist name="plist" id="plist">
+                        <option value="{$plist.id}" <if condition="$info.pid eq $plist.id ">selected = "selected"</if> >{$plist.name}</option>
+                    </volist>
+                </select>
+            </div>
+        </div>
+		
+		<div class="form-item">
+            <label class="item-label">描述</label>
+            <div class="controls">
+                <textarea type="text" class="textarea input-large" name="remarks">{$info.remarks}</textarea>
+            </div>
+        </div>
+		
+        
+        <div class="form-item">
+		<input type="hidden" name="id" value="{$info.id}">
+            <button class="btn submit-btn ajax-post" id="submit" type="submit" target-form="form-horizontal">确 定</button>
+            <button class="btn btn-return" onclick="javascript:history.back(-1);return false;">返 回</button>
+        </div>
+    </form>
+</block>
+
+

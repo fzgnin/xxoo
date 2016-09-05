@@ -1,0 +1,60 @@
+<extend name="Public/basechild"/>
+
+<block name="body">
+	<!-- 标题栏 -->
+	<div class="main-title">
+		<h2>签到详细信息</h2>
+	</div>
+	<div class="cf">
+		
+		
+		<div class="cf" >
+		<div class="fl" id="select_value_id">
+		
+		    <div class="ajax_search_btn_div">
+			<span class="ajax_search_btn_span">选择月份</span>
+			<input value="{$filter.month}" placeholder="请选择时间" class="ajax_search_btn_input time" style="padding:5px"   name="month" type="text" onchange="table_order_page(1)">
+			</div>
+			
+	    <input class="ajax_search_btn_input" type="hidden" name="type" value="signinfo_list">
+			
+        </div>
+
+        <!-- 高级搜索 -->
+		
+    </div>
+
+    </div>
+    <!-- 数据列表 -->
+	<div id="guest_list">
+    <include file="Default:Ajax:Attendance:signinfo_list" />
+	</div>
+</block>
+
+<block name="script">
+<link href="__STATIC__/datetimepicker/css/datetimepicker.css" rel="stylesheet" type="text/css">
+<php>if(C('COLOR_STYLE')=='blue_color') echo '<link href="__STATIC__/datetimepicker/css/datetimepicker_blue.css" rel="stylesheet" type="text/css">';</php>
+<link href="__STATIC__/datetimepicker/css/dropdown.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="__STATIC__/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="__STATIC__/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+<script type="text/javascript">
+$(function(){
+    $('.time').datetimepicker({
+        format: 'yyyy-mm',
+        language:"zh-CN",
+        minView:3,
+		startView:3,
+        autoclose:true
+    });
+    showTab();
+});
+</script>
+    <script type="text/javascript">
+	var url = "{:U('Attendance/ajax_query')}";
+	var APP = "__APP__";
+	</script>
+	<script src="__STATIC__/thinkbox/jquery.thinkbox.js"></script>
+	<script type="text/javascript" src="__JS__/huang.js"/></script>
+
+
+</block>

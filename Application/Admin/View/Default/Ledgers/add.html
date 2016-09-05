@@ -1,0 +1,93 @@
+<extend name="Public/base"/>
+
+<block name="body">
+<link rel="stylesheet" href="__CSS__/style.default.css" type="text/css" />
+<script type="text/javascript" src="__JS__/general.js"></script>
+    <div class="bodywrapper">
+  <!--头部-->
+
+    <!--子菜单结束-->
+    <div class="centercontent">
+    
+        <div class="pageheader">
+           
+            
+            <ul class="hornav">
+                <li class="current"><a href="#basicform">填写品牌信息</a></li>
+                <li class=""><a href="#secondform">待开发。。。</a></li>
+            </ul>
+        </div><!--pageheader-->
+        
+        <div id="contentwrapper" class="contentwrapper">
+        	<form  id="mpostForm" name="mpostForm" class="stdform" action="{:U('Brand/insert')}" method="post" enctype="multipart/form-data">
+        	<div id="basicform" class="subcontent"><!--contenttitle-->
+		
+			            <p>
+                        	<label>品牌名称</label>
+                            <span class="field"><input type="text" name="brandname"  class="smallinput" value="{$brand_info['name']}" /></span>
+                            <small class="desc">请填写全称</small>
+                        </p>
+                        
+                        
+                        <p>
+                        	<label>品牌描述</label>
+                            <span class="field"><textarea maxlength="255" rows="5"  name="branddesc" class="longinput" style="width:40%"/>{$brand_info['desc']}</textarea></span> 
+                        </p>
+
+                        <p>
+                            <label>品牌logo</label>
+                            <span class="field"><input type="file" value="" name="brandlogo"  class="smallinput" style="width:20%" />
+                            <if condition="$brand_info.img_logo_thumb neq ''"><img style="width:30px" src="__ROOT__{:C('BRAND_LOGO_THUMB')}{$brand_info.img_logo_thumb}" id="img_load">
+                            </if>
+
+                            </span>
+                            <input type="hidden" value="{$brand_info.img_logo}" name="old_logo">
+                            <small class="desc">jpeg图片 200px*100px</small>
+                        </p>
+
+                        <!--隐藏字段-->
+                        <p class="stdformbutton">
+                        	<input style="width:100px; margin: 0; font-weight: bold; color: #eee; background: #FB9337; border: 1px solid #F0882C; padding: 7px 10px; 
+  -moz-box-shadow: none; -webkit-box-shadow: none; box-shadow: none; cursor: pointer; -moz-border-radius: 2px; -webkit-border-radius: 2px;
+  border-radius: 2px;" type="button" class="submit radius2" value="提交" onClick="myFunction()">
+                        </p>
+                    
+
+            </div><!--subcontent-->
+
+            <div id="secondform" class="subcontent" style="display:none">
+             
+
+
+            </div>
+        </form>
+        </div><!--contentwrapper-->
+        
+	</div><!-- centercontent -->
+    
+    
+</div>
+</block>
+
+<block name="script">
+    <script type="text/javascript">
+        //导航高亮
+        highlight_subnav('{:U('User/index')}');
+    </script>
+	
+	<script type="text/javascript">
+	
+	function myFunction()
+	{ 
+	
+	if(mpostForm.brandname.value==""){alert("请输入品牌名称！");
+	mpostForm.brandname.focus();
+	return false;
+	}
+	
+	if (confirm("你确认要提交吗？"))
+	document.mpostForm.submit()
+	}
+
+	</script>
+</block>

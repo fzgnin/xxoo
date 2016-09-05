@@ -1,0 +1,480 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    
+     <!--[if lt IE 9]>
+    <script type="text/javascript" src="__STATIC__/jquery-1.10.2.min.js"></script>
+	<script type="text/javascript" src="__LAYER__/layer.js"></script>
+    <![endif]--><!--[if gte IE 9]><!-->
+    <script type="text/javascript" src="__STATIC__/jquery-2.0.3.min.js"></script>
+   
+	<script type="text/javascript" src="__LAYER__/layer.js"></script>
+    <!--<![endif]-->
+	
+	<style type="text/css">
+
+.demo-huang{
+max-height:500px
+}
+</style>
+    
+</head>
+<body>
+<link rel="stylesheet" href="__CSS__/style.css" type="text/css" />
+<link rel="stylesheet" href="__CSS__/base.css" type="text/css" />
+<link rel="stylesheet" href="__CSS__/style.default.css" type="text/css" />
+<link rel="stylesheet" href="__CSS__/module.css" type="text/css" />
+
+<script type="text/javascript" src="__JS__/general.js"></script>
+    <div class="bodywrapper">
+  <!--头部-->
+
+    <!--子菜单结束-->
+    <div class="centercontent">
+    
+        <div class="pageheader">
+           
+            
+            <ul class="hornav">
+                <li class="current"><a href="#basicform">填写店家信息</a></li>
+                <li class=""><a href="#secondform">填写品牌折扣</a></li>
+            </ul>
+        </div><!--pageheader-->
+        
+        <div id="contentwrapper" class="contentwrapper">
+        	<form  id="mpostForm" name="mpostForm" class="stdform" action="{:U('Admin/Guest/getchangeguest')}" method="post">  
+        	<div id="basicform" class="subcontent"><!--contenttitle-->
+
+                  
+                          <p>
+                        	<label>店家名称</label>
+                            <span class="field"><input type="text" name="guestname"  value="{$info['guestname']}" class="smallinput" /></span>
+                            <small class="desc">请填写全称</small>
+                        </p>
+                        
+                         <p>
+                        	<label>选择所在区域</label>
+                            <span class="formwrapper">
+                            	<select data-placeholder="请选择地区....." id="province" class="chzn-select"  name="province" style="width:350px;height:37px" tabindex="2">
+                                  <option value="{$info['province']}" select="selectd">{$info['province']}</option> 
+                                  <option value="北京市">北京市</option>
+                                  <option value="天津市">天津市</option>
+                                  <option value="上海市">上海市</option>
+                                  <option value="重庆市">重庆市</option>
+                                  <option value="河北省">河北省</option> 
+                                  <option value="山西省">山西省</option>
+                                  <option value="内蒙古">内蒙古</option>
+                                  <option value="辽宁省">辽宁省</option>
+                                  <option value="吉林省">吉林省</option>
+                                  <option value="黑龙江省">黑龙江省</option>
+                                  <option value="江苏省">江苏省</option>
+                                  <option value="浙江省">浙江省</option>
+                                  <option value="安徽省">安徽省</option>
+                                  <option value="福建省">福建省</option>
+                                  <option value="江西省">江西省</option>
+                                  <option value="山东省">山东省</option>
+                                  <option value="河南省">河南省</option>
+                                  <option value="湖北省">湖北省</option>
+                                  <option value="湖南省">湖南省</option>
+                                  <option value="广东省">广东省</option>
+                                  <option value="广西">广西</option>
+                                  <option value="海南省">海南省</option>
+                                  <option value="四川省">四川省</option>
+                                  <option value="贵州省">贵州省</option>
+                                  <option value="云南省">云南省</option>
+                                  <option value="西藏">西藏</option>
+                                  <option value="陕西省">陕西省</option>
+                                  <option value="甘肃省">甘肃省</option>
+                                  <option value="青海省">青海省</option>
+                                  <option value="宁夏">宁夏</option>
+                                  <option value="新疆">新疆</option>
+                                  <option value="香港">香港</option>
+                                  <option value="澳门">香港</option>
+                                  <option value="台湾省">台湾省</option>
+                                </select>
+                            </span>
+                        </p>
+                        
+                        <p>
+                        	<label>地址</label>
+                            <span class="field"><textarea  rows="3"  name="address" class="longinput" style="width:40%"/ >{$info['address']}</textarea></span> 
+                        </p>
+                        
+                          <p>
+                        	<label>负责人</label>
+                            <span class="field"><input type="text"  name="manager" value="{$info['manager']}"  class="smallinput" /></span>
+                            <small class="desc">只需填写一位负责人</small>
+                        </p>
+                        
+                        <p>
+                        	<label>负责人联系方式</label>
+                            <span class="field"><input type="text" name="phone" value="{$info['phone']}"  class="smallinput" /></span>
+                            <small class="desc">填写该负责人的联系方式：手机号码</small>
+                        </p>
+                        
+
+                        <p>
+                            <label>店内电话</label>
+                            <span class="field"><input type="text" name="tphone" value="{$info['tphone']}" class="smallinput" /></span>
+                            <small class="desc">填写该负责人的联系方式：手机号码</small>
+                        </p>
+
+                         <p>
+                        	<label>备注信息</label>
+                            <span class="field"><textarea  rows="3"  name="remark" class="longinput" style="width:40%"/ >{$info['remark']}</textarea></span> 
+                        </p>
+						
+						<p>
+                        	<label>合作情况</label>
+                            <span class="field">
+                            <a href="javascript:;" onClick="show_userbid();" class="btn_list_1">添加合作部门</a>
+							<span id="gbumen_id">
+							
+							<foreach name='gblist' item='v'>
+							<a href="javascript:;" id="gbid_{$v.id}" class="btn_list_1" style="background-color:rgb(35, 59, 19);">{$v.bname}</a>
+							<input type="hidden" name="gbid[]" value="{$v.id}" />
+                            </foreach>
+							
+							</span>
+                        </p>
+						
+						<p>
+                        	<label>服务业务员</label>
+							<span class="field">
+                           	<input class="smallinput" placeholder="请按enter键选择" id="user_name" value="{$info.fname}" title="{$info.fname}" onblur="check_info(this)" onkeydown="enter_up(this,'user')" name="user_name" type="text">
+							<input type="hidden" name="user_id" id="user_id" value="{$info.fid}">
+                            </span>
+                        </p>
+                       
+                         <p>
+                            <label>修改人</label>
+                            <span class="field">【{$_SESSION['onethink_admin']['user_auth']['username']}】</span>
+                          
+                        </p>
+                        <!--隐藏字段-->
+<input type="hidden" name="id" value="{$info['id']}" />
+                        
+                        <p class="stdformbutton">
+                        	<input style="width:100px; margin: 0; font-weight: bold; color: #eee; background: #FB9337; border: 1px solid #F0882C; padding: 7px 10px; 
+  -moz-box-shadow: none; -webkit-box-shadow: none; box-shadow: none; cursor: pointer; -moz-border-radius: 2px; -webkit-border-radius: 2px;
+  border-radius: 2px;" type="button" class="submit radius2" value="提交" onClick="myFunction()">
+                        </p>
+                    
+
+            </div><!--subcontent-->
+
+            <div id="secondform" class="subcontent" style="display:none"> 
+                         <p id="add_xuanxiang">
+                          <label style="width:220px">选择品牌和折扣:&nbsp;&nbsp;&nbsp;<a href="javascript:;" class="btn_anniu">再加一行</a></label>
+                            <span class="formwrapper" style="margin-left:240px">
+                              <select  class="chzn-select"  name="brand_id[]" style="width:20%; min-width:20%;height:37px" tabindex="2">
+                              <option value="">请选择品牌.....</ >
+
+                              <foreach name='brand_list' item='v'>
+                              <option value="{$v.id}">{$v.name}</option>
+                              </foreach>
+                                  
+                                </select>
+                                开单折扣:&nbsp;<input type="text" value="" name="discount_value_k[]" style="width:15%">&nbsp;过账折扣:&nbsp;<input type="text" value="" name="discount_value_g[]" style="width:15%">
+                                <input type="hidden" name="branddiscount_id[]" value="">
+                                
+                            </span>
+
+
+                            <foreach name='branddiscount' item='vo'>
+
+                            <span class="formwrapper" style="margin-left:240px">
+                              <select  class="chzn-select"  style="width:20%; min-width:20%;height:37px" tabindex="2" disabled="disabled">
+                              <option value="">请选择品牌.....</option>
+
+                              <foreach name='brand_list' item='v'>
+                              <option value="{$v.id}"    <if condition="$v.id eq $vo.brand_id ">selected=""</if> >{$v.name}</option>
+                              </foreach>
+                                  
+                                </select>
+                                开单折扣:&nbsp;<input type="text" value="{$vo.discount_k}" name="discount_value_k[]" style="width:15%">&nbsp;过账折扣:&nbsp;<input type="text" value="{$vo.discount_g}" name="discount_value_g[]" style="width:15%">
+                                <input type="hidden" name="branddiscount_id[]" value="{$vo.id}">
+                                <input type="hidden" name="brand_id[]" value="{$vo.brand_id}">
+                                
+                            </span>
+
+
+                            </foreach>
+
+                            
+                        </p>
+
+                        <p class="stdformbutton">
+						<input type="hidden" name="stus" value="{$info['stus']}">
+                          <input style="width:100px; margin: 0; font-weight: bold; color: #eee; background: #FB9337; border: 1px solid #F0882C; padding: 7px 10px; 
+  -moz-box-shadow: none; -webkit-box-shadow: none; box-shadow: none; cursor: pointer; -moz-border-radius: 2px; -webkit-border-radius: 2px;
+  border-radius: 2px;" type="button" class="submit radius2" value="提交" onClick="myFunction()">
+                        </p>
+                       
+
+            </div>
+        </form>
+        </div><!--contentwrapper-->
+        
+	</div><!-- centercontent -->
+    
+    
+</div>
+</block>
+
+<block name="script">
+   
+   	<script type="text/javascript">
+	var URL_JS = "__URL__";
+	var APP = "__APP__";
+	</script>
+
+	<script type="text/javascript" src="__JS__/huang.js"/></script>
+	
+	<script type="text/javascript">
+	var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+	
+	var url = parent.document.location;
+	
+	function myFunction()
+	{ var province=document.getElementById("province");
+	  var jid=document.getElementById("province");
+	  var bid=document.getElementById("city");
+	
+	 if(mpostForm.guestname.value==""){alert("请输入店家名称！");
+		mpostForm.guestname.focus();
+		return false;
+	   }
+	
+	if(province.value==""){alert("请选择店家所在区域！");
+	return false;
+	}
+	 if(mpostForm.address.value==""){alert("请输入店家地址！");
+		mpostForm.address.focus();
+		return false;
+	   }
+	
+	  
+	
+	
+	  layer.confirm("你确认要提交吗？",function(index1){
+	  
+	  $.ajax({
+                type: "POST",
+                url:"{:U('Admin/Guest/getchangeguest')}",
+                data:$('#mpostForm').serialize(),// 你的formid
+                async: false,
+                error: function(request) {
+                    alert("网络传输错误");
+                },
+                success: function(data) {
+                    
+					if(data.status)
+					{
+										
+						parent.layer.alert(data.info,{icon: 1,shift: 6,closeBtn: 0},function(index2)
+						{
+						  parent.table_order_page(0);
+						  parent.layer.closeAll();
+						});
+						
+						
+					}else
+					{
+						layer.close(index1);
+						parent.layer.msg(data.info);
+					}
+                }
+            });
+  
+	  })
+	  
+	}
+	
+	
+	jQuery('.btn_anniu').click(function(){
+	
+	var html_span = jQuery('.formwrapper').eq(1).prop("outerHTML");
+	
+	jQuery('#add_xuanxiang').append(html_span);
+	
+	
+	})
+	
+	
+	
+	function show_userbid(obj)
+	{
+		//获取军团列表
+		
+		$.ajax({
+		type:'post',
+		data:{'gid':obj},
+		url:"{:U('Guest/select_uidbid')}",
+		success:function(data)
+		{
+			if(data)
+			{
+				var str = '<form method="post" action="" name="tbform" id="tbform">';
+				
+				for(var i=0;i<data.length;i++)
+				{
+					str += '<dl class="checkmod" style="border:none;border-bottom: 1px solid #ebebeb;margin-bottom:0px">';
+
+					str += '<dd class="bd" style="padding-left:30px">';
+						
+					str += '<div class="rule_check"><div>';
+					
+					str += '<label class="checkbox">';
+					
+					if(data[i]['gbid'])
+					{
+						if(data[i]['show'])
+						{
+							str += '<input class="auth_rules rules_row" type="checkbox" checked="true" name="bid[]" value="'+data[i]['id']+'" data-name="'+data[i]['bname']+'"/>'+data[i]['title_show'];
+						}else
+						{
+							str += '<input class="auth_rules rules_row" type="checkbox" disabled="" checked="true" name="bid[]" value="'+data[i]['id']+'" data-name="'+data[i]['bname']+'"/>'+data[i]['title_show'];
+						}
+					
+						str += '<input type="hidden" name="ubid[]" value="'+data[i]['gbid']+'"/>';
+					}else
+					{
+						if(data[i]['show'])
+						{
+							str += '<input class="auth_rules rules_row" type="checkbox" name="bid[]" value="'+data[i]['id']+'" data-name="'+data[i]['bname']+'"/>'+data[i]['title_show'];
+						}else
+						{
+							str += '<input class="auth_rules rules_row" type="checkbox" disabled="" name="bid[]" value="'+data[i]['id']+'" data-name="'+data[i]['bname']+'"/>'+data[i]['title_show'];
+						}
+					}
+							
+					str += '</label></div></div>';
+
+					str += '</dd></dl>';
+
+				}
+				
+				str += '<input type="hidden" name="uid" value="'+obj+'"></form>';
+				
+				layer.open({
+					type:1,
+					title: '军团管理权限',
+					shadeClose: false,
+					shade: 0.8,
+					shift:5,
+					area: ['380px', 'auto'],
+					skin: 'demo-huang',
+					btn: ['确认'],
+					success: function(layero, index){
+						//获取页面现存部门id
+						$('#gbumen_id').find('input[name="gbid[]"]').each(function(){
+						
+						    var that = this;
+							$('#tbform').find('input[name="bid[]"]').each(function(){
+							//形成数据插入页面
+								if($(that).val() == $(this).val())
+								{
+									$(this).attr("checked","checked");
+								}
+							});
+						}); 
+					},
+					yes: function(index, layero){
+						//提交到后台
+						
+						var str = '';
+						$('#tbform').find('input[name="bid[]"]').each(function(){
+							//形成数据插入页面
+						
+						var bid_f = $(this).val();
+						
+						if($(this).prop('checked'))
+						{
+							//检查选中项是否已存在
+							var open_f = true;
+							
+							$('#gbumen_id').find('input[name="gbid[]"]').each(function(){
+								if(bid_f == $(this).val())
+								{
+									open_f = false;
+								}
+							});
+							
+							if(open_f)
+							{
+								str += '<a href="javascript:;" id="gbid_'+bid_f+'" class="btn_list_1" style="background-color:rgb(35, 59, 19);">'+$(this).attr('data-name')+'</a>';
+								
+								str += '<input type="hidden" name="gbid[]" value="'+bid_f+'" />';
+								
+							}
+						}else
+						{
+							//删除未选中
+							$('#gbumen_id').find('input[name="gbid[]"]').each(function(){
+								if(bid_f == $(this).val())
+								{
+									$(this).remove();
+									$('#gbid_'+bid_f).remove();
+									
+								}
+							});
+						}
+							 
+						
+						}); 
+						
+						$('#gbumen_id').append(str);
+						
+						layer.close(index); //如果设定了yes回调，需进行手工关闭
+						
+						
+						
+					},
+					content: str //iframe的url
+				});
+			}
+		},
+		error:function()
+		{
+			alert('传输错误');
+		}
+		});
+
+
+	}
+	
+	function check_all(obj)
+	{
+		$(obj).closest('dl').find('dd').find('input').prop('checked', obj.checked);
+	}
+	
+	function call_back(data)
+	{
+		$('#user_name').val(data.name);
+		$('#user_name').attr('title',data.name);
+		$('#user_id').val(data.id);
+	
+	}
+	
+	</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

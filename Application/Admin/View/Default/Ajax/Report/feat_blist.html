@@ -1,0 +1,56 @@
+<include file="Default:Ajax:Report:feat_search" />
+<div class="fl" style="margin-bottom:10px; margin-top:10px" id="select_value_id_child">
+
+				
+			<!--{获取条件数组的值并赋值}-->
+			<if condition="$filter.goods_id "><a href="javascript:;" onclick="delete_this('goods_id')" class="btn_list_1">{$filter.goodsname}</a></if>
+			<if condition="$filter.guest_id "><a href="javascript:;" onclick="delete_this('guest_id')" class="btn_list_1">{$filter.guestname}</a></if>
+			<if condition="$filter.bumen_id "><a href="javascript:;" onclick="delete_this('bumen_id')" class="btn_list_1">{$filter.bname}</a></if>
+			<if condition="$filter.tid "><a href="javascript:;" onclick="delete_this('tid')" class="btn_list_1">{$filter.tid}军团</a></if>
+			
+        </div>
+
+<div class="data-table table-striped">
+	<table class="">
+    <thead>
+        <tr>
+		<th class="">部门名称</th>
+		<th class="" style="color:#CCFF66" onClick="table_order('g_my')">过账业绩</th>
+		<th class="">操作</th>
+		</tr>
+    </thead>
+    <tbody>
+		<notempty name="list">
+		<volist name="list" id="vo">
+		<tr>
+			<td>{$vo.bname}</td>
+			
+			<td>{$vo.g_my}</td>
+			<td>
+				<a href="javascript:;" onclick="table_order_page(1,'bumen_id',{$vo.bid})" class="btn_list_1">查看详细</a>	
+				          
+                </td>
+		</tr>
+		</volist>
+		<else/>
+		<td colspan="9" class="text-center"> aOh! 暂时还没有内容! </td>
+		</notempty>
+	</tbody>
+    </table>
+	</div>
+    <div class="page">
+        {$page}
+		<span style="float:right">总业绩：{$a_amount|default="0"}元</span>
+    </div>
+	
+	<script type="text/javascript">
+	$(function(){
+		$('.time').datetimepicker({
+			format: 'yyyy-mm-dd',
+			language:"zh-CN",
+			minView:2,
+			autoclose:true
+		});
+		showTab();
+	});
+	</script>

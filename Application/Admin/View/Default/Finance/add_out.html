@@ -1,0 +1,336 @@
+<extend name="Public/base"/>
+<block name="body">
+<link rel="stylesheet" href="__CSS__/style.default.css" type="text/css" />
+<link rel="stylesheet" href="__CSS__/order_css.css" type="text/css" />
+<link rel="stylesheet" href="__CSS__/font-awesome.min.css" type="text/css" />
+<style type="text/css">
+.select_type_style{
+padding: 6px 5px;height:34px;border: medium none;width: 100%;color:red;
+}
+</style>
+<div class="bill-container ng-scope">
+<form name="xsckd" id="xsckd" action="{:U('Finance/insert')}" method="post">
+    <div class="ng-scope" ><div class="bill-header ng-scope">
+    <div class="bill-subject">
+        <div class="bill-subject-left">
+            <div class="subject pull-left">
+                <h1>
+                    <input value="付款单" type="text" style="background: rgb(179, 64, 33) none repeat scroll 0% 0%;color: rgb(255, 255, 255);box-shadow:none">
+                </h1>
+            </div>
+            <div class="company-info pull-left">
+                <big class="ng-binding">上海国际雅兰付款单</big>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="bill-footer-input row">
+            <div class="bill-footer-input-item">
+                <div class="input-group ng-scope">
+				<span class="input-group-addon">录单日期</span>
+				<input value="{$time}" placeholder="请选择时间" class="form-control input_widget_datetime ng-pristine ng-untouched ng-valid time" name="add_time" type="text">
+				</div>
+            </div>
+			
+			<div class="bill-footer-input-item">
+                <div class="input-group ng-scope">
+				<span class="input-group-addon">付款单编号</span>
+				<span class="form-control input_widget_number ng-pristine ng-untouched ng-valid">{$order_num}</span>
+				<input value="{$order_num}" name="order_sn" type="hidden">
+				</div>
+            </div>
+			
+			<div class="bill-footer-input-item">
+                <div class="input-group ng-scope">
+				<span class="input-group-addon">收款单位</span>
+				<input class="form-control input_widget_number ng-pristine ng-untouched ng-valid" type="text" id="mname_id" value="" title="" onblur="check_info(this)" onkeydown="show_selectinfo(this)" name="mname">
+				<input type="hidden" name="mid" id="mid" value="">
+				<input type="hidden" name="mtype" id="mtype" value="">
+				</div>
+            </div>
+		
+        </div>
+</div>
+    <div class="bill-body">
+        <div config="bill_config" class="bill-rows ng-isolate-scope">
+    <table class="table table-bordered bill-rows-table">
+        <thead>
+            <tr>
+                <th width="60" style="text-align:center"><i class="fa fa-plus" style="cursor: pointer;"></i></th>
+                <th class="text-center" width="50">#</th>
+                <th class="ng-scope" >
+                    <label class="ng-binding">付款账户</label>      
+                </th>
+				<!--<th class="ng-scope" >
+                    <label class="ng-binding">支出类别</label>      
+                </th>-->
+				<th class="ng-scope" >
+                    <label class="ng-binding">付款账号</label>      
+                </th>
+				<th class="ng-scope" >
+                    <label class="ng-binding">付款金额</label>         
+                </th><th class="ng-scope" >
+                    <label class="ng-binding">付款方式</label>     
+                </th><th class="ng-scope" >
+                    <label class="ng-binding">款项用途</label>    
+                </th>
+					
+            </tr>
+        </thead>
+        <tbody id="tbody_id" onkeydown="keyDown(event)">
+            <tr>
+                <td class="text-center">
+                    <i class="fa fa-trash-o" style="cursor: pointer;"></i>
+                </td>
+                <td class="text-center">#<span class="paixu">1</span></td>
+                <td class="td_huang">
+					<input class="form-control form-huang" type="text"  onkeydown="enter_up(this,'money')" value="" name="cname[]"  onblur="check_info(this)"><input type="hidden" name="co_id[]" value="" />
+                </td>
+				
+				<!--<td class="td_huang">
+				<select class="select_type_style"  name="pay_type[]" onfocus="select_paytype(this);"> 					  
+				<option value="0">请选择支出类别</option>  
+				  			     
+				</select>
+				</td>-->
+				
+				<td style="width:80px"><span></span><input type="hidden" name="cid[]" value="" /></td>
+				
+				<td class="td_huang" style="width: 100px !important;"><input class="form-control form-huang" type="text" name="money[]" value=""  onblur="calculate_money()"/></td>
+				
+				<td style="width:50px"><span></span><input type="hidden" name="type[]" value="" /></td>
+				
+				<td class="td_huang" style="width: 200px !important;">
+                 <input class="form-control form-huang" type="text" name="purpose[]" value="" /> 
+                </td>
+
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+               <td colspan="2" align="center"><strong class="ng-binding">合计</strong></td>
+               <td class="ng-scope"></td>
+			   <td class="ng-scope"></td>
+			   
+			   <td class="ng-scope">
+			   <span id="total_money"></span><input type="hidden" name="total_money" id="total_money_input" value="" />
+			   </td>
+			   <td class="ng-scope">
+			   
+			   </td>
+			   <td class="ng-scope">
+			   
+			   </td>
+ 
+            </tr>
+        </tfoot>
+    </table>
+</div>
+    </div>
+    <div class="bill-footer">
+        <div class="bill-footer-input row">
+            <div class="input-group bill-footer-input-item" style="width: auto">
+                <span class="input-group-addon ng-binding">备注</span>
+                <input class="form-control ng-pristine ng-untouched ng-valid" name="remarks" value="" type="text">
+            </div>
+        </div>
+
+        <div class="bill-footer-meta">
+            <span class="label label-primary">
+                <span class="ng-binding">制单人</span>
+                <span class="ng-binding">TEam Swift
+ 管理员</span>
+            </span>
+            <div class="pull-right">
+                <input type="hidden" value="11"name="order_type"/>
+				<input type="button" value="提交" onclick="form_submit('{:U('insert')}','{:U('orderlist')}',0)"  class="btn btn-primary btn-lg ng-binding"/>
+				<input type="button" value="提交并新增" onclick="form_submit('{:U('insert')}','{:U('orderlist')}',1)"  class="btn btn-primary btn-lg ng-binding" style="background-color:rgb(255, 5, 5)"/>
+            </div>
+        </div>
+
+    </div>
+	</form>
+</div>
+
+    
+</block>
+
+<block name="script">
+<link href="__STATIC__/datetimepicker/css/datetimepicker.css" rel="stylesheet" type="text/css">
+<php>if(C('COLOR_STYLE')=='blue_color') echo '<link href="__STATIC__/datetimepicker/css/datetimepicker_blue.css" rel="stylesheet" type="text/css">';</php>
+<link href="__STATIC__/datetimepicker/css/dropdown.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="__STATIC__/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="__STATIC__/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+<script type="text/javascript">
+
+Think.setValue("type", {$data.type|default='""'});
+Think.setValue("display", {$data.display|default=0});
+
+$('#submit').click(function(){
+	$('#form').submit();
+});
+
+$(function(){
+    $('.time').datetimepicker({
+        format: 'yyyy-mm-dd hh:ii',
+        language:"zh-CN",
+        minView:2,
+        autoclose:true
+    });
+});
+</script>
+<script type="text/javascript">
+var URL_JS = "__URL__";
+var APP = "__APP__";
+</script>
+<script type="text/javascript" src="__JS__/order.js"/></script>
+
+
+<script type="text/javascript">
+
+//增加一行
+$('.fa-plus').bind('click',function(){
+ var res = '<tr><td class="text-center"><i class="fa fa-trash-o" style="cursor: pointer;"></i></td><td class="text-center">#<span class="paixu">1</span></td><td class="td_huang"><input class="form-control form-huang" type="text"  onkeydown="enter_up(this,&quot;money&quot;)" value="" name="cname[]"  onblur="check_info(this)"><input type="hidden" name="co_id[]" value="" /></td><td style="width:80px"><span></span><input type="hidden" name="cid[]" value="" /></td><td class="td_huang" style="width: 100px !important;"><input class="form-control form-huang" type="text" name="money[]" value="" onblur="calculate_money()" /></td><td style="width:50px"><span></span><input type="hidden" name="type[]" value="" /></td><td class="td_huang" style="width: 200px !important;"><input class="form-control form-huang" type="text" name="purpose[]" value="" /></td></tr>';
+ $('#tbody_id').append(res);
+ 
+ //重拍序列号
+ $('.paixu').each(function(i){
+   $(this).html(i+1);
+ });
+ 
+ //动态绑定事件
+ $(".fa-trash-o").on("click", function() {
+		$(this).parent().parent().remove();
+	
+	 //重拍序列号
+	 $('.paixu').each(function(i){
+	   $(this).html(i+1);
+	 });
+	calculate_money(); 
+ });
+});
+
+
+
+
+function calculate_money()
+ {
+   var tr_length = $('#tbody_id tr').length;
+   
+   var total_money = 0;
+    
+   for(var i=0;i<tr_length;i++)
+   {
+    //获取信息
+	
+	var money = $('#tbody_id tr').eq(i).find('input').eq(3).val();
+
+	//计算总价
+	if(money)
+	{
+	 total_money = accAdd(total_money,money);
+	}
+   }
+   
+   //赋总值
+   $('#total_money').html(total_money);
+   $('#total_money_input').val(total_money);
+   
+ }
+
+
+
+function call_back(obj)
+{
+	//回调函数赋值到页面
+	$('#mname_id').val(obj.name);
+	$('#mname_id').attr('title',obj.name);
+	$('#mid').val(obj.id);
+	$('#mtype').val(obj.mtype);
+}
+
+function show_selectinfo(obj)
+{
+	//形成单位类型的html页面
+	var _str = '';
+	var theEvent = window.event || arguments.callee.caller.arguments[0];    
+	var code = theEvent.keyCode || theEvent.which || theEvent.charCode;    
+	if (code == 13) {   
+
+		var s_arr = "{name:'"+obj.name+"',value:'"+obj.value+"'}";
+		_str += '<div style="width: 100%; text-align: center; padding: 10px;">';
+		_str += '<a href="javascript:;" class="btn_list_1" style="font-size:25px;margin-right:25px;line-height:55px;padding:4px 20px;" onclick="check_gstype('+s_arr+',&quot;guest&quot;)">顾客</a>';
+		_str += '<a href="javascript:;" class="btn_list_1" style="font-size:25px;margin-right:25px;line-height:55px;padding:4px 20px;" onclick="check_gstype('+s_arr+',&quot;supplier&quot;)">供应商</a>';
+		_str += '</div>';
+		
+		layer.open({
+			type: 1,
+			title: '选择单位类型',
+			shadeClose: false,
+			shade: 0.8,
+			shift:5,
+			area: ['500px', '130px'],
+			content: _str //iframe的url
+		});
+		
+		$(obj).blur();
+		return false;    
+	}    
+	return true;	
+}
+
+
+function select_paytype(obj)
+{
+	
+	
+	var str = '';
+	
+	if(1 >= $(obj).find('option').length)
+	{
+		str += '<?php 
+		foreach($plist as $k=>$v)
+		{
+			  echo '<option value="'.$v['id'].'">'.$v['name'].'</option>';
+		}
+		?>'
+		
+		$(obj).html(str);
+	}
+
+}
+
+
+
+function make_str(obj)
+{
+	var str = '';
+	
+	for(var i=0;i<obj.length;i++)
+	{
+		str += '<tr><td class="text-center"><i class="fa fa-trash-o" style="cursor: pointer;"></i></td>';
+		str += '<td class="text-center">#<span class="paixu">1</span></td>';
+		str += '<td class="td_huang"><input class="form-control form-huang" type="text"  onkeydown="enter_up(this,&quot;money&quot;)" value="'+obj[i]['cname']+'" title="'+obj[i]['cname']+'" name="cname[]"  onblur="check_info(this)">';
+		str += '<input type="hidden" name="co_id[]" value="'+obj[i]['co_id']+'" /></td>';
+		//str += '<td class="td_huang"><select class="select_type_style"  name="pay_type[]" onfocus="select_paytype(this);"><option value="0">请选择支出类别</option></select></td>';
+		str += '<td style="width:80px"><span>'+obj[i]['cid']+'</span><input type="hidden" name="cid[]" value="'+obj[i]['cid']+'" /></td>';
+		
+		str += '<td class="td_huang" style="width: 100px !important;"><input class="form-control form-huang" type="text" name="money[]" value="" onblur="calculate_money()" /></td>';
+		
+		str += '<td style="width:50px"><span>'+obj[i]['type']+'</span><input type="hidden" name="type[]" value="'+obj[i]['type']+'" /></td>';
+		
+		str += '<td class="td_huang" style="width: 200px !important;"><input class="form-control form-huang" type="text" name="purpose[]" value="" /></td></tr>';
+		
+	}
+	
+	
+	add_goods(str);
+	
+
+}
+
+
+</script>
+
+</block>

@@ -1,0 +1,66 @@
+<table class="">
+    <thead>
+        <tr>
+		<th class="" onClick="table_order('onethink_guest.id')">ID</th>
+		<th class="">客户名称</th>
+		<th class="">地区</th>
+		<th class="">所属部门</th>
+		<th class="">账户余额（负数为欠款）</th>
+		</tr>
+    </thead>
+    <tbody style="cursor: pointer;">
+		<notempty name="list">
+		<volist name="list" id="vo">
+		<tr class="checksss">
+			<td>{$vo.id}</td>
+			<td>{$vo.guestname}</td>
+			<td>{$vo.province}</td>
+			<td>
+			
+			<volist name="vo.bumen" id="vs">
+			
+			<if condition="$key eq 0 ">
+			<a href="javascript:;" class="btn_list_1" style="background-color:red;" data-bid="{$vs.bid}">{$vs.bname}</a>
+			<else/>
+			<a href="javascript:;" class="btn_list_1" style="background-color:rgb(35, 59, 19);" data-bid="{$vs.bid}">{$vs.bname}</a>
+			</if>
+			</volist>
+			
+			</td>
+			<td>{$vo.money}</td>
+				
+		</tr>
+		</volist>
+		<else/>
+		<td colspan="9" class="text-center"> aOh! 暂时还没有内容! </td>
+		</notempty>
+	</tbody>
+    </table>
+	
+	<div class="page">
+        {$page}
+    </div>
+	
+	<script type="text/javascript">
+	
+	//单击变色
+	$('.checksss').bind("click",function(){
+	 //变色效果
+	 $(this).addClass("tr_select").siblings().removeClass("tr_select");
+    });
+	
+	//双击选中
+	$('.checksss').bind("dblclick",function(){
+	 //获取信息
+	 var guest_id = $(this).children('td').eq(0).html();
+	 var guestname = $(this).children('td').eq(1).html();
+	 var bname = $(this).find('a').eq(0).html();
+	 var bid = $(this).find('a').eq(0).attr('data-bid');
+
+	 var back_ob = {id:guest_id,name:guestname,mtype:1,bid:bid,bname:bname};
+	 
+	 parent.call_back(back_ob);
+
+	 parent.layer.closeAll();
+    });
+	</script>

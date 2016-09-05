@@ -1,0 +1,51 @@
+<extend name="Public/base" />
+
+<block name="body">
+<style type="text/css">
+.btn_list_1:hover{ background-color:#4BBD00 !important;}
+</style>
+	<!-- 标题栏 -->
+	<div class="main-title">
+		<h2 class="btn_h2_style">收支类别</h2>
+	</div>
+	<div class="cf" >
+	
+	<div class="fl">
+            <a class="btn" href="{:U('add')}">新 增</a>
+            
+    </div>
+	<div class="fl" id="select_value_id">
+	
+	
+	
+	<div class="ajax_search_btn_div">
+			<span class="ajax_search_btn_span">收支类别</span>
+			<select class="ajax_search_btn_input" style="height:30px;border-radius:0px;outline:none;"  name="type" onchange="table_order_page(1)"> 
+									  
+                                      <option value="0" <if condition="$filter.date_type eq 0 ">selected = "selected"</if> >请选择</option>
+									  <option value="1" <if condition="$filter.date_type eq 1 ">selected = "selected"</if> >收入类</option>
+									  <option value="2" <if condition="$filter.date_type eq 2 ">selected = "selected"</if> >支出类</option>				     
+									</select>
+			
+	</div>
+	</div>
+	</div>
+    <!-- 数据列表 -->
+	<div id="guest_list">
+    <include file="Default:Ajax:Paycategory:paycategory_list"/>
+	</div>
+	
+	
+</block>
+
+<block name="script">
+
+
+    <script type="text/javascript">
+	var url = "{:U('Paycategory/ajax_query')}";
+	var APP = "__APP__";
+	var URL_JS = "__URL__";
+	</script>
+	<script src="__STATIC__/thinkbox/jquery.thinkbox.js"></script>
+	<script type="text/javascript" src="__JS__/huang.js"/></script>
+</block>

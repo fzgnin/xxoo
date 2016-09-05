@@ -1,0 +1,580 @@
+<extend name="Public/base" />
+
+<block name="body">
+<link href="__CSS__/font-awesome.min.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+
+.huang_tb td{
+
+border:1px solid #000 !important;
+cursor:pointer;
+}
+
+.huang_div {
+width: 240px;overflow: auto; float: left;border-bottom:1px dashed #8c8c8c;
+}
+
+.huang_div_d {
+
+width: 310px;
+max-height:150px;
+}
+
+.huang_div_f{
+float: left;
+border: 1px solid rgb(0, 0, 0);
+border-radius: 5px;
+padding: 10px;
+box-shadow: 2px 2px 2px rgb(0, 0, 0);width:330px;
+margin-left: 10px;
+}
+
+.huang_div_s{
+width: 330px;
+height: 345px;
+overflow:auto;
+}
+
+.user-table{
+margin: 8px 0px 0px;
+float: left;
+width: 1014px;
+height: 207px;
+border: 1px solid rgb(0, 0, 0);
+box-shadow: 2px 2px 2px rgb(0, 0, 0);
+border-radius: 5px;
+}
+
+.img_head{
+width:60px;
+float:left;
+
+}
+
+
+.img_head_f{
+height: 60px;
+padding: 10px;
+}
+.img_head_f img{
+width: 60px;
+height: 60px;
+border-radius: 50%;
+}
+
+.select_td{
+
+background-color:#838387;
+}
+
+
+</style>
+
+	<link rel="stylesheet" href="__ZTREE__/zTreeStyle.css" type="text/css">
+	<script type="text/javascript" src="__ZTREE__/jquery.ztree.core-3.5.js"></script>
+	<script type="text/javascript" src="__ZTREE__/jquery.ztree.exedit.js"></script>
+	<script type="text/javascript" src="__LAYER__/layer.js"></script>
+	
+	<SCRIPT type="text/javascript">
+		<!--
+		var setting = {
+			view: {
+				addHoverDom: addHoverDom,
+				removeHoverDom: removeHoverDom,
+				selectedMulti: false
+			},
+			edit: {
+				enable: true,
+				editNameSelectAll: true,
+				showRemoveBtn: showRemoveBtn,
+				showRenameBtn: showRenameBtn
+			},
+			data: {
+				simpleData: {
+					enable: true
+				}
+			},
+			callback: {
+				beforeDrag: beforeDrag,
+				beforeRemove: beforeRemove,
+				beforeRename: beforeRename,
+				onRemove: onRemove,
+				onRename: onRename
+			}
+		};
+
+		var zNodes ={$d_list};
+		
+		var log, className = "dark";
+		
+		function beforeDrag(treeId, treeNodes) {
+			return false;
+		}
+		
+		function beforeRemove(treeId, treeNode) {
+			className = (className === "dark" ? "":"dark");
+			showLog("[ "+getTime()+" beforeRemove ]&nbsp;&nbsp;&nbsp;&nbsp; " + treeNode.name);
+			var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+			zTree.selectNode(treeNode);
+			return confirm("确认删除 节点 -- " + treeNode.name + " 吗？");
+		}
+		function onRemove(e, treeId, treeNode) {
+			showLog("[ "+getTime()+" onRemove ]&nbsp;&nbsp;&nbsp;&nbsp; " + treeNode.name);
+		}
+		function beforeRename(treeId, treeNode, newName, isCancel) {
+			className = (className === "dark" ? "":"dark");
+			showLog((isCancel ? "<span style='color:red'>":"") + "[ "+getTime()+" beforeRename ]&nbsp;&nbsp;&nbsp;&nbsp; " + treeNode.name + (isCancel ? "</span>":""));
+			if (newName.length == 0) {
+				alert("节点名称不能为空.");
+				var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+				setTimeout(function(){zTree.editName(treeNode)}, 10);
+				return false;
+			}
+			return true;
+		}
+		function onRename(e, treeId, treeNode, isCancel) {
+			showLog((isCancel ? "<span style='color:red'>":"") + "[ "+getTime()+" onRename ]&nbsp;&nbsp;&nbsp;&nbsp; " + treeNode.name + (isCancel ? "</span>":""));
+		}
+		function showRemoveBtn(treeId, treeNode) {
+			return !treeNode.isFirstNode;
+		}
+		function showRenameBtn(treeId, treeNode) {
+			return !treeNode.isLastNode;
+		}
+		function showLog(str) {
+			if (!log) log = $("#log");
+			log.append("<li class='"+className+"'>"+str+"</li>");
+			if(log.children("li").length > 8) {
+				log.get(0).removeChild(log.children("li")[0]);
+			}
+		}
+		function getTime() {
+			var now= new Date(),
+			h=now.getHours(),
+			m=now.getMinutes(),
+			s=now.getSeconds(),
+			ms=now.getMilliseconds();
+			return (h+":"+m+":"+s+ " " +ms);
+		}
+
+		var newCount = 1;
+		function addHoverDom(treeId, treeNode) {
+			var sObj = $("#" + treeNode.tId + "_span");
+			if (treeNode.editNameFlag || $("#addBtn_"+treeNode.tId).length>0) return;
+			var addStr = "<span class='button add' id='addBtn_" + treeNode.tId
+				+ "' title='add node' onfocus='this.blur();'></span>";
+			sObj.after(addStr);
+			var btn = $("#addBtn_"+treeNode.tId);
+			if (btn) btn.bind("click", function(){
+					
+					
+					layer.prompt({
+					  	formType: 0,
+					  	title: '请输入名称'
+					}, function(value, index, elem){
+						
+						
+						$.ajax({
+						type:'post',
+						url:"{:U('Bumen/add')}",
+						data:{'pid':treeNode.id,'name':value},
+						success:function(data)
+						{
+							if(data.status)
+							{
+								var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+								zTree.addNodes(treeNode, {id:data.id, pId:treeNode.id, name:value});
+								layer.close(index);
+								return false;
+							}else
+							{
+								layer.msg(data.info,{icon:2,time: 3000});
+								return false;
+							}
+							
+						},
+						error:function()
+						{
+							layer.msg('数据传输错误！',{icon:2,time: 3000});
+							return false;
+						}
+						
+						});
+
+					}); 
+
+				
+				
+			});
+		};
+		function removeHoverDom(treeId, treeNode) {
+			$("#addBtn_"+treeNode.tId).unbind().remove();
+		};
+		function selectAll() {
+			var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+			zTree.setting.edit.editNameSelectAll =  $("#selectAll").attr("checked");
+		}
+
+		$(document).ready(function(){
+			$.fn.zTree.init($("#treeDemo"), setting, zNodes);
+		});
+		//-->
+	</SCRIPT>
+	<!-- 标题栏 -->
+	<div style="width:100%">
+	<div class="main-title">
+		<h2 class="btn_h2_style">考勤系统</h2>
+	</div>
+	
+	
+	<div class="data-table table-striped" style="width:30%;float:left;margin:0px;padding-right:1%;">
+	<ul id="treeDemo" class="ztree" style="box-shadow: 3px 3px 3px rgb(72, 72, 72);overflow: auto;height: 713px;"></ul>
+	</div>
+	
+	
+    <!-- 数据列表 -->
+	<div style="width: 68%;float: left;">
+	<div id="guest_list" style="border:1px solid rgb(0, 0, 0);box-shadow:3px 3px 3px rgb(5, 4, 3);border-radius:5px;">
+    <include file="Default:Ajax:Attendance:user_list"/>
+	</div>
+	
+	
+	
+	</div>
+
+	
+	</div>
+</block>
+
+<block name="script">
+	<script src="__STATIC__/thinkbox/jquery.thinkbox.js"></script>
+	<script type="text/javascript">
+	var url = "{:U('Attendance/ajax_query')}";
+	var APP = "__APP__";
+	var URL_JS = "__URL__";
+	</script>
+	<script type="text/javascript" src="__JS__/huang.js"/></script>
+
+	<script type="text/javascript">
+	
+	function table_department(obj)
+	{
+		var filter_list = getCookie('SEARCH_INFO');
+		filter_list = JSON.parse(filter_list);
+		filter_list['department_id'] = obj;
+		filter_list['p'] = 1;
+		filter_list['keywords'] = '';
+        $.ajax({
+		type:'POST',
+		url:url,
+		data:filter_list,
+		error:function(){
+		alert('网络传输错误！');
+		},
+		success:function(data)
+		{
+		$('#guest_list').html(data.info);
+		}
+		});
+	}
+
+	
+	
+	function get_user_kaoqin(obj,oaj)
+	{
+	  if('no' == obj)
+	  {
+	    obj = $('#user_id_span').html();
+	  }
+	  
+	  $.ajax({
+	   type:'POST',
+	   url:"{:U('Attendance/get_kaoqin')}",
+	   data:{'uid':obj,'data':oaj},
+	   success:function(data)
+	   {
+	    
+		 var user = data['user'];
+		 var data = data['list'];
+		 
+		 
+		 //赋值头像
+		 $('#user_headimg').attr('src',user['headurl']);
+		 $('#name_id').html(user['name']);
+		 get_tbody(data,oaj);
+		 get_thead(oaj);
+		 $('#user_id_span').html(obj);
+		 $('#time_select').val(oaj);
+	   
+	   },error:function()
+	   {
+	    alert('传输错误！');
+	   }
+	  });
+	
+	}
+	
+	//获取本月的天数和礼拜
+	function get_thead(obj)
+	{
+	  //获取
+		var year = obj.substring(0,4);     //年  
+		var month= obj.substring(5,7);     //月  
+		var d = new Date(year, month, 0);   //Wed Mar 31 00:00:00 UTC+0800 2010  
+		var daysCount = d.getDate();            //本月天数  
+		
+		var weekArray = new Array("日", "一", "二", "三", "四", "五", "六");
+        
+		var str = '<tr><th><div>日</div><div>周</div></th>';
+		for(i=1;i<=daysCount;i++)
+		{
+		  var ss = new Date(year,month-1,i).getDay();
+		  str += '<th><div>'+i+'</div>';
+		  
+		  if(0 == ss)
+		  {
+		   str += '<div style="color:red">'+weekArray[ss]+'</div></th>';
+		  }else
+		  {
+		   str += '<div>'+weekArray[ss]+'</div></th>';
+		  }
+		  
+		}
+		str += '</tr>';
+		
+		$('#thead_id').html(str);
+	}
+	
+	function get_tbody(obj,oaj)
+	{
+	    var year = oaj.substring(0,4);     //年  
+		var month= oaj.substring(5,7);     //月  
+		var d = new Date(year, month, 0);   //Wed Mar 31 00:00:00 UTC+0800 2010  
+		var daysCount = d.getDate();            //本月天数 
+		var str = '<tr><td>上</td>';
+		var str1 = '<tr><td>下</td>';
+		for(i=1;i<=daysCount;i++)
+		{
+		  var open_jia = 0;
+		  
+		  if(null != obj)
+		  {
+			  for(k=0;k<obj.length;k++)
+			  {
+				
+				if(obj[k]['day'] == i)
+				{
+					switch(obj[k]['morning'])
+					{
+					  case '8':
+					  str += '<td onclick="show_info(&quot;'+oaj+'-'+i+'-0&quot;,this)"><i class="fa fa-circle" style="color:#000"></i></td>';
+					  break;
+					  case '1':
+					  str += '<td onclick="show_info(&quot;'+oaj+'-'+i+'-0&quot;,this)"><i class="fa fa-check" style="color:green"></i></td>';
+					  break;
+					  case '2':
+					  str += '<td onclick="show_info(&quot;'+oaj+'-'+i+'-0&quot;,this)"><i class="fa fa-circle-o" style="color:#f70"></i></td>';
+					  break;
+					  case '3':
+					  str += '<td onclick="show_info(&quot;'+oaj+'-'+i+'-0&quot;,this)"><i class="fa fa-plus" style="color:green"></i></td>';
+					  break;
+					  case '4':
+					  str += '<td onclick="show_info(&quot;'+oaj+'-'+i+'-0&quot;,this)"><i class="fa fa-close" style="color:red"></i></td>';
+					  break;
+					  case '5':
+					  str += '<td onclick="show_info(&quot;'+oaj+'-'+i+'-0&quot;,this)"><i class="fa fa-exclamation-circle" style="color:red"></i></td>';
+					  break;
+					  case '6':
+					  str += '<td onclick="show_info(&quot;'+oaj+'-'+i+'-0&quot;,this)"><i class="fa fa-warning" style="color:red"></i></td>';
+					  break;
+					  case '7':
+					  str += '<td onclick="show_info(&quot;'+oaj+'-'+i+'-0&quot;,this)"><i class="fa fa-plane" style="color:blue"></i></td>';
+					  break;
+					  default:
+					  str += '<td onclick="show_info(&quot;'+oaj+'-'+i+'-0&quot;,this)"></td>';
+					}
+					switch(obj[k]['afternoon'])
+					{
+					  case '8':
+					  str1 += '<td onclick="show_info(&quot;'+oaj+'-'+i+'-1&quot;,this)"><i class="fa fa-circle" style="color:#000"></i></td>';
+					  break;
+					  case '1':
+					  str1 += '<td onclick="show_info(&quot;'+oaj+'-'+i+'-1&quot;,this)"><i class="fa fa-check" style="color:green"></i></td>';
+					  break;
+					  case '2':
+					  str1 += '<td onclick="show_info(&quot;'+oaj+'-'+i+'-1&quot;,this)"><i class="fa fa-circle-o" style="color:#f70"></i></td>';
+					  break;
+					  case '3':
+					  str1 += '<td onclick="show_info(&quot;'+oaj+'-'+i+'-1&quot;,this)"><i class="fa fa-plus" style="color:green"></i></td>';
+					  break;
+					  case '4':
+					  str1 += '<td onclick="show_info(&quot;'+oaj+'-'+i+'-1&quot;,this)"><i class="fa fa-close" style="color:red"></i></td>';
+					  break;
+					  case '5':
+					  str1 += '<td onclick="show_info(&quot;'+oaj+'-'+i+'-1&quot;,this)"><i class="fa fa-exclamation-circle" style="color:red"></i></td>';
+					  break;
+					  case '6':
+					  str1 += '<td onclick="show_info(&quot;'+oaj+'-'+i+'-1&quot;,this)"><i class="fa fa-warning" style="color:red"></i></td>';
+					  break;
+					  case '7':
+					  str1 += '<td onclick="show_info(&quot;'+oaj+'-'+i+'-1&quot;,this)"><i class="fa fa-plane" style="color:blue"></i></td>';
+					  break;
+					  default:
+					  str1 += '<td onclick="show_info(&quot;'+oaj+'-'+i+'-1&quot;,this)"></td>';
+					}
+					open_jia = 1;
+				}
+				
+			  }
+		  }
+		  
+		  
+		  if(0 == open_jia)
+			{
+			   str += '<td onclick="show_info(&quot;'+oaj+'-'+i+'-0&quot;,this)"></td>';
+			   str1 += '<td onclick="show_info(&quot;'+oaj+'-'+i+'-1&quot;,this)"></td>';
+			}
+		  
+		}
+		
+		str += '</tr>';
+		str1 += '</tr>';
+		
+	    var ddd = str+str1;
+
+	    $('#tbody_id').html(ddd);
+ 
+	}
+	
+	function show_info(obj,oaj)
+	{
+	  var uid = $('#user_id_span').html();
+	  
+	  $('#kq_time').html(obj);
+	  
+	  //选中效果
+	  $('#tbody_id td').removeClass('select_td');
+	  
+	  $(oaj).addClass('select_td');
+	 
+	  $.ajax({
+	   type:'POST',
+	   url:"{:U('Attendance/get_day_info')}",
+	   data:{'day':obj,'uid':uid},
+	   success:function(data)
+	   {
+		 var info = data['list'];
+		 var shenpi = data['shenpi'];
+		 str = '';
+		 str1 = '';
+		 if(null != info)
+		 {
+		   for(i=0;i<info.length;i++)
+		   {
+			 
+			 str += '<li style="width: 310px;"><div class="huang_div_d"><span style="float: left;">签到时间：</span><div class="huang_div">'+info[i]['s_time']+'</div></div>';
+			  
+			 str += '<div class="huang_div_d"><span style="float: left;width: 70px;">签到地点：</span><div class="huang_div">'+info[i]['s_address']+'</div></div>';
+			 
+			 str += '<li style="width: 310px;"><div class="huang_div_d"><span style="float: left;">签退时间：</span><div class="huang_div">'+info[i]['t_time']+'</div></div>';
+			  
+			 str += '<div class="huang_div_d"><span style="float: left;width: 70px;">签退地点：</span><div class="huang_div">'+info[i]['t_address']+'</div></div>';
+			   
+			 str += '<div class="huang_div_d"><span style="float: left;width: 70px;">工作计划：</span><div class="huang_div">'+info[i]['plan']+'</div></div>';
+		 
+			 str += '<div class="huang_div_d"><span style="float: left;width: 70px;">工作日报：</span><div class="huang_div">'+info[i]['work_z']+'</div></div></li>';
+	
+		   }
+		 }
+		 
+		 if(null != shenpi)
+		 {
+		   for(i=0;i<shenpi.length;i++)
+		   {
+			 
+			 str1 += '<li style="width: 310px;"><div class="huang_div_d"><span style="float: left;">请假类型：</span><div class="huang_div">'+shenpi[i]['typename']+'</div></div>';
+			  
+			 str1 += '<div class="huang_div_d"><span style="float: left;width: 70px;">请假理由：</span><div class="huang_div">'+shenpi[i]['qj_reseason']+'</div></div>';
+			   
+			 str1 += '<div class="huang_div_d"><span style="float: left;width: 70px;">开始时间：</span><div class="huang_div">'+shenpi[i]['qj_time']+'</div></div>';
+		 
+			 str1 += '<div class="huang_div_d"><span style="float: left;width: 70px;">结束时间：</span><div class="huang_div">'+shenpi[i]['qj_time_end']+'</div></div></li>';
+	
+		   }
+		 
+		 }
+		 
+		 $('#ul_id_info').html(str);
+		 $('#ul_qingjia_info').html(str1);
+	   
+	   },error:function()
+	   {
+	    alert('传输错误！');
+	   }
+	  });
+	  
+	}
+	
+	function set_kaoqin()
+	{  
+	  var uid = $('#user_id_span').html();
+	  
+	  var type = $('#kaoqin_type').val();
+	  
+	  var kq_time = $('#kq_time').html();
+	  
+	  if(!uid || !kq_time || $('.select_td').length<=0)
+	  {
+	   alert('请选择员工或对应时间！');
+	   return false;
+	  }
+	  
+	  
+	  
+	  $.ajax({
+	   type:'POST',
+	   url:"{:U('Attendance/set_user_kaoqin')}",
+	   data:{'uid':uid,'type':type,'kq_time':kq_time},
+	   success:function(data)
+	   {
+		if(data['success'])
+		{
+		  switch(type)
+		  {
+		    case '8':
+			$('.select_td').html('<i class="fa fa-circle" style="color:#000"></i>');
+			break;
+			case '1':
+			$('.select_td').html('<i class="fa fa-check" style="color:green"></i>');
+			break;
+			case '2':
+			$('.select_td').html('<i class="fa fa-circle-o" style="color:#f70"></i>');
+			break;
+			case '3':
+			$('.select_td').html('<i class="fa fa-plus" style="color:green"></i>');
+			break;
+			case '4':
+			$('.select_td').html('<i class="fa fa-close" style="color:red"></i>');
+			break;
+			case '5':
+			$('.select_td').html('<i class="fa fa-exclamation-circle" style="color:red"></i>');
+			break;
+			case '6':
+			$('.select_td').html('<i class="fa fa-warning" style="color:red"></i>');
+			break;
+			case '7':
+			$('.select_td').html('<i class="fa fa-plane" style="color:blue"></i>');
+			break;
+		  }
+		}
+	   
+	   },error:function()
+	   {
+	    alert('传输错误！');
+	   }
+	  });
+	
+	}
+	
+	</script>
+</block>

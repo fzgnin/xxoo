@@ -1,0 +1,254 @@
+<extend name="Public/basechild"/>
+
+<block name="body">
+<link rel="stylesheet" type="text/css" href="__BOOTSTRAP__/css/bootstrap.min.css" media="all">
+<style type="text/css">
+.bottom-grids {
+    margin-top: 90px;
+}.bottom-text {
+    background: #fff;
+    padding: 52px 15px;
+    border-radius: 100%;
+    -webkit-border-radius: 100%;
+    -o-border-radius: 100%;
+    -ms-border-radius: 100%;
+    -moz-border-radius: 100%;
+    border: 2px solid transparent;
+}.bottom-text h3 {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 600;
+    color: #646464;
+}h4, h5, h6, h1, h2, h3 {
+    margin: 0;
+}h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+    font: 14px/1.5 "microsoft yahei", Helvetica, Tahoma, Arial, sans-serif;
+}
+a:hover{
+color: #fff;
+}.bottom-text p {
+    margin-top: 14px;
+    text-align: center;
+    font-size: 14px;
+    color: #757575;
+    line-height: 2em;
+}p {
+    margin: 0;
+}.bottom-grid span {
+    position: absolute;
+    font-size: 27px;
+    color: #646464;
+    background: #c2c2c2;
+    border-radius: 100%;
+    padding: 20px 20px;
+    top: -37px;
+    text-align: center;
+    left: 37%;
+}
+.bottom-grid:hover div.bottom-spa span {
+    background: #2FD828 !important;
+    color: #fff !important;
+    transition: 0.5s all;
+    -webkit-transition: 0.5s all;
+    -o-transition: 0.5s all;
+    -moz-transition: 0.5s all;
+    -ms-transition: 0.5s all;
+}.bottom-grid:hover div.bottom-text {
+    border: 2px solid #2FD828;
+    transition: 0.5s all;
+    -webkit-transition: 0.5s all;
+    -o-transition: 0.5s all;
+    -moz-transition: 0.5s all;
+    -ms-transition: 0.5s all;
+}
+
+
+</style>
+	<!-- 标题栏 -->
+	<div class="main-title">
+		<h2>库存盘点</h2>
+	</div>
+	
+    <!-- 数据列表 -->
+	<div id="guest_list">
+    <div class="bottom-grids" style="width: 1170px; margin-right: auto; margin-left: auto;">
+			<div class="col-md-3 bottom-grid" onclick="javascript:location.href='{:U('Inventory/add_first')}'">
+				<div style="cursor: pointer;" class="bottom-text">
+					<h3>初始化库存表</h3>
+					<p>注：初始化库存表是直接输入当前仓库中现有商品的数量，本操作在仓库使用的时候执行一次即可，以后无需再执行！</p>
+				</div>
+				<div class="bottom-spa"><span class="glyphicon glyphicon-play-circle" aria-hidden="true" style="cursor: pointer;"></span></div>
+			</div>
+			<div class="col-md-3 bottom-grid" onclick="javascript:location.href='{:U('Inventory/add')}'">
+				<div style="cursor: pointer;" class="bottom-text">
+					<h3>盘点库存</h3>
+					<p>注：盘点库存前请先向财务确定当前所有关于库存的单据都已经过账，进行此操作前将会暂停关于库存和商品的单据！</p>
+				</div>
+				<div class="bottom-spa"><span class="glyphicon glyphicon-random" aria-hidden="true" style="cursor: pointer;"></span></div>
+			</div>
+			
+			<div class="col-md-3 bottom-grid" onclick="javascript:location.href='{:U('Inventory/inventorylist')}'">
+				<div style="cursor: pointer;" class="bottom-text">
+					<h3>盘库单列表</h3>
+					<p>注：听说一定要凑够三行才可以哦！
+					听说一定要凑够三行才可以哦！
+					听说一定要凑够三行才可以哦！
+					听说一定要凑够三行才可以哦！</p>
+				</div>
+				<div class="bottom-spa"><span class="glyphicon glyphicon-list" aria-hidden="true" style="cursor: pointer;"></span></div>
+			</div>
+			
+			
+			<div class="clearfix"></div>
+		</div>
+	</div>
+</block>
+
+<block name="script">
+	<script src="__STATIC__/thinkbox/jquery.thinkbox.js"></script>
+
+	<script type="text/javascript">
+	//搜索功能
+	$("#search").click(function(){
+		var url = $(this).attr('url');
+        var query  = $('.search-form').find('input').serialize();
+        query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g,'');
+        query = query.replace(/^&/g,'');
+        if( url.indexOf('?')>0 ){
+            url += '&' + query;
+        }else{
+            url += '?' + query;
+        }
+		window.location.href = url;
+	});
+	//回车搜索
+	$(".search-input").keyup(function(e){
+		if(e.keyCode === 13){
+			$("#search").click();
+			return false;
+		}
+	});
+    //导航高亮
+    highlight_subnav('{:U('User/index')}');
+	
+	
+	
+	function edit_guest(obj)
+	{
+	 //iframe层
+	  var url = "__URL__/changeguest/id/"+obj;
+		layer.open({
+			type: 2,
+			title: '修改客户资料',
+			shadeClose: false,
+			shade: 0.8,
+			shift:5,
+			area: ['900px', '800px'],
+			content: url //iframe的url
+		}); 
+	
+	
+	}
+	
+	function no_guest(obj,oaj)
+	{
+	  var url = "{:U('Guest/changegueststyle')}";
+	  layer.confirm('确定修改吗？',function(index)
+	  {
+	    $.ajax({
+		type:'POST',
+		data:{'id':obj,stus:oaj},
+		url:url,
+		success:function(data)
+			{
+			  table_order_page(0);
+			  layer.msg(data.info,{icon:1,time: 1000});
+			}					
+		});	  
+	  })
+	
+	}
+
+	function table_order(obj)
+	{
+	  
+	  //分页url
+	  var url = "{:U('Guest/ajax_query')}";
+	  
+	  //获取分页的排序条件
+	  
+	  if($('#filter_id').html())
+	  {
+		  var filter_list = $('#filter_id').html();
+		  filter_list =  JSON.parse(filter_list);
+		  
+		  //更改分页的排序方式		  
+		  filter_list['order_by'] = obj;
+		  
+		  if(filter_list['sort_by'] == 'ASC')
+		  {
+		  
+		    filter_list['sort_by'] = 'DESC';
+		  }else
+		  {
+		  
+		    filter_list['sort_by'] = 'ASC';
+		  }
+	  }
+	  
+	  $.ajax({
+	  type:'POST',
+	  url:url,
+	  data:filter_list,
+	  success:function(data)
+	  {
+	   $('#guest_list').html(data.info);
+	  }
+
+	  });	
+	}
+	
+	function table_order_page(obj)
+	{
+	  if($('#filter_id').html())
+	  {
+		  var filter_list = $('#filter_id').html();
+		  filter_list =  JSON.parse(filter_list);
+		  if(obj != 0)
+		  {
+		   filter_list['p'] = obj;
+		  }  
+	  }
+	  var url = "{:U('Guest/ajax_query')}";
+	  $.ajax({
+	  type:'POST',
+	  url:url,
+	  data:filter_list,
+	  success:function(data)
+	  {
+	   $('#guest_list').html(data.info);
+	  }
+	  });
+	
+	}
+	</script>
+	
+	<script type="text/javascript">
+	function get_bumenguest(obj)
+	{
+	  $.ajax({
+	  type:'POST',
+	  url:"{:U('Order/sales_list')}",
+	  data:{'bid':obj.value},
+	  success:function(data)
+	  {
+	    	$('#tbody_bumen').html(data.info);
+	  },
+	  error:function()
+	  {
+	    alert('数据传输错误！');
+	  }
+	  });
+	}
+	</script>
+</block>

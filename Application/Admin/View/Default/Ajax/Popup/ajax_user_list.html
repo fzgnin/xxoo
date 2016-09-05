@@ -1,0 +1,45 @@
+<table class="">
+    <thead>
+        <tr>
+		<th class="">ID</th>
+		<th class="">员工</th>
+		</tr>
+    </thead>
+    <tbody style="cursor: pointer;">
+		<notempty name="list">
+		<volist name="list" id="vo">
+		<tr class="checksss">
+			<td>{$vo.id}</td>
+			<td>{$vo.name}</td>
+				
+		</tr>
+		</volist>
+		<else/>
+		<td colspan="9" class="text-center"> aOh! 暂时还没有内容! </td>
+		</notempty>
+	</tbody>
+    </table>
+	
+	<div class="page">
+        {$page}
+    </div><script type="text/javascript">
+	
+	//单击变色
+	$('.checksss').bind("click",function(){
+	 //变色效果
+	 $(this).addClass("tr_select").siblings().removeClass("tr_select");
+    });
+	
+	//双击选中
+	$('.checksss').bind("dblclick",function(){
+	 //获取信息
+	 var guest_id = $(this).children('td').eq(0).html();
+	 var guestname = $(this).children('td').eq(1).html();
+
+	 var back_ob = {id:guest_id,name:guestname};
+	 
+	 parent.call_back(back_ob);
+	 
+	 parent.layer.closeAll();
+    });
+	</script>

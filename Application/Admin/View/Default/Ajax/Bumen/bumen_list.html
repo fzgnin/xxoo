@@ -1,0 +1,49 @@
+<div class="data-table table-striped">
+	<table class="">
+    <thead>
+        <tr>
+		
+		<th class="">id</th>
+		<th class="">部门名字	</th>
+		<th class="">所属军团</th>
+		<th class="">上级部门</th>
+		<th class="">负责人</th>
+		<th class="">状态</th>
+		<th class="">操作</th>
+		</tr>
+    </thead>
+    <tbody>
+		<notempty name="list">
+		<volist name="list" id="vo">
+		<tr>
+            
+			<td>{$vo.id} </td>
+			<td>{$vo.title_show}</td>
+			<td>{$vo.tname}</td>
+			<td>{$vo.pname}</td>
+			<td><span>{$vo.charge}</span></td>
+			<td><if condition=" $vo.status eq 1 ">正常<else/>已禁用</if></td>
+			
+			<td>
+				<a title="编辑" href="{:U('edit',array('id'=>$vo['id']))}" class="btn_list_1">编辑</a>
+				<a title="下属人员" href="{:U('Attendance/userlist',array('department_id'=>$vo['id']))}" class="btn_list_1">下属人员</a>
+				<a title="管辖客户" href="{:U('Guest/guestlist',array('bumen_id'=>$vo['id']))}" class="btn_list_1">管辖客户</a>
+				<a title="部门业绩" href="javascript:alert('暂未开放');" class="btn_list_1">部门业绩</a>
+				<a title="部门费用" href="javascript:alert('暂未开放');" class="btn_list_1">部门费用</a>
+				<if condition="$vo.status eq 1 ">
+				<a href="javascript:;" onclick="change_status({$vo.id},{$vo.status})"  class="btn_list_1">弃用</a>
+				<else/>
+				<a href="javascript:;" onclick="change_status({$vo.id},{$vo.status})" style="background-color:#0033FF"  class="btn_list_1">启用</a>
+				</if>
+					
+					<!--<a title="删除" href="{:U('remove?id='.$list['id'])}"  class="btn_list_1">删除</a>-->
+					
+                </td>
+		</tr>
+		</volist>
+		<else/>
+		<td colspan="9" class="text-center"> aOh! 暂时还没有内容! </td>
+		</notempty>
+	</tbody>
+    </table>
+	</div>

@@ -1,0 +1,66 @@
+<div class="data-table table-striped">
+	<table class="">
+    <thead>
+        <tr>
+		<th >部门</th>
+		<th >订单类型</th>
+		<th >订单编号</th>
+		<th >下单时间</th>
+		<th >过账时间</th>
+		<th >支出金额</th>
+		<th >总计支出</th>
+		<th >备注</th>
+		<th >操作</th>
+		</tr>
+    </thead>
+    <tbody>
+		<tr>
+			<td>{$b_array.bname}</td>
+			<td><span style="color:#CC00CC">期初支出</span></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td><span style="color:#CC00CC">{$b_array.balance|default="0"}</span></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<notempty name="list">
+		<volist name="list" id="vo">
+		<tr>
+			<td>{$vo.mname}</td>
+			<td>
+			<if condition="$vo.order_type eq 1 ">
+			销售出货单
+			<elseif condition="$vo.order_type eq 2 "/>
+			销售退货单
+			<elseif condition="$vo.order_type eq 10 "/>
+			收款单
+			<elseif condition="$vo.order_type eq 11 "/>
+			付款单
+			<elseif condition="$vo.order_type eq 12 "/>
+			其他收款单
+			<elseif condition="$vo.order_type eq 13 "/>
+			其他付款单
+			</if></td>
+			<td>{$vo.order_sn}</td>
+			<td>{$vo.add_time|date='Y-m-d H:i',###}</td>
+			<td>{$vo.post_time|date='Y-m-d H:i',###}</td>
+			<td>{$vo.amount}</td>
+			<td>{$vo.balance} </td>
+			<td>{$vo.remarks}</td>
+			<td>
+			<a href="javascript:;" onclick="show_order({$vo.id},{$vo.order_type})" class="btn_list_1">查看原始单据</a>	  
+			</td>
+		</tr>
+		</volist>
+		<else/>
+		<td colspan="9" class="text-center"> aOh! 暂时还没有内容! </td>
+		</notempty>
+	</tbody>
+    </table>
+	</div>
+    <div class="page">
+        {$page}
+		
+    </div>

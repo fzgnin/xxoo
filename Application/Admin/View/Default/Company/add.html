@@ -1,0 +1,102 @@
+<extend name="Public/base"/>
+
+<block name="body">
+<link rel="stylesheet" href="__CSS__/style.default.css" type="text/css" />
+<script type="text/javascript" src="__JS__/general.js"></script>
+    <div class="bodywrapper">
+  <!--头部-->
+
+    <!--子菜单结束-->
+    <div class="centercontent">
+    
+        <div class="pageheader">
+           
+            
+            <ul class="hornav">
+                <li class="current"><a href="#basicform">填写账户信息</a></li>
+                <li class=""><a href="#secondform">待开发。。。</a></li>
+            </ul>
+        </div><!--pageheader-->
+        
+        <div id="contentwrapper" class="contentwrapper">
+        	<form  id="mpostForm" name="mpostForm" class="stdform" action="{:U('Company/insert')}" method="post">
+        	<div id="basicform" class="subcontent"><!--contenttitle-->
+
+                          <p>
+                        	<label>账户名称</label>
+                            <span class="field"><input type="text" name="cname"  class="smallinput" /></span>
+                            <small class="desc">请填写银行账户名称或现金账户</small>
+                        </p>
+                        
+                         <p>
+                        	<label>账户卡号</label>
+                           <span class="field"><input type="text" name="cid"  class="smallinput" /></span>
+                            <small class="desc">请填写银行卡号，现金账户请自主命名</small>
+                        </p>
+     
+                          <p>
+                        	<label>初始金额</label>
+                            <span class="field"><input type="text"  name="money"  class="smallinput" /></span>
+                            <small class="desc">请填写账户初始金额</small>
+                        </p>
+						
+						
+						 <p>
+                        	<label>账户类型</label>
+                            <span class="formwrapper">
+                            	<select  class="chzn-select"  name="type" style="width:350px;height: 37px;" tabindex="2">
+                                  <option value="0" select="selectd">现金</option> 	  
+                                  <option value="1">银行存款</option>
+                                </select>
+                            </span>
+                        </p>
+                        
+                        
+                        <!--隐藏字段-->
+                        <p class="stdformbutton">
+                        	<input style="width:100px; margin: 0; font-weight: bold; color: #eee; background: #FB9337; border: 1px solid #F0882C; padding: 7px 10px; 
+  -moz-box-shadow: none; -webkit-box-shadow: none; box-shadow: none; cursor: pointer; -moz-border-radius: 2px; -webkit-border-radius: 2px;
+  border-radius: 2px;" type="button" class="submit radius2" value="提交" onClick="myFunction()">
+                        </p>
+                    
+
+            </div><!--subcontent-->
+
+            <div id="secondform" class="subcontent" style="display:none">
+             
+
+
+            </div>
+        </form>
+        </div><!--contentwrapper-->
+        
+	</div><!-- centercontent -->
+    
+    
+</div>
+</block>
+
+<block name="script">
+   
+	
+	<script type="text/javascript">
+	
+	function myFunction()
+	{ 
+	
+		if(mpostForm.cname.value==""){alert("请输入账户名称！");
+		mpostForm.cname.focus();
+		return false;
+		}
+		
+		if(mpostForm.cid.value==""){alert("请输入账户卡号！");
+		mpostForm.cid.focus();
+		return false;
+		}
+		
+		if (confirm("你确认要提交吗？"))
+		document.mpostForm.submit()
+	}
+
+	</script>
+</block>

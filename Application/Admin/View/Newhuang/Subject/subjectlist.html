@@ -1,0 +1,127 @@
+<extend name="Public/basechild"/>
+
+<block name="body">
+<style type="text/css">
+.btn_list_1:hover{ background-color:#4BBD00 !important;}
+</style>
+	<!-- 标题栏 -->
+	<div class="main-title">
+		<h2 class="btn_h2_style">收支类别</h2>
+	</div>
+	<div class="cf" >
+	
+	<div class="fl">
+            <a class="btn" href="{:U('add')}">新 增</a>
+            
+    </div>
+	<div class="fl" id="select_value_id">
+	
+	
+	
+	
+	</div>
+	</div>
+    <!-- 数据列表 -->
+	<div id="guest_list">
+    <include file="Default:Ajax:Subject:subject_list"/>
+	</div>
+	
+	
+</block>
+
+<block name="script">
+
+
+    <script type="text/javascript">
+	var url = "{:U('Subject/ajax_query')}";
+	var APP = "__APP__";
+	var URL_JS = "__URL__";
+	</script>
+	<script src="__STATIC__/thinkbox/jquery.thinkbox.js"></script>
+	<script type="text/javascript" src="__JS__/huang.js"/></script>
+	
+	
+	<script type="text/javascript">
+	
+	function show_subject(obj)
+	{
+		
+		//先传入基本的展示信息用json数据来存储
+		var show_json = {'id':'ID','order_sn':'订单编号','mname':'往来单位','order_type':'订单类型','amount':'总金额','status':'状态','remarks':'备注','other':'操作'};
+		
+		//项目往来资金
+		$.ajax({
+		type:'post',
+		url:"{:U('Subject/show_subject')}",
+		data:{id:obj},
+		success:function(data)
+		{
+			if(data)
+			{
+				str = make_head(data,show_json);
+				
+				//打开layer对话框
+				layer.open({
+					type: 1,
+					title: '查看订单详细',
+					shadeClose: false,
+					shade: 0.8,
+					shift:5,
+					area: ['1500px', '800px'],
+					content: str //iframe的url
+				});
+			}
+			
+		},
+		error:function()
+		{
+			alert('数据传输错误！');
+		}
+		
+		
+		});
+	
+	}
+	
+	//形成数据
+	function make_head(data,show_json)
+	{
+		
+		var str = '<div class="data-table table-striped" style="margin: 20px;height:600px;overflow: auto;"><table class="">';
+		str += '<thead><tr>'
+		$.each(show_json,function(name,value) {
+			str += '<th class="">'+value+'</th>';	
+		});
+		str += '</tr></thead>';
+		str += '<tbody>';
+		for(var i=0;i<data.length;i++)
+		{
+			str += '<tr>';
+			$.each(show_json,function(name,value) {
+				if('other' == name)
+				{
+					str += '<td><a class="btn_list_1" style="background-color: #C03204;" href="javascript:;" onclick="show_order('+data[i]['id']+',&quot;OtherFinance&quot;)">查看详细</a></td>';
+				}
+				else
+				{
+					str += '<td>'+data[i][''+name+'']+'</td>';
+				}
+			});
+			str += '</tr>';
+		}
+		
+		str += '</tbody>';
+		str += '</table></div>';
+		return str;	
+	}
+	
+	
+	
+	function make_body()
+	{
+	
+	
+	}
+	
+	</script>
+</block>

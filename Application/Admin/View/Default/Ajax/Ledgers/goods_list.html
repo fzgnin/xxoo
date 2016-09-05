@@ -1,0 +1,46 @@
+	<div class="data-table table-striped">
+	<table class="">
+    <thead>
+        <tr>
+		<th class="row-selected row-selected"><input class="check-all" type="checkbox"/></th>
+		<th class="" onClick="table_order('onethink_order.id')">ID</th>
+		<th class="">商品名称</th>
+		<th class="">所属仓库</th>
+		<th class="">现存数量</th>
+		<th class="">总进量</th>
+		<th class="">总销量</th>
+		<th class="">现存成本</th>
+		<th class="">总成本</th>
+		<th class="">销售成本</th>
+		<th class="">商品均价</th>
+		</tr>
+    </thead>
+    <tbody>
+		<notempty name="list">
+		<volist name="list" id="vo">
+		<tr>
+            <td><input class="ids" type="checkbox" name="id[]" value="{$vo.id}" /></td>
+			<td>{$vo.id} </td>
+			<td>{$vo.goodsname}</td>
+			<td>上海总部库</td>
+			<td>{$vo.n_num}</td>
+			<td>{$vo.a_num}</td>
+			<td>{$vo.s_num}</td>
+			<td>{$vo.n_amount}</td>
+			<td>{$vo.a_amount}</td>		
+			<td>{$vo.s_amount}</td>
+			<td>{$vo.averages}</td>
+		</tr>
+		</volist>
+		<else/>
+		<td colspan="9" class="text-center"> aOh! 暂时还没有内容! </td>
+		</notempty>
+	</tbody>
+    </table>
+	</div>
+    <div class="page">
+        {$page}
+		<span style="float:right;">库存总金额：{$now_amount|default="0"}元</span>
+    </div>
+	
+	

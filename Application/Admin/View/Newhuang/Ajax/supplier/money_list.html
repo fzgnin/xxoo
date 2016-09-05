@@ -1,0 +1,48 @@
+<div class="data-table table-striped">
+	<table class="">
+    <thead>
+        <tr>
+		<th class="row-selected row-selected"><input class="check-all" type="checkbox"/></th>
+		<th class="">ID</th>
+		<th class="">供应商</th>
+		<th class="">订单id</th>
+		<th class="">订单类型</th>
+		<th class="">订单号</th>
+		<th class="">商品名称</th>
+		<th class="">数量</th>
+		<th class="">价格</th>
+		<th class="">总价</th>
+		<th class="">描述</th>
+		<th class="">过账时间</th>
+		</tr>
+    </thead>
+    <tbody>
+		<notempty name="list">
+		<volist name="list" id="vo">
+		<tr>
+            <td><input class="ids" type="checkbox" name="id[]" value="{$vo.id}" /></td>
+			<td>{$vo.id} </td>
+			<td>{$vo.sname}</td>
+			<td>{$vo.order_id}</td>
+			<td>{$vo.order_type}</td>
+			<td>{$vo.order_sn}</td>
+			<td>{$vo.goodsname}</td>
+			<td>{$vo.num}</td>
+			<td>{$vo.price}</td>
+			<td>{$vo.totalprice}</td>
+			<td>{$vo.remarks}</td>
+			<td>{$vo.add_time}</td>
+		</tr>
+		</volist>
+		<else/>
+		<td colspan="9" class="text-center"> aOh! 暂时还没有内容! </td>
+		</notempty>
+	</tbody>
+    </table>
+	<input type="hidden" id="SORT_BY_ID" value="{$sort_by}">
+	</div>
+    <div class="page">
+        {$page}
+    </div>
+	
+	
