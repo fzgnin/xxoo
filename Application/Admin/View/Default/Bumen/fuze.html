@@ -1,0 +1,60 @@
+<extend name="Public/base"/>
+
+<block name="body">
+    <div class="main-title">
+        <h2>更改负责人</h2>
+    </div>
+    <form action="{:U('change')}" method="post" class="form-horizontal">
+        <div class="form-item">
+            <label class="item-label">部门名称</label>
+            <div class="controls">
+                <input type="text" class="text input-large" name="bname" value="{$bumen['bname']}">
+                <input type='hidden' name='bid' value="{$bumen['id']}">
+            </div>
+        </div>
+		
+		<div class="form-item">
+            <label class="item-label">原负责人</label>
+            <div class="controls">
+                <input type="text" class="text input-large" name="username" value="{$person['name']}">
+            </div>
+        </div>
+		
+		
+        <div class="form-item">
+            <label class="item-label">更改负责人</label>
+            <div class="controls">
+                <select name="id">
+                    <volist name="list" id="vo">
+                        <option value="{$vo['id']}" <if condition="$vo.id eq $person.id ">selected="seclected"</if>>{$vo['name']}</option>
+                    </volist>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-item">
+            <label class="item-label">职位</label>
+            <div class="controls">
+                <select name="position">
+                        <option value='0'>请选择</option>
+                    <volist name="position" id="vo">
+                        <option value="{$vo['id']}" <if condition="$vo.id eq $person.pid ">selected="seclected"</if>>{$vo['name']}</option>
+                    </volist>
+                </select>
+            </div>
+        </div>
+        
+        <div class="form-item">
+			<input type="hidden"  name="personid" value="{$person['id']}">
+            <button class="btn submit-btn" id="submit" type="submit" target-form="form-horizontal">确 定</button>
+            <button class="btn btn-return" onclick="javascript:history.back(-1);return false;">返 回</button>
+        </div>
+    </form>
+</block>
+
+<block name="script">
+    <script type="text/javascript">
+        //导航高亮
+        highlight_subnav('{:U('User/index')}');
+    </script>
+</block>

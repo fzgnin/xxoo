@@ -1,0 +1,74 @@
+<include file="Default:Ajax:search_model"/>
+<div class="data-table table-striped">
+	<table class="">
+    <thead>
+        <tr>
+		<th class="row-selected row-selected"><input class="check-all" type="checkbox"/></th>
+		<th class="" style="color:#4cdb00" >ID</th>
+		<th class="">订单编号</th>
+		<th class="">订单类型</th>
+		<th class="">下单时间</th>
+		<th class="">客户单位</th>
+		<th class="">所属部门</th>
+		<th class="">总价</th>
+		
+		<th class="">过账折后总价</th>
+		
+		<th class="">状态</th>
+		
+		<th class="">备注</th>
+		<th class="">操作</th>
+		</tr>
+    </thead>
+    <tbody>
+		<notempty name="list">
+		<volist name="list" id="vo">
+		<tr>
+            <td><input class="ids" type="checkbox" name="id[]" value="{$vo.id}" /></td>
+			<td>{$vo.id} </td>
+			<td>{$vo.order_sn}</td>
+			<td><if condition=" $vo.order_type eq 15 "><span style="color:green">配送单</span><else/><span style="color:red">获赠单</span></if></td>
+			<td>{$vo.add_time|date='Y-m-d H:i',###}</td>
+			<td>{$vo.gname}</td>
+			<td>{$vo.bname}</td>
+			<td>{$vo.amount}</td>
+			
+			<td>{$vo.g_amount}</td>
+			
+			<td><if condition="$vo.error eq 1 " >
+				<span style="color:red">此订单异常</span>
+				<else/>
+					<if condition="$vo.status eq 0 " >
+					<span style="color:rgb(245, 81, 255)">未过账</span>
+					<elseif condition="$vo.status eq 1 " />
+					<span style="color:green">已过账</span>
+					</if>
+				</if>
+			</td>
+			
+			<td>{$vo.remarks}</td>
+			<td>
+				<a class="btn_list_1" style="background-color: #C03204;" href="javascript:;" onclick="show_order({$vo.id},'Distribution')">查看详细</a>
+				<if condition="$vo.status eq 0 ">
+				<a class="btn_list_1" style="background-color:#00B0BD;" href="javascript:;" onclick="edit_order({$vo.id},'Distribution')">编辑</a>
+				<a class="btn_list_1" href="javascript:;" onclick="delete_order({$vo.id})">删除</a>
+				<a class="btn_list_1" href="javascript:;" onclick="posting_order({$vo.id},{$vo.order_type},1)">过账</a>
+				<elseif condition="$vo.status eq 1 "/>
+				<a class="btn_list_1" href="javascript:;" onclick="posting_order({$vo.id},{$vo.order_type},2)">反过账</a>
+				</if>
+				        
+                </td>
+		</tr>
+		</volist>
+		<else/>
+		<td colspan="9" class="text-center"> aOh! 暂时还没有内容! </td>
+		</notempty>
+	</tbody>
+    </table>
+	</div>
+    <div class="page">
+        {$page}
+		<span style="float:right">总业绩：{$a_amount|default="0"}元</span>
+    </div>
+	
+	
